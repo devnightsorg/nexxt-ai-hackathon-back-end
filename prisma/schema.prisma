@@ -1,0 +1,326 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  customer
+  admin
+}
+
+enum RiskProfile {
+  conservative
+  balanced
+  dynamic
+}
+
+enum AccountType {
+  current
+  savings
+  term_deposit
+  investment
+  pension
+  housing_savings
+  credit_card
+  loan
+}
+
+enum AccountStatus {
+  active
+  closed
+}
+
+enum Direction {
+  in
+  out
+}
+
+enum GoalType {
+  emergency_fund
+  vacation
+  home
+  car
+  education
+  retirement
+  custom
+}
+
+enum GoalStatus {
+  active
+  achieved
+  cancelled
+}
+
+enum OfferKind {
+  product
+  tip
+}
+
+enum OfferStatus {
+  active
+  accepted
+  dismissed
+  expired
+}
+
+enum Channel {
+  web
+  mcp
+}
+
+enum MessageRole {
+  user
+  assistant
+  tool
+}
+
+enum ActionType {
+  transfer
+  open_product
+}
+
+enum ActionStatus {
+  pending
+  rejected
+  executed
+  failed
+  expired
+}
+
+enum ActorType {
+  user
+  agent
+  external_agent
+  system
+}
+
+enum Verdict {
+  allowed
+  blocked
+}
+
+model User {
+  id            String      @id @default(uuid())
+  email         String      @unique
+  passwordHash  String
+  fullName      String
+  role          UserRole    @default(customer)
+  age           Int?
+  occupation    String?
+  monthlyIncome Decimal?    @db.Decimal(14, 2)
+  riskProfile   RiskProfile @default(conservative)
+  createdAt     DateTime    @default(now())
+
+  accounts        Account[]
+  goals           Goal[]
+  offers          Offer[]
+  conversations   Conversation[]
+  actionProposals ActionProposal[]
+  apiKeys         ApiKey[]
+}
+
+model Product {
+  slug       String   @id
+  name       String
+  category   String
+  summary    String
+  details    Json
+  goodFor    String[]
+  riskLevel  Int?
+  sourceUrls String[]
+  updatedAt  DateTime @updatedAt
+
+  accounts Account[]
+  offers   Offer[]
+}
+
+model Account {
+  id          String        @id @default(uuid())
+  userId      String
+  type        AccountType
+  productSlug String?
+  name        String
+  iban        String        @unique
+  currency    String        @default("RON")
+  balance     Decimal       @db.Decimal(14, 2)
+  status      AccountStatus @default(active)
+  terms       Json?
+  openedAt    DateTime      @default(now())
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product      Product?      @relation(fields: [productSlug], references: [slug])
+  transactions Transaction[]
+  linkedGoals  Goal[]
+
+  @@index([userId])
+}
+
+model Transaction {
+  id               String    @id @default(uuid())
+  accountId        String
+  direction        Direction
+  amount           Decimal   @db.Decimal(14, 2)
+  currency         String    @default("RON")
+  category         String
+  counterpartyName String?
+  counterpartyIban String?
+  description      String?
+  bookedAt         DateTime
+  balanceAfter     Decimal   @db.Decimal(14, 2)
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, bookedAt])
+}
+
+model Goal {
+  id              String     @id @default(uuid())
+  userId          String
+  name            String
+  type            GoalType
+  targetAmount    Decimal    @db.Decimal(14, 2)
+  currency        String     @default("RON")
+  targetDate      DateTime?
+  linkedAccountId String?
+  savedAmount     Decimal    @default(0) @db.Decimal(14, 2)
+  priority        Int        @default(2)
+  status          GoalStatus @default(active)
+  createdAt       DateTime   @default(now())
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  linkedAccount Account? @relation(fields: [linkedAccountId], references: [id])
+}
+
+model KbDocument {
+  id          String   @id @default(uuid())
+  sourcePath  String   @unique
+  title       String
+  category    String
+  productSlug String?
+  sourceUrls  String[]
+  contentHash String
+  content     String
+  updatedAt   DateTime @updatedAt
+
+  chunks KbChunk[]
+}
+
+model KbChunk {
+  id         String                       @id @default(uuid())
+  documentId String
+  index      Int
+  content    String
+  embedding  Unsupported("vector(1024)")?
+
+  document KbDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, index])
+}
+
+model Offer {
+  id          String      @id @default(uuid())
+  userId      String
+  ruleId      String
+  kind        OfferKind
+  productSlug String?
+  title       String
+  terms       Json
+  reasoning   String
+  citations   Json
+  score       Float
+  actionable  Boolean
+  status      OfferStatus @default(active)
+  expiresAt   DateTime
+  createdAt   DateTime    @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productSlug], references: [slug])
+
+  @@index([userId, status])
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  userId    String
+  channel   Channel
+  apiKeyId  String?
+  title     String?
+  piiVault  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  apiKey          ApiKey?          @relation(fields: [apiKeyId], references: [id])
+  messages        Message[]
+  actionProposals ActionProposal[]
+}
+
+model Message {
+  id             String      @id @default(uuid())
+  conversationId String
+  role           MessageRole
+  content        String
+  toolCalls      Json?
+  toolCallId     String?
+  attachments    Json?
+  createdAt      DateTime    @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+}
+
+model ActionProposal {
+  id             String       @id @default(uuid())
+  userId         String
+  conversationId String?
+  type           ActionType
+  payload        Json
+  policyVerdict  Json
+  status         ActionStatus @default(pending)
+  proposedVia    String
+  confirmedBy    String?
+  result         Json?
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+  decidedAt      DateTime?
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation Conversation? @relation(fields: [conversationId], references: [id])
+}
+
+model ApiKey {
+  id                 String    @id @default(uuid())
+  userId             String
+  name               String
+  prefix             String
+  hash               String    @unique
+  scopes             String[]
+  maxAmountPerAction Decimal?  @db.Decimal(14, 2)
+  lastUsedAt         DateTime?
+  revokedAt          DateTime?
+  createdAt          DateTime  @default(now())
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversations Conversation[]
+}
+
+/// Append-only, hash-chained: deliberately no foreign keys, so deleting a user never rewrites history.
+model AuditLog {
+  id        Int       @id @default(autoincrement())
+  ts        DateTime
+  actorType ActorType
+  actorId   String?
+  userId    String?
+  action    String
+  resource  String?
+  verdict   Verdict   @default(allowed)
+  details   Json      @default("{}")
+  prevHash  String
+  hash      String    @unique
+
+  @@index([userId, ts])
+  @@index([action])
+}

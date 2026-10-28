@@ -1,0 +1,33 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: raiffeisen
+      POSTGRES_PASSWORD: raiffeisen
+      POSTGRES_DB: raiffeisen
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # -h forces TCP, so the check stays red while the init scripts run on the socket-only temp server.
+      test: ["CMD-SHELL", "pg_isready -U raiffeisen -h localhost"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  api:
+    build: .
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://raiffeisen:raiffeisen@db:5432/raiffeisen
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    command: sh -c "npx prisma migrate deploy && node dist/seed/seed.js && node dist/main.js"
+
+volumes:
+  pgdata:
