@@ -24,7 +24,7 @@ function fakeDeps(): { deps: McpDeps; audited: unknown[] } {
 const tool = (name: string) => MCP_TOOLS.find((t) => t.name === name)!;
 
 describe('mcp tools', () => {
-  it('exposes the 12 tools', () => {
+  it('exposes the 13 tools', () => {
     expect(MCP_TOOLS.map((t) => t.name).sort()).toEqual(
       [
         'ask_raiffeisen_agent',
@@ -32,6 +32,7 @@ describe('mcp tools', () => {
         'create_goal',
         'get_action_status',
         'get_financial_snapshot',
+        'get_money_map',
         'get_personalised_offers',
         'get_profile_summary',
         'list_goals',

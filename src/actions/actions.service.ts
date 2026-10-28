@@ -12,6 +12,7 @@ import { formatRon, toMoney } from '../common/money';
 import { config } from '../config/config';
 import { isValidIban } from '../banking/iban.util';
 import { LedgerService } from '../banking/ledger.service';
+import { GOAL_DELETED_REASON } from '../goals/goals.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { CatalogProduct } from '../products/catalog.types';
 import { ProductsService } from '../products/products.service';
@@ -36,6 +37,10 @@ export interface ProposalDto {
 }
 
 const NOT_CONFIRMABLE = 'Propunerea nu mai poate fi confirmată';
+export const GOAL_DELETED = 'This goal was deleted.';
+
+const rejectedForDeletedGoal = (row: ActionProposal): boolean =>
+  row.status === 'rejected' && (row.result as { reason?: unknown } | null)?.reason === GOAL_DELETED_REASON;
 const ACTION_STATUSES: ActionStatus[] = ['pending', 'rejected', 'executed', 'failed', 'expired'];
 
 function maskIban(iban: string): string {
@@ -217,7 +222,7 @@ export class ActionsService {
     });
     if (claimed.count === 0) {
       await this.expireIfStale(id);
-      throw new ConflictException(NOT_CONFIRMABLE);
+      throw new ConflictException(rejectedForDeletedGoal(await this.findOwn(p, id)) ? GOAL_DELETED : NOT_CONFIRMABLE);
     }
 
     const row = await this.prisma.actionProposal.findUniqueOrThrow({ where: { id } });

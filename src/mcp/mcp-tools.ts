@@ -12,6 +12,7 @@ import { config } from '../config/config';
 import { simulate } from '../finance/projection';
 import { GoalsService } from '../goals/goals.service';
 import { KnowledgeService } from '../knowledge/knowledge.service';
+import { MoneyMapService } from '../money-map/money-map.service';
 import { OffersService } from '../offers/offers.service';
 import { ProductsService } from '../products/products.service';
 import { AuditService } from '../security/audit/audit.service';
@@ -23,6 +24,7 @@ export interface McpDeps {
   goals: GoalsService;
   offers: OffersService;
   knowledge: KnowledgeService;
+  moneyMap: MoneyMapService;
   products: ProductsService;
   agent: AgentService;
   actions: ActionsService;
@@ -121,6 +123,14 @@ export const MCP_TOOLS: McpToolDef[] = [
     scope: 'offers:read',
     inputSchema: {},
     handler: (d, p) => d.offers.list(p.userId),
+  },
+  {
+    name: 'get_money_map',
+    description:
+      'Harta financiară a clientului: scara în 7 pași (statusuri, pasul curent) și cele mai importante 3 acțiuni recomandate.',
+    scope: 'accounts:read',
+    inputSchema: {},
+    handler: (d, p) => d.moneyMap.getMoneyMap(p.userId),
   },
   {
     name: 'search_knowledge_base',

@@ -220,6 +220,10 @@ export const PERSONAS: PersonaSpec[] = [
       { kind: 'random', category: 'dining', merchants: ['Glovo', "McDonald's", 'Starbucks'], count: [5, 6], amount: [25, 60] },
       { kind: 'random', category: 'entertainment', merchants: ['Cinema City', 'Steam', 'Control Club'], count: [4, 5], amount: [40, 80] },
       { kind: 'random', category: 'shopping', merchants: ['Zara', 'H&M', 'eMAG'], count: [2, 2], amount: [60, 150] },
+      // Expensive debt for the money map (step 3 red): a non-bank (IFN) loan and a buy-now-pay-later plan.
+      // Fixed amounts draw nothing from the RNG, so the rest of her history is unchanged.
+      { kind: 'fixed', direction: 'out', category: 'other', counterparty: 'Provident Financial', description: 'Rată împrumut Provident', day: 8, amount: 210 },
+      { kind: 'fixed', direction: 'out', category: 'other', counterparty: 'Mokka', description: 'Rată Mokka (laptop în rate)', day: 15, amount: 140 },
     ],
   },
 ];

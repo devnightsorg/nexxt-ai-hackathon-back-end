@@ -64,11 +64,11 @@ describe('mcp', () => {
     await app.close();
   });
 
-  it('lists the 12 tools and returns andrei’s financial snapshot', async () => {
+  it('lists the 13 tools and returns andrei’s financial snapshot', async () => {
     const client = await connect(apiKey());
     try {
       const { tools } = await client.listTools();
-      expect(tools).toHaveLength(12);
+      expect(tools).toHaveLength(13);
       expect(tools.map((t) => t.name)).toContain('get_financial_snapshot');
 
       const res = (await client.callTool({ name: 'get_financial_snapshot', arguments: {} })) as ToolRes;

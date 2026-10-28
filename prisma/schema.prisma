@@ -121,6 +121,17 @@ model User {
   conversations   Conversation[]
   actionProposals ActionProposal[]
   apiKeys         ApiKey[]
+  situation       SituationProfile?
+}
+
+/// Onboarding "situation" answers that feed the money map (transactions win when they disagree).
+model SituationProfile {
+  userId      String    @id
+  answers     Json      @default("{}")
+  completedAt DateTime?
+  updatedAt   DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Product {
