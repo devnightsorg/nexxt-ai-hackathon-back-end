@@ -1,8 +1,8 @@
 import { PENSION_DEDUCTIBLE_MONTHLY_RON } from '../offers/offer-rules';
 import type { LadderResult } from './ladder';
 import type { DebtSummary } from './lenders';
+import { lei, spanOf } from './phrases';
 
-const lei = (n: number): string => `${Math.round(n).toLocaleString('en-US')} lei`;
 const r1 = (n: number): number => Math.floor(n * 10) / 10;
 const pct = (n: number): number => Math.round(n * 100);
 
@@ -11,16 +11,18 @@ export function buildHeadline(r: LadderResult, debt: DebtSummary): { text: strin
   const f = r.facts;
   const step = r.ladder[r.currentStep - 1];
   const facts = [
-    `income_ron=${Math.round(f.income)}`,
-    `surplus_ron=${Math.round(f.surplus)}`,
-    `buffer_months=${r1(f.bufferMonths)}`,
-    `dti_pct=${pct(f.dti)}`,
+    `Income about ${lei(f.income)} a month`,
+    f.surplus >= 0
+      ? `About ${lei(f.surplus)} left at the end of the month`
+      : `Spending about ${lei(-f.surplus)} a month above income`,
+    `Cash and savings cover ${spanOf(f.bufferMonths)} of spending`,
+    f.dti > 0 ? `Loan payments take ${pct(f.dti)}% of income` : 'No regular loan payments found',
   ];
   const t = (text: string, ...extra: string[]) => ({ text, facts: [...facts, ...extra] });
 
   if (!f.hasData && r.ladder.every((s) => s.status === 'grey' || s.step === 7)) {
     const open = r.ladder.filter((s) => s.status === 'grey' && s.step < 7).length;
-    return t(`Answer a few questions to light up the ${open} steps of your money map.`, `grey_steps=${open}`);
+    return t(`Answer a few questions to light up the ${open} steps of your money map.`, `${open} steps still need your answers`);
   }
   if (step.status === 'grey') {
     return r.currentStep === 1
@@ -40,13 +42,13 @@ export function buildHeadline(r: LadderResult, debt: DebtSummary): { text: strin
       if (expensive.length) {
         return t(
           `You pay ${lei(debt.expensiveMonthly)} a month to ${expensive.map((p) => p.lender).join(' and ')} — clear that expensive debt next.`,
-          `expensive_debt_ron_per_month=${debt.expensiveMonthly}`,
+          `Expensive debt payments about ${lei(debt.expensiveMonthly)} a month`,
         );
       }
       if (f.creditCardDebt > 0) {
         return t(
           `You carry ${lei(f.creditCardDebt)} on your credit card — paying it down is your next step.`,
-          `credit_card_debt_ron=${Math.round(f.creditCardDebt)}`,
+          `Credit card balance ${lei(f.creditCardDebt)}`,
         );
       }
       return t(`Loan payments take ${pct(f.dti)}% of your income — keep them under 40%.`);
@@ -56,19 +58,19 @@ export function buildHeadline(r: LadderResult, debt: DebtSummary): { text: strin
     case 'emergency_fund':
       return t(
         `Your emergency fund covers ${r1(f.bufferMonths)} of ${f.emergencyTargetMonths} months — keep building it.`,
-        `emergency_target_months=${f.emergencyTargetMonths}`,
+        `Emergency fund target: ${f.emergencyTargetMonths} months of spending`,
       );
     case 'goals':
       return t(
         `Your goals need ${lei(f.goalsRequiredMonthly)} a month — let's put a plan behind them.`,
-        `goals_required_ron_per_month=${Math.round(f.goalsRequiredMonthly)}`,
+        `Your goals need about ${lei(f.goalsRequiredMonthly)} a month`,
       );
     case 'long_term':
       return step.status === 'green'
         ? t(`All 7 steps are green — you keep ${pct(f.surplusRatio)}% of your income each month.`)
         : t(
             `Your foundations are solid — ${lei(PENSION_DEDUCTIBLE_MONTHLY_RON)} a month into a private pension is tax-deductible.`,
-            `pension_deductible_ron_per_month=${PENSION_DEDUCTIBLE_MONTHLY_RON}`,
+            `Up to ${lei(PENSION_DEDUCTIBLE_MONTHLY_RON)} a month into a private pension is tax-deductible`,
           );
   }
 }

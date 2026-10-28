@@ -181,5 +181,6 @@ describe('rankActions', () => {
     };
     const [first] = rankActions(input({ debt, candidates: [] }));
     expect(first).toMatchObject({ step: 3, ruleId: 'expensive_debt_payoff', impactRonPerMonth: 350, product: null });
+    expect(first.reasoning[1].fact).toBe('Provident about 210 lei a month, Mokka about 140 lei a month');
   });
 });

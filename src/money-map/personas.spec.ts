@@ -25,6 +25,9 @@ function expectContract(m: MoneyMap): void {
     'long_term',
   ]);
   expect(m.actions.length).toBeLessThanOrEqual(3);
+  // Facts are shown as-is in the UI: sentences, never key=value pairs.
+  const facts = [...m.headline.facts, ...m.actions.flatMap((a) => a.reasoning.map((r) => r.fact))];
+  for (const f of facts) expect(f).not.toMatch(/\w=\S/);
   for (const a of m.actions) {
     expect(Object.keys(a).sort()).toEqual(
       ['id', 'impactRonPerMonth', 'kind', 'product', 'reasoning', 'ruleId', 'step', 'stepLabel', 'title'].sort(),
@@ -48,7 +51,12 @@ describe('money map for the seed personas', () => {
     expect(ladder(m)).toEqual(['green', 'red', 'red', 'grey', 'red', 'amber', 'grey']);
     expect(m.currentStep).toBe(2);
     expect(m.actions.map((a) => a.step)).toEqual([2, 3, 6]);
-    expect(m.headline.facts).toContain('buffer_months=0.7');
+    expect(m.headline.facts).toEqual([
+      'Income about 4,800 lei a month',
+      expect.stringMatching(/^About [\d,]+ lei left at the end of the month$/),
+      'Cash and savings cover about 3 weeks of spending',
+      'No regular loan payments found',
+    ]);
   });
 
   it('maria: conflicting answers are reported and transactions win', () => {

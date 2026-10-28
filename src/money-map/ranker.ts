@@ -6,6 +6,7 @@ import type { CatalogProduct, ProductCategory } from '../products/catalog.types'
 import { MONEY_MAP_CONFIG as C, stepLabel, stepWeight } from './config';
 import type { LadderResult } from './ladder';
 import type { DebtSummary } from './lenders';
+import { CATEGORY_LABELS, lei } from './phrases';
 import type { LadderStep, MoneyMapAction, SituationAnswers } from './types';
 
 export interface RankInput {
@@ -21,18 +22,8 @@ export interface RankInput {
 
 export const CREDIT_CATEGORIES: ProductCategory[] = ['personal_loan', 'mortgage', 'credit_card'];
 
-const lei = (n: number): string => `${Math.round(n).toLocaleString('en-US')} lei`;
 const round = (n: number | null): number | null => (n === null || !Number.isFinite(n) ? null : Math.round(n));
 const STATUS_RANK = { red: 0, amber: 1, green: 2, grey: 3 } as const;
-const CATEGORY_LABELS: Record<string, string> = {
-  groceries: 'groceries',
-  dining: 'eating out',
-  shopping: 'shopping',
-  entertainment: 'entertainment',
-  transport: 'transport',
-  travel: 'travel',
-  subscriptions: 'subscriptions',
-};
 
 /** Why each offer rule fired, in plain English. */
 const RULE_TEXT: Record<RuleId, string> = {
@@ -102,13 +93,13 @@ function describe(
       return {
         title: `Move ${lei(c.suggestedAmount ?? 0)} of idle cash into ${name}`,
         impact: monthlyInterest(c.suggestedAmount, p),
-        fact: `idle_cash_ron=${Math.round(i.snapshot.idleCash)}`,
+        fact: `About ${lei(i.snapshot.idleCash)} sits in your current account above one month of spending`,
       };
     case 'goal_term_deposit':
       return {
         title: `Put ${lei(c.suggestedAmount ?? 0)} in a ${c.termMonths}-month ${name} for "${goal?.name ?? 'your goal'}"`,
         impact: monthlyInterest(c.suggestedAmount, p),
-        fact: `deposit_ron=${c.suggestedAmount}`,
+        fact: `${lei(c.suggestedAmount ?? 0)} into the deposit, maturing before the goal date`,
       };
     case 'emergency_fund':
       return {
@@ -117,25 +108,25 @@ function describe(
             ? `Build a 1-month starter buffer: ${lei(c.monthlyContribution ?? 0)}/month into ${name}`
             : `Grow your emergency fund: ${lei(c.monthlyContribution ?? 0)}/month into ${name}`,
         impact: c.monthlyContribution,
-        fact: `monthly_contribution_ron=${c.monthlyContribution}`,
+        fact: `Contribution of ${lei(c.monthlyContribution ?? 0)} a month`,
       };
     case 'home_goal':
       return {
         title: `Save ${lei(c.monthlyContribution ?? 0)}/month for "${goal?.name ?? 'your home'}" with ${name}`,
         impact: c.monthlyContribution ?? monthlyInterest(c.suggestedAmount, p),
-        fact: `monthly_contribution_ron=${c.monthlyContribution}`,
+        fact: `Contribution of ${lei(c.monthlyContribution ?? 0)} a month`,
       };
     case 'retirement':
       return {
         title: `Start a private pension (Pillar III): ${lei(c.monthlyContribution ?? 0)}/month into ${name}`,
         impact: c.monthlyContribution,
-        fact: `monthly_contribution_ron=${c.monthlyContribution}`,
+        fact: `Contribution of ${lei(c.monthlyContribution ?? 0)} a month`,
       };
     case 'long_term_growth':
       return {
         title: `Invest ${lei(c.suggestedAmount ?? 0)} for the long term in ${name}`,
         impact: null,
-        fact: `risk_profile=${i.riskProfile}`,
+        fact: `Your risk profile is ${i.riskProfile}`,
       };
     case 'credit_card_debt':
       return {
@@ -143,19 +134,19 @@ function describe(
           ? `Refinance your ${lei(i.snapshot.creditCardDebt)} card balance with ${name}`
           : `Pay down your ${lei(i.snapshot.creditCardDebt)} credit card balance`,
         impact: null,
-        fact: `credit_card_debt_ron=${Math.round(i.snapshot.creditCardDebt)}`,
+        fact: `Credit card balance ${lei(i.snapshot.creditCardDebt)}`,
       };
     case 'subscriptions_tip':
       return {
         title: `Cancel half of your subscriptions to save ${lei(i.snapshot.subscriptionsMonthly / 2)}/month`,
         impact: i.snapshot.subscriptionsMonthly / 2,
-        fact: `subscriptions_ron_per_month=${Math.round(i.snapshot.subscriptionsMonthly)}`,
+        fact: `Subscriptions about ${lei(i.snapshot.subscriptionsMonthly)} a month`,
       };
     case 'youth_package':
       return {
         title: `Switch to ${name}, the account package for young people`,
         impact: null,
-        fact: `product=${c.productSlug}`,
+        fact: 'You are 26 or younger, so you qualify for the young customers package',
       };
   }
 }
@@ -174,10 +165,10 @@ function engineDrafts(i: RankInput, make: MakeDraft): Draft[] {
     out.push(
       make(1, 'cash_flow_review', 'tip', null, {
         title: top
-          ? `Trim ${CATEGORY_LABELS[top.category]} by 10% to free ${lei(cut ?? 0)}/month`
+          ? `Trim ${CATEGORY_LABELS[top.category].toLowerCase()} by 10% to free ${lei(cut ?? 0)}/month`
           : 'Set a monthly spending plan before payday',
         impact: cut,
-        fact: top ? `${top.category}_ron_per_month=${Math.round(top.monthlyAvg)}` : `surplus_ron=${Math.round(i.ladder.facts.surplus)}`,
+        fact: top ? `${CATEGORY_LABELS[top.category]} about ${lei(top.monthlyAvg)} a month` : `About ${lei(i.ladder.facts.surplus)} left at the end of the month`,
         rule:
           L[0].status === 'green'
             ? 'You told us money feels tight, so the first action is about spending'
@@ -191,7 +182,7 @@ function engineDrafts(i: RankInput, make: MakeDraft): Draft[] {
       make(3, 'expensive_debt_payoff', 'tip', null, {
         title: `Pay off ${expensive.map((p) => p.lender).join(' and ')} first to free ${lei(i.debt.expensiveMonthly)}/month`,
         impact: i.debt.expensiveMonthly,
-        fact: expensive.map((p) => `${p.lender.toLowerCase().replace(/\s+/g, '_')}_ron_per_month=${p.monthlyAvg}`).join(', '),
+        fact: expensive.map((p) => `${p.lender} about ${lei(p.monthlyAvg)} a month`).join(', '),
         rule: 'Non-bank and buy-now-pay-later credit costs the most; clear it before saving more',
       }),
     );
@@ -204,7 +195,7 @@ function engineDrafts(i: RankInput, make: MakeDraft): Draft[] {
       make(3, 'card_payoff', 'tip', null, {
         title: 'Pay more than the minimum on your credit card every month',
         impact: null,
-        fact: `credit_card_debt_ron=${Math.round(i.snapshot.creditCardDebt)}`,
+        fact: `Credit card balance ${lei(i.snapshot.creditCardDebt)}`,
         rule: 'Revolving card balances carry the highest bank interest',
       }),
     );
@@ -275,7 +266,7 @@ export function rankActions(i: RankInput): MoneyMapAction[] {
         make(step, 'long_term_meeting', 'meeting', null, {
           title: 'Book a meeting with an advisor about long-term investing',
           impact: null,
-          fact: 'risk_profile=conservative',
+          fact: 'Your risk profile is conservative',
           rule: 'Investment products are only named for balanced or dynamic risk profiles',
           ruleScore: c.score,
         }),
