@@ -1,0 +1,3707 @@
+[
+  {
+    "slug": "pachet-cont-curent-zero-simplu",
+    "name": "Pachet de cont curent ZERO Simplu",
+    "category": "account_package",
+    "summary": "Entry-level Raiffeisen current-account package (RON current account + Visa debit card + Smart Mobile) with zero monthly fee if you receive at least 1,000 lei/month and make one card/phone payment per month; 100% online opening in about 8 minutes.",
+    "key_features": [
+      "RON current account + Visa debit card + Smart Mobile app included",
+      "Free instant payments and RON incoming transfers up to 49,999 lei",
+      "Free RON cash withdrawals at ATMs of ANY bank in Romania",
+      "Free RON savings account (Super Acces Plus, 0 lei admin fee)",
+      "Smart Hour: RON<->EUR exchange at BNR rate Mon-Fri 10:00-11:00, max 1,500 EUR/day, 10,000 EUR/month",
+      "'Plătești și economisești' automatic round-up style saving on card payments",
+      "Overdraft interest discount of 5 percentage points vs standard (standard margin 9.99% -> 4.99% over IRCC)",
+      "Smart Market cashback/vouchers; Google Pay / Apple Pay / Garmin Pay",
+      "Welcome bonus up to 600 lei for new customers (01.09.2026-31.01.2027, see regulation)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Monthly package administration fee",
+        "value": "0 lei if conditions met, else 15 lei/month",
+        "notes": "Zero when BOTH: (1) at least one 'electronic transaction' in the month (POS/online card payment, Smart Mobile payment, Direct Debit or FixPay) AND (2) monthly credit turnover of at least 1,000 lei. Customers aged 18-24 pay 0 even without a payment. Source: fee list 1 Sep 2026 + product page."
+      },
+      {
+        "name": "Account opening/closing",
+        "value": "0 lei",
+        "notes": "Fee list s.1.1"
+      },
+      {
+        "name": "Card delivery fee",
+        "value": "15 lei",
+        "notes": "Debited from the attached account for newly issued/reissued/renewed debit cards"
+      },
+      {
+        "name": "Smart Mobile subscription",
+        "value": "0 lei in ZERO Simplu/ZERO Tot",
+        "notes": "Standard price 4 lei/month"
+      },
+      {
+        "name": "Interbank RON transfer in Smart Mobile",
+        "value": "0 lei in ZERO Simplu/ZERO Tot",
+        "notes": "Standard 4 lei + clearing fee 0.51 lei (<50,000 lei)"
+      },
+      {
+        "name": "Instant payments / RoPay (RON)",
+        "value": "0 lei",
+        "notes": "Fee list s.2.1; note the Smart Mobile page shows 0.45 lei for the standard (non-ZERO) price"
+      },
+      {
+        "name": "Cash withdrawal at ATMs in Romania (RON)",
+        "value": "0 lei",
+        "notes": "Included in package"
+      },
+      {
+        "name": "Gambling card transactions",
+        "value": "1% + 10 lei",
+        "notes": "Fee list s.6"
+      }
+    ],
+    "eligibility": [
+      "Individual (persoană fizică) aged 18+",
+      "New customers: Romanian citizen, 18+, can open fully online with ID photo + short selfie video (about 8 minutes)",
+      "Existing customers can switch to the package from Smart Mobile or branch",
+      "Zero fee needs: >=1,000 lei monthly credits + 1 electronic payment/month"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "daily_spending",
+      "salary_account",
+      "student_young_adult",
+      "short_term_saving"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/conturi-si-pachete-de-cont-curent/pachetul-de-cont-curent-zero-simplu.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/conturi-si-pachete-de-cont-curent.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "pachet-cont-curent-gold",
+    "name": "Pachet de cont curent Gold",
+    "category": "account_package",
+    "summary": "Mid-tier package: RON account with Visa Gold debit card, an extra EUR or USD current account, 3 free airport business-lounge entries per year, BlackCab discount and all ZERO Simplu benefits; 0 lei/month if you receive 2,000 lei/month and make one card payment.",
+    "key_features": [
+      "Visa Gold debit card + RON current account",
+      "Additional current account in EUR or USD",
+      "3 free Business Lounge entries per year (Romania and Vienna airports) for payments of minimum 2,000 lei",
+      "12% discount at BlackCab rides; road-assistance / home concierge discounts",
+      "All ZERO Simplu benefits (Smart Mobile, instant payments, free RON ATM cash-out, Smart Hour, Plătești și economisești)",
+      "Preferential-interest term deposits (3 and 12 months) for salary customers",
+      "Welcome bonus up to 600 lei for new customers (01.09.2026-31.01.2027)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Monthly package administration fee",
+        "value": "0 lei if conditions met, else 30 lei/month",
+        "notes": "Zero when BOTH: >=1 electronic payment per month AND monthly credit turnover >= 2,000 lei."
+      },
+      {
+        "name": "Card delivery fee",
+        "value": "15 lei",
+        "notes": ""
+      },
+      {
+        "name": "Stand-alone Visa Gold debit card (not in a package)",
+        "value": "Issue 70 lei; annual 200 lei; min. initial deposit 300 lei",
+        "notes": "Fee list s.6; these do not apply when the card is inside the package"
+      },
+      {
+        "name": "Account in other currency",
+        "value": "Included in package",
+        "notes": "Outside a package: 3 EUR/month admin for FX current accounts"
+      }
+    ],
+    "eligibility": [
+      "Individual aged 18+",
+      "Zero fee needs >=2,000 lei monthly credits + 1 electronic payment/month",
+      "Opens online in Smart Mobile (about 8 minutes) for new customers"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON",
+      "EUR",
+      "USD"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "daily_spending",
+      "travel",
+      "salary_account"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/conturi-si-pachete-de-cont-curent/pachet-cont-curent-gold.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/card-debit-visa-gold.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "pachet-cont-curent-premium",
+    "name": "Pachet de cont curent Premium",
+    "category": "account_package",
+    "summary": "Top retail package for Premium customers: Visa Platinum debit + Platinum credit card, multi-currency accounts, 6 lounge entries, accident insurance, travel insurance and preferential credit/deposit pricing. Zero monthly fee with 2,000 EUR average monthly income or 40,000 EUR held with Raiffeisen.",
+    "key_features": [
+      "Visa Platinum debit card + RON current account + extra RON account",
+      "EUR and USD current accounts; EUR or USD debit card; payments and receipts in the account currency",
+      "Visa Platinum credit card included",
+      "6 free Business Lounge entries per year (Romania + Vienna)",
+      "0% interest on the first 500 lei used from overdraft",
+      "Accident insurance (death or total permanent disability from accident) + travel insurance on Platinum cards",
+      "Visa merchant discounts; all ZERO Simplu benefits",
+      "Premium status unlocks preferential mortgage/consumer-loan rates and bonus deposits"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Monthly package administration fee",
+        "value": "0 lei if conditions met, else 60 lei/month",
+        "notes": "Zero when: monthly electronic transaction AND (average monthly income >= 2,000 EUR equivalent over last 3 months OR >= 40,000 EUR equivalent total balance with Raiffeisen Group in the last calendar month) - per fee list footnote: total balance of holder's accounts >= 40,000 EUR + 1 electronic transaction, OR average monthly income >= 2,000 EUR + 1 electronic transaction."
+      },
+      {
+        "name": "Card delivery fee",
+        "value": "15 lei",
+        "notes": ""
+      },
+      {
+        "name": "Stand-alone Visa Platinum debit (outside package)",
+        "value": "Issue 70 lei; annual 200 lei; min deposit 300 lei",
+        "notes": "Fee list s.6 shares the Gold/Platinum column"
+      }
+    ],
+    "eligibility": [
+      "Premium customer profile: average monthly incoming income >= 2,000 EUR equivalent (last 3 months) OR >= 40,000 EUR equivalent held with Raiffeisen Group",
+      "Make at least one electronic payment per month for the fee waiver"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON",
+      "EUR",
+      "USD"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "daily_spending",
+      "travel",
+      "high_income",
+      "home_purchase"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/conturi-si-pachete-de-cont-curent.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "cont-curent-14-17-ani",
+    "name": "Cont curent 14-17 ani (Cardul Galben)",
+    "category": "account_package",
+    "summary": "Free current account for teenagers 14-17 with a Visa debit card (Cardul Galben) and Smart Mobile; zero fees with no conditions and a bonus of up to 300 lei in 2026-27.",
+    "key_features": [
+      "Zero fees for account, card, Smart Mobile, incoming transfers, card payments and ATM withdrawals - no conditions",
+      "Visa debit 'Cardul Galben'; Apple Pay / Google Pay",
+      "Instant incoming payments; free RON ATM withdrawals at any bank in Romania",
+      "Bonus up to 300 lei: 50 lei at end of the month after opening + 50 lei for each of the next 5 months with >=3 debit card payments (campaign 01.09.2026-31.01.2027)",
+      "Parent/legal representative opens it together with the teen in branch"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Account administration (14-17 account)",
+        "value": "0 lei/month",
+        "notes": "Fee list s.1.1 'Cont 14-17 ani 0 lei/lună'"
+      },
+      {
+        "name": "Card delivery fee",
+        "value": "15 lei",
+        "notes": "Debited from the attached account"
+      }
+    ],
+    "eligibility": [
+      "Age 14-17 (under 18)",
+      "Opening in branch: minor brings ID card + birth certificate; legal representative brings ID card"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "child_teen",
+      "daily_spending",
+      "financial_education"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/conturi-si-pachete-de-cont-curent/cont-adolescenti-14-17-ani.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "incasare-pensie-raiffeisen",
+    "name": "Încasare pensie la Raiffeisen (pensia pe card)",
+    "category": "account_package",
+    "summary": "Offer for pensioners who move their pension to Raiffeisen: zero-fee RON account + Visa card (subject to the standard package conditions), free RON ATM withdrawals at any Romanian bank, preferential deposits and overdraft, welcome bonus up to 600 lei.",
+    "key_features": [
+      "Zero commission for account, card, unlimited RON payments/receipts and mobile banking (subject to the package's standard free-of-charge conditions)",
+      "Free RON cash withdrawals 24/7 at any ATM in Romania",
+      "Bonus up to 600 lei for new customers + up to 2,000 lei when bringing friends",
+      "Bank handles transfer of the pension from the Casa de Pensii (CNPP, MAI, MApN) - no need to visit the pension house",
+      "Preferential-rate deposits for customers with recurring monthly inflows >= 2,000 lei; Fresh Money deposits; preferential overdraft"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Package administration",
+        "value": "0 lei when package conditions are met",
+        "notes": "Page says 'cu îndeplinirea condițiilor standard pentru gratuitatea pachetului' (e.g. ZERO Simplu: 1,000 lei monthly inflow + 1 payment; pension counts as inflow - inferred)"
+      }
+    ],
+    "eligibility": [
+      "Pensioner receiving a pension from CNPP or other pension houses (MAI, MApN)",
+      "Documents: ID card, pension slip (talon de pensie), account statement, Annex 1 - request to collect pension, GDPR consent"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "retirement",
+      "daily_spending",
+      "salary_account"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/conturi-si-pachete-de-cont-curent/incasare-pensie.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "pachet-cont-curent-asist",
+    "name": "Pachetele de cont curent Asist (cont de plăți cu servicii de bază)",
+    "category": "account_package",
+    "summary": "Basic payment-account packages ('Asist' and 'Asist Standard') offered under Law 258/2017 (basic payment accounts); fee list shows 0 lei/month administration. Details are given in branches.",
+    "key_features": [
+      "Basic payment account with basic services under Legea 258/2017",
+      "Listed in the fee list with 0 lei/month administration fee",
+      "Details available in branches only (page gives no feature list)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Administration fee Pachet Asist / Asist Standard",
+        "value": "0 lei/month",
+        "notes": "Fee list s.1.1"
+      }
+    ],
+    "eligibility": [
+      "Customers who want a basic payment account (Law 258/2017) - see branch"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "daily_spending",
+      "basic_banking"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/conturi-si-pachete-de-cont-curent.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "cont-curent-standard",
+    "name": "Pachet de cont curent Standard / Cont curent Standard",
+    "category": "current_account",
+    "summary": "Legacy-style paid current account: 'Pachet Standard' 3 lei/month and 'Cont Curent Standard' 5 lei/month in the fee list; referenced in mortgage cost examples as the standard current-account package (account + debit card) at 3 lei/month.",
+    "key_features": [
+      "Pachet Standard (current account + attached debit card): 3 lei/month",
+      "Cont Curent Standard: 5 lei/month",
+      "Used as the reference package in mortgage cost examples (3 lei/month)",
+      "No feature list on the retrieved pages - use ZERO Simplu for new customers"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Administration - Pachet Standard",
+        "value": "3 lei/month",
+        "notes": "Fee list s.1.1"
+      },
+      {
+        "name": "Administration - Cont Curent Standard",
+        "value": "5 lei/month",
+        "notes": "Fee list s.1.1"
+      },
+      {
+        "name": "Administration of FX current account (other currencies)",
+        "value": "3 EUR/month equivalent",
+        "notes": "Fee list s.1.1"
+      },
+      {
+        "name": "Account opening / closing",
+        "value": "0 lei",
+        "notes": ""
+      },
+      {
+        "name": "Paper statements by post",
+        "value": "3 lei/account/month",
+        "notes": "Statements in branch: 0 lei once a month"
+      },
+      {
+        "name": "Duplicate documents (incl. statements)",
+        "value": "2 EUR up to 10 pages; +0.20 EUR/page above",
+        "notes": ""
+      },
+      {
+        "name": "Garnishment (poprire) set-up fee",
+        "value": "25 lei per garnishment",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individual; see CGB for account-opening requirements"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON",
+      "EUR",
+      "USD"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "basic_banking"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "cont-economii-super-acces-plus",
+    "name": "Cont de economii Super Acces Plus",
+    "category": "savings_account",
+    "summary": "Flexible instant-access savings account in RON, EUR or USD with tiered variable interest (RON 2.00%/2.50%/3.00% by balance band), no monthly fee, deposits/withdrawals anytime and interest paid daily-accrued, monthly-capitalised.",
+    "key_features": [
+      "RON interest tiers: up to 50,000 lei 2.00%; 50,001-300,000 lei 2.50%; above 300,000 lei 3.00% (marginal bands)",
+      "EUR 0.50% and USD 0.30% regardless of balance",
+      "Variable rate; interest accrues daily on end-of-day balance, credited monthly on the last day of the month; new deposits earn interest from the day received",
+      "0 lei administration, 0% opening and closing commission",
+      "Open 100% online from Smart Mobile in RON, EUR or USD; no minimum opening amount stated (1 leu/EUR/USD)",
+      "Free automatic monthly transfers from salary/current account through FixPay",
+      "Deposit cash at Raiffeisen multifunctional machines (MFM) with a Raiffeisen card",
+      "See interest received in Smart Mobile (useful for annual income declaration)"
+    ],
+    "interest_rate_or_return": {
+      "value": 2.0,
+      "unit": "% p.a. (RON, band up to 50,000 lei; variable)",
+      "conditions": "RON: <=50,000 lei 2.00%; 50,001-300,000 lei 2.50%; >300,000 lei 3.00%. EUR 0.50% flat; USD 0.30% flat. Rates are variable and differentiated per balance band (each slice earns its band's rate). Interest income is taxed 10% at source.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Account opening",
+        "value": "0 lei / EUR / USD",
+        "notes": "Fee list s.1.2"
+      },
+      {
+        "name": "Monthly administration",
+        "value": "0 lei (RON) / 0 EUR/USD",
+        "notes": "Fee list s.1.2"
+      },
+      {
+        "name": "Card cash withdrawal from savings account",
+        "value": "1.5%, min 10 lei (min 1 EUR/USD)",
+        "notes": "Standard debit-card cash fee depending on the holder's package"
+      },
+      {
+        "name": "Withholding tax on interest",
+        "value": "10%",
+        "notes": "Deducted before interest is paid, per the pages"
+      }
+    ],
+    "eligibility": [
+      "Account holder aged 18+ (hub page: 'Vârsta titularului: minimum 18 ani')",
+      "Existing customers open in Smart Mobile; non-customers first open a current account (about 8 minutes, 5 steps)"
+    ],
+    "min_amount": {
+      "value": 1,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON",
+      "EUR",
+      "USD"
+    ],
+    "terms": [
+      "No fixed term (unlimited)"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "emergency_fund",
+      "short_term_saving",
+      "travel",
+      "child_education"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/cont-de-economii.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "plateste-si-economisesti",
+    "name": "Cont de economii «Plătești și economisești» (SavingBox)",
+    "category": "savings_account",
+    "summary": "Automatic saving on card payments: choose 1%, 3%, 5% or 10% of every debit-card payment to be moved into a dedicated RON savings account paying 10% p.a. on the first 5,000 lei (variable), 5% up to 50,000 lei and 2.5% above.",
+    "key_features": [
+      "Activate in Smart Mobile at no cost and pick 1%, 3%, 5% or 10% of each debit-card payment to set aside automatically",
+      "Dedicated RON savings account paid 10.00% up to 5,000 lei, 5.00% for 5,001-50,000 lei, 2.50% above 50,000 lei (variable, marginal bands)",
+      "Account can only be funded by the feature's automatic transfers",
+      "0 lei monthly administration fee; instant access to the money",
+      "Included at no cost with ZERO Simplu / Gold / Premium"
+    ],
+    "interest_rate_or_return": {
+      "value": 10.0,
+      "unit": "% p.a. (RON, on first 5,000 lei; variable)",
+      "conditions": "Bands: <=5,000 lei 10.00%; 5,001-50,000 lei 5.00%; >50,000 lei 2.50%. Rate is variable. Account can be opened only together with activation of the 'Plătești și economisești' function and funded only by it. Interest accrues daily, credited monthly; 10% tax at source (per savings-account FAQ).",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Monthly administration",
+        "value": "0 lei",
+        "notes": "RON savings account dedicated to the service"
+      },
+      {
+        "name": "Card cash withdrawal from the account",
+        "value": "1.5%, min 10 lei",
+        "notes": "Standard debit-card cash fee depending on package"
+      }
+    ],
+    "eligibility": [
+      "Customer with a RON debit card/current account and Smart Mobile",
+      "Feature available for payments made with the debit card in RON"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "No fixed term"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "short_term_saving",
+      "emergency_fund",
+      "habit_building",
+      "round_up_saving"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/cont-de-economii.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/digital-banking/mobile-banking.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/carduri-de-debit.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": false,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "depozit-termen-lei",
+    "name": "Depozit la termen în LEI",
+    "category": "term_deposit",
+    "summary": "Fixed-rate RON term deposits opened 100% in Smart Mobile: 3 months 4.70%, 12 months 5.20%, 24 months 6.40% (standard rates); 0% interest if broken early (except 24-month deposits).",
+    "key_features": [
+      "Standard fixed rates: 3 months 4.70%; 12 months 5.20%; 24 months 6.40%",
+      "Minimum 500 lei; opened exclusively via Raiffeisen Smart Mobile at these rates",
+      "Interest capitalised at maturity; automatic renewal for 3- and 12-month deposits",
+      "0% opening, administration and closing commission",
+      "Early liquidation: 3-12 month deposits earn 0.00% interest; 24-month deposits earn 5.00% if broken before 12 months and 5.50% between 12 and 24 months",
+      "Salary customers can get higher 'bonus' rates (see depozit-bonus-dobanda-incasari)"
+    ],
+    "interest_rate_or_return": {
+      "value": 5.2,
+      "unit": "% p.a. fixed (12 months)",
+      "conditions": "Standard RON rates via Smart Mobile: 3m 4.70% (auto-renew), 12m 5.20% (auto-renew), 24m 6.40%. 10% tax withheld at source on interest.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Opening / administration / closing",
+        "value": "0%",
+        "notes": "Page: 'Ai 0% comision pentru deschiderea, administrarea și închiderea depozitului'"
+      },
+      {
+        "name": "Early liquidation interest (3-12 months)",
+        "value": "0.00% interest paid",
+        "notes": "No interest is paid if liquidated before maturity"
+      },
+      {
+        "name": "Early liquidation interest (24 months)",
+        "value": "5.00% if before 12 months; 5.50% between 12 and 24 months",
+        "notes": "Rate table row 'Dobândă bonificată în cazul lichidării...'"
+      },
+      {
+        "name": "Tax on interest",
+        "value": "10% withheld",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individual with a Raiffeisen current account (new customers open one in Smart Mobile in about 8 min)",
+      "Calculator range: 500 - 1,000,000 lei"
+    ],
+    "min_amount": {
+      "value": 500,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "3 months",
+      "12 months",
+      "24 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "short_term_saving",
+      "home_purchase",
+      "fixed_return"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozite-la-termen.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": [
+      {
+        "months": 3,
+        "ratePct": 4.7
+      },
+      {
+        "months": 12,
+        "ratePct": 5.2
+      },
+      {
+        "months": 24,
+        "ratePct": 6.4
+      }
+    ]
+  },
+  {
+    "slug": "depozit-termen-eur",
+    "name": "Depozit la termen în EUR",
+    "category": "term_deposit",
+    "summary": "Fixed-rate EUR term deposits via Smart Mobile: 1 month 0.50%, 3 months 1.00%, 6 months 1.30%, 12 months 1.60%; minimum 200 EUR; 0% interest if closed early.",
+    "key_features": [
+      "Fixed rates: 1m 0.50%; 3m 1.00%; 6m 1.30%; 12m 1.60%",
+      "Minimum 200 EUR; automatic renewal at maturity",
+      "0% commission for opening, administration and closing",
+      "Early liquidation: 0.00% interest",
+      "Preferential bonus rates for salary customers (3m 1.20%, 6m 1.70%, 12m 2.00%) in a separate product"
+    ],
+    "interest_rate_or_return": {
+      "value": 1.6,
+      "unit": "% p.a. fixed (12 months)",
+      "conditions": "Standard EUR rates via Smart Mobile: 1m 0.50%, 3m 1.00%, 6m 1.30%, 12m 1.60%. 10% tax withheld at source.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Opening / administration / closing",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Early liquidation interest",
+        "value": "0.00%",
+        "notes": "All EUR term deposits 1-12 months"
+      },
+      {
+        "name": "Tax on interest",
+        "value": "10% withheld",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individual with a Raiffeisen current account"
+    ],
+    "min_amount": {
+      "value": 200,
+      "currency": "EUR"
+    },
+    "currencies": [
+      "EUR"
+    ],
+    "terms": [
+      "1 month",
+      "3 months",
+      "6 months",
+      "12 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "short_term_saving",
+      "fx_saving"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozite-la-termen.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "depozit-termen-usd",
+    "name": "Depozit la termen în USD",
+    "category": "term_deposit",
+    "summary": "Fixed-rate USD term deposits, opened only through digital channels: 3 months 2.20%, 6 months 2.40%, 12 months 2.80%; minimum 200 USD.",
+    "key_features": [
+      "Fixed rates: 3m 2.20%; 6m 2.40%; 12m 2.80%",
+      "Minimum 200 USD; opened exclusively digitally",
+      "Auto-renewal at maturity",
+      "Early liquidation: 0.00% interest"
+    ],
+    "interest_rate_or_return": {
+      "value": 2.8,
+      "unit": "% p.a. fixed (12 months)",
+      "conditions": "USD rates, constituire exclusiv prin canale digitale: 3m 2.20%, 6m 2.40%, 12m 2.80%. 10% tax at source.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Opening / administration / closing",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Early liquidation interest",
+        "value": "0.00%",
+        "notes": "3-12 months"
+      },
+      {
+        "name": "Tax on interest",
+        "value": "10% withheld",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individual with a Raiffeisen current account"
+    ],
+    "min_amount": {
+      "value": 200,
+      "currency": "USD"
+    },
+    "currencies": [
+      "USD"
+    ],
+    "terms": [
+      "3 months",
+      "6 months",
+      "12 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "fx_saving",
+      "short_term_saving"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozite-la-termen.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "depozit-fresh-money",
+    "name": "Depozit Fresh Money (sume noi, 4 luni)",
+    "category": "term_deposit",
+    "summary": "Promotional 4-month deposit for NEW money brought to Raiffeisen: 6.20% p.a. in RON and 2.50% in EUR (the bank markets these as its best rates, although its 24-month RON deposit pays 6.40% in the same table); closes at maturity, 0% interest if broken early.",
+    "key_features": [
+      "4-month fixed deposit; RON 6.20% p.a., EUR 2.50% p.a.",
+      "Only for 'new money' (sume noi): increase in total holdings of at least 500 lei / 100 EUR vs baseline date",
+      "Minimum 500 lei / 100 EUR; maximum per client 1,000,000 lei / 200,000 EUR across all Fresh Money deposits; open as many as you like within the cap",
+      "Opened 100% in Smart Mobile; no auto-renewal; interest paid at maturity to current account after tax",
+      "Early liquidation: 0.00% interest",
+      "Fees: 0% opening, administration and closing"
+    ],
+    "interest_rate_or_return": {
+      "value": 6.2,
+      "unit": "% p.a. fixed (RON, 4 months)",
+      "conditions": "RON 6.20% / EUR 2.50%; applies only to new money; 4 months; closes at maturity; promotional offer - check the page for current validity.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Opening / administration / closing",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Early liquidation interest (total liquidation)",
+        "value": "0.00%",
+        "notes": ""
+      },
+      {
+        "name": "Maximum exposure",
+        "value": "1,000,000 lei / 200,000 EUR per client",
+        "notes": "Sum of all Fresh Money deposits"
+      },
+      {
+        "name": "Tax on interest",
+        "value": "10% withheld",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individual with a Raiffeisen current account (new customers can open one in 10-20 minutes in Smart Mobile)",
+      "'Sume noi': any amount >= 500 lei / 100 EUR by which total balance today exceeds total balance on the baseline date minus Fresh Money deposits already opened"
+    ],
+    "min_amount": {
+      "value": 500,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON",
+      "EUR"
+    ],
+    "terms": [
+      "4 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "short_term_saving",
+      "fixed_return",
+      "bring_new_money"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozit-fresh-money.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozite-la-termen.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": false,
+    "rates_by_term": [
+      {
+        "months": 4,
+        "ratePct": 6.2
+      }
+    ]
+  },
+  {
+    "slug": "flexidepozit",
+    "name": "Flexidepozit (depozit cu depuneri ulterioare, 6 luni)",
+    "category": "term_deposit",
+    "summary": "6-month RON deposit at 5.00% fixed that allows additional deposits at any time and one partial withdrawal up to 20% of the balance without closing; auto-renewal; min 500 lei.",
+    "key_features": [
+      "6-month RON deposit, fixed 5.00% p.a.",
+      "Top up anytime with any amount (also free monthly FixPay transfers from salary account)",
+      "One partial withdrawal allowed during the life of the deposit, max 20% of the balance",
+      "Interest capitalised at maturity; automatic renewal",
+      "Full early liquidation earns 0.00% interest",
+      "Minimum opening 500 lei"
+    ],
+    "interest_rate_or_return": {
+      "value": 5.0,
+      "unit": "% p.a. fixed (RON, 6 months)",
+      "conditions": "Fixed 5.00%; capitalised at maturity; 10% tax at source.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Opening / administration / closing",
+        "value": "0%",
+        "notes": "FixPay service for top-ups is free"
+      },
+      {
+        "name": "Partial withdrawal limit",
+        "value": "20% of balance (one withdrawal)",
+        "notes": "Per fee table 'Procent maxim pentru retragerea parțială 20%' and FAQ"
+      },
+      {
+        "name": "Early full liquidation interest",
+        "value": "0.00%",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individual with Raiffeisen current account; open in Smart Mobile (non-customers in about 10-20 min)"
+    ],
+    "min_amount": {
+      "value": 500,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "6 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "short_term_saving",
+      "regular_saving",
+      "emergency_fund"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozit-cu-depuneri-ulterioare.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozite-la-termen.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": [
+      {
+        "months": 6,
+        "ratePct": 5.0
+      }
+    ]
+  },
+  {
+    "slug": "depozit-bonus-dobanda-incasari",
+    "name": "Depozite cu bonus de dobândă (clienți cu încasări în cont)",
+    "category": "term_deposit",
+    "summary": "Higher-rate RON/EUR deposits for customers who receive salary/income at Raiffeisen: RON 3m 5.00%, 6m 5.50% (Premium only), 12m 5.50%; EUR 3m 1.20%, 6m 1.70%, 12m 2.00%. Closed at maturity.",
+    "key_features": [
+      "RON: 3 months 5.00%; 6 months 5.50% (Premium package only); 12 months 5.50%",
+      "EUR: 3 months 1.20%; 6 months 1.70% (Premium only); 12 months 2.00%",
+      "Minimum 500 lei / 200 EUR; closes at maturity (no auto-renewal)",
+      "3- and 12-month: need Gold/Zero Simplu/Zero Tot/Premium/Standard package and >=2,000 lei monthly inflows; 6-month: Premium package and >=10,000 lei monthly inflows",
+      "Eligibility shown in Smart Mobile within the first 5 working days of the month"
+    ],
+    "interest_rate_or_return": {
+      "value": 5.5,
+      "unit": "% p.a. fixed (RON, 12 months)",
+      "conditions": "Bonus rates: RON 3m 5.00%, 6m 5.50%, 12m 5.50%; EUR 3m 1.20%, 6m 1.70%, 12m 2.00%. Conditions cumulative, see eligibility.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Opening / administration / closing",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Early liquidation interest",
+        "value": "0.00% (inferred: the same table row covers all RON/EUR deposits 3-12 months)",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Hold a Gold, ZERO Simplu, ZERO Tot, Premium or Standard current-account package (excluding FWR and Elite segment customers) - 3 and 12 month bonus deposits",
+      "Monthly incoming amounts of at least 2,000 lei at the end of the previous month (3 & 12 months); incoming = cash at MFM, interbank/intrabank transfers (e.g. salary) excluding transfers between own accounts",
+      "6-month bonus deposit: Premium package and >= 10,000 lei monthly inflows",
+      "FWR/Elite = customers with an FWR package and balance >= 250,000 EUR equivalent at end of previous month (excluded)"
+    ],
+    "min_amount": {
+      "value": 500,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON",
+      "EUR"
+    ],
+    "terms": [
+      "3 months",
+      "6 months",
+      "12 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "short_term_saving",
+      "salary_account",
+      "fixed_return"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozite-la-termen.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": [
+      {
+        "months": 3,
+        "ratePct": 5.0
+      },
+      {
+        "months": 6,
+        "ratePct": 5.5
+      },
+      {
+        "months": 12,
+        "ratePct": 5.5
+      }
+    ]
+  },
+  {
+    "slug": "raiffeisen-ron-plus",
+    "name": "Raiffeisen RON Plus",
+    "category": "investment_fund",
+    "summary": "Low-risk RON bond & money-market fund aiming to beat bank deposits. For investors with low risk appetite; not recommended if you need the money within 2 years.",
+    "key_features": [
+      "Low-risk RON bond & money-market fund aiming to beat bank deposits.",
+      "Currency: RON",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 2 years (KID dated 17.01.2025; an aggregator lists 1 year; the KID's SRI is computed on a 1-year horizon)",
+      "Total ongoing costs: 1.29%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "1.29% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Recommended holding: 2 years (KID dated 17.01.2025; an aggregator lists 1 year; the KID's SRI is computed on a 1-year horizon)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "short_term_saving",
+      "emergency_fund_excess",
+      "beat_deposits"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-ron-plus.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://www.uniqa.ro/sites/default/files/2025-06/DIE_Raiffeisen_Ron_Plus_0.pdf",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-ron-flexi",
+    "name": "Raiffeisen RON Flexi",
+    "category": "investment_fund",
+    "summary": "Lowest-cost RON fixed-income fund, able to hold shorter maturities than RON Plus. Low risk; suitable for horizons of 6-12 months.",
+    "key_features": [
+      "Lowest-cost RON fixed-income fund, able to hold shorter maturities than RON Plus.",
+      "Currency: RON",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 6-12 months (aggregator; KID not retrieved)",
+      "Total ongoing costs: 0.99%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "0.99% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Recommended holding: 6-12 months (aggregator; KID not retrieved)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "short_term_saving",
+      "emergency_fund_excess",
+      "beat_deposits"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-ron-flexi.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/",
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-ron-flexi/documente.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-conservator-ron",
+    "name": "Raiffeisen Conservator RON",
+    "category": "investment_fund",
+    "summary": "Fund-of-funds with a low-to-medium risk profile and moderate growth potential. Investor with low-to-medium ('conservator') risk appetite; not recommended if you need the money within 2 years.",
+    "key_features": [
+      "Fund-of-funds with a low-to-medium risk profile and moderate growth potential.",
+      "Currency: RON",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 2 years (KID 17.01.2025)",
+      "Total ongoing costs: 1.73%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "1.73% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Recommended holding: 2 years (KID 17.01.2025)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "medium_term_saving",
+      "beat_deposits"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-conservator-ron.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://www.uniqa.ro/sites/default/files/2025-06/DIE_Raiffeisen_Conservator_Ron.pdf",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-moderat-ron",
+    "name": "Raiffeisen Moderat RON",
+    "category": "investment_fund",
+    "summary": "Fund-of-funds with medium risk profile and moderate growth potential, flexible allocation across bonds and equities. Investor with medium ('moderat') risk appetite; not recommended if you need the money within 3 years.",
+    "key_features": [
+      "Fund-of-funds with medium risk profile and moderate growth potential, flexible allocation across bonds and equities.",
+      "Currency: RON",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 3 years (KID 17.01.2025)",
+      "Total ongoing costs: 1.90%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "1.90% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Recommended holding: 3 years (KID 17.01.2025)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "medium_term_growth",
+      "beat_deposits"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-moderat-ron.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://www.uniqa.ro/sites/default/files/2025-06/DIE_Raiffeisen_Moderat_RON.pdf",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-romania-dividend",
+    "name": "Raiffeisen România Dividend",
+    "category": "investment_fund",
+    "summary": "Equity fund investing up to 100% in the most liquid companies listed on the Bucharest Stock Exchange, with a dividend focus. Higher risk, long horizon; for investors who accept equity-market volatility.",
+    "key_features": [
+      "Equity fund investing up to 100% in the most liquid companies listed on the Bucharest Stock Exchange, with a dividend focus.",
+      "Currency: RON",
+      "Summary risk indicator (SRI): 4/7 (aggregator)",
+      "Recommended holding period: 7 years per aggregator; the official fund page snippet shows 'minim 10 ani' - sources conflict",
+      "Total ongoing costs: 2.43%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "2.43% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Recommended holding: 7 years per aggregator; the official fund page snippet shows 'minim 10 ani' - sources conflict"
+    ],
+    "risk_level": 4,
+    "good_for": [
+      "long_term_growth",
+      "equity_exposure"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-romania-dividend.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/",
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-romania-dividend.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-euro-plus",
+    "name": "Raiffeisen EURO Plus",
+    "category": "investment_fund",
+    "summary": "EUR fixed-income fund (government and corporate bonds, deposits) aiming to beat euro bank deposits with low risk and high liquidity. Low risk; short horizon (about 1 year).",
+    "key_features": [
+      "EUR fixed-income fund (government and corporate bonds, deposits) aiming to beat euro bank deposits with low risk and high liquidity.",
+      "Currency: EUR",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 1 year (aggregator; KID not retrieved)",
+      "Total ongoing costs: 0.95%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "0.95% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "EUR"
+    ],
+    "terms": [
+      "Recommended holding: 1 year (aggregator; KID not retrieved)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "fx_saving",
+      "short_term_saving",
+      "beat_deposits"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-euro-plus.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-euro-flexi",
+    "name": "Raiffeisen EURO Flexi",
+    "category": "investment_fund",
+    "summary": "EUR fixed-income fund with shorter maturities; the cheapest fund in the range. Low risk; short horizon.",
+    "key_features": [
+      "EUR fixed-income fund with shorter maturities; the cheapest fund in the range.",
+      "Currency: EUR",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 1 year (aggregator; KID not retrieved)",
+      "Total ongoing costs: 0.86%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "0.86% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "EUR"
+    ],
+    "terms": [
+      "Recommended holding: 1 year (aggregator; KID not retrieved)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "fx_saving",
+      "short_term_saving"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-euro-flexi.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-euro-obligatiuni",
+    "name": "Raiffeisen EURO Obligațiuni",
+    "category": "investment_fund",
+    "summary": "EUR bond fund with a longer horizon than the Plus/Flexi funds. Low-to-moderate risk (SRI 3/7); bond price fluctuation risk.",
+    "key_features": [
+      "EUR bond fund with a longer horizon than the Plus/Flexi funds.",
+      "Currency: EUR",
+      "Summary risk indicator (SRI): 3/7 (aggregator)",
+      "Recommended holding period: 3 years (aggregator; KID not retrieved)",
+      "Total ongoing costs: 1.08%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "1.08% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "EUR"
+    ],
+    "terms": [
+      "Recommended holding: 3 years (aggregator; KID not retrieved)"
+    ],
+    "risk_level": 3,
+    "good_for": [
+      "fx_saving",
+      "medium_term_saving"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-euro-obligatiuni.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-dolar-plus",
+    "name": "Raiffeisen DOLAR Plus",
+    "category": "investment_fund",
+    "summary": "USD fixed-income fund for short-term USD liquidity. Low risk; short horizon.",
+    "key_features": [
+      "USD fixed-income fund for short-term USD liquidity.",
+      "Currency: USD",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 1 year (aggregator; KID not retrieved)",
+      "Total ongoing costs: 1.32%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "1.32% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "USD"
+    ],
+    "terms": [
+      "Recommended holding: 1 year (aggregator; KID not retrieved)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "fx_saving",
+      "short_term_saving"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-dolar-plus.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/",
+      "https://www.raiffeisenfonduri.ro/content/dam/rbi/invest/eu/ro/documents/die-2026/die_februarie_2026/KID%20Raiffeisen%20Dolar%20Plus%20.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-conservator-euro",
+    "name": "Raiffeisen Conservator Euro",
+    "category": "investment_fund",
+    "summary": "EUR fund-of-funds with low-to-medium risk profile (EUR version of Conservator RON). Low-to-medium risk appetite.",
+    "key_features": [
+      "EUR fund-of-funds with low-to-medium risk profile (EUR version of Conservator RON).",
+      "Currency: EUR",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 2 years (aggregator)",
+      "Total ongoing costs: 1.53%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "1.53% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "EUR"
+    ],
+    "terms": [
+      "Recommended holding: 2 years (aggregator)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "fx_saving",
+      "medium_term_saving"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-conservator-euro.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-moderat-euro",
+    "name": "Raiffeisen Moderat Euro",
+    "category": "investment_fund",
+    "summary": "EUR fund-of-funds with medium risk profile (EUR version of Moderat RON). Medium risk appetite.",
+    "key_features": [
+      "EUR fund-of-funds with medium risk profile (EUR version of Moderat RON).",
+      "Currency: EUR",
+      "Summary risk indicator (SRI): 2/7 (aggregator)",
+      "Recommended holding period: 3 years (aggregator)",
+      "Total ongoing costs: 1.70%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "1.70% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "EUR"
+    ],
+    "terms": [
+      "Recommended holding: 3 years (aggregator)"
+    ],
+    "risk_level": 2,
+    "good_for": [
+      "fx_saving",
+      "medium_term_growth"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-moderat-euro.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-sustainable-mix",
+    "name": "Raiffeisen Sustainable Mix",
+    "category": "investment_fund",
+    "summary": "ESG-screened mixed fund (equities and bonds) in EUR. Above-average risk profile investors; long horizon.",
+    "key_features": [
+      "ESG-screened mixed fund (equities and bonds) in EUR.",
+      "Currency: EUR",
+      "Summary risk indicator (SRI): 3/7 (aggregator)",
+      "Recommended holding period: 7 years (aggregator)",
+      "Total ongoing costs: 1.89%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "1.89% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "EUR"
+    ],
+    "terms": [
+      "Recommended holding: 7 years (aggregator)"
+    ],
+    "risk_level": 3,
+    "good_for": [
+      "long_term_growth",
+      "esg"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-sustainable-mix.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-sustainable-equity",
+    "name": "Raiffeisen Sustainable Equity",
+    "category": "investment_fund",
+    "summary": "ESG-screened equity fund in EUR with access to international equity markets. Above-average risk; long horizon.",
+    "key_features": [
+      "ESG-screened equity fund in EUR with access to international equity markets.",
+      "Currency: EUR",
+      "Summary risk indicator (SRI): 4/7 (aggregator)",
+      "Recommended holding period: 10 years (aggregator)",
+      "Total ongoing costs: 2.32%/year",
+      "Daily redemption (business days); not covered by FGDB; capital not guaranteed",
+      "Can be bought one-off or via recurring SmartInvest plan (min 200 RON / 50 EUR / 50 USD per month)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Total ongoing cost (commission shown by the bank, net)",
+        "value": "2.32% per year",
+        "notes": "SmartInvest page: 'Toate comisioanele afișate sunt nete'"
+      },
+      {
+        "name": "Subscription / redemption commission",
+        "value": "0% per Key Information Document where retrieved (RON Plus, Conservator RON, Moderat RON: 'nu percepem comision de intrare/ieșire')",
+        "notes": "Other funds: see prospectus; an aggregator reports a 1% redemption fee for Raiffeisen Sustainable Equity units held <90 days (unverified)"
+      },
+      {
+        "name": "Redemption commission (unverified, aggregator)",
+        "value": "1% if held <= 90 days, else 0%",
+        "notes": "From aggregator JSON, not from an official bank document"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / investor profile questionnaire at subscription (MiFID II) - bank gives no investment advice",
+      "Minimum initial subscription = one fund unit; unit price not retrieved",
+      "Available to individuals with a Raiffeisen account/custody relationship; subscribe in branch or Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "EUR"
+    ],
+    "terms": [
+      "Recommended holding: 10 years (aggregator)"
+    ],
+    "risk_level": 4,
+    "good_for": [
+      "long_term_growth",
+      "esg",
+      "equity_exposure"
+    ],
+    "source_urls": [
+      "https://www.raiffeisenfonduri.ro/ro/investitii/raiffeisen-sustainable-equity.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-investitii.html",
+      "https://mrfinance.ro/fonduri-de-investitii/raiffeisen/",
+      "https://www.raiffeisenfonduri.ro/content/dam/rbi/invest/eu/ro/documents/die-2026/die_martie_2026/KID%20Raiffeisen%20Sustainable%20Equity%20martie%202026.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "raiffeisen-acumulare-pilon-iii",
+    "name": "Fond de pensii facultative Raiffeisen Acumulare (Pilon III)",
+    "category": "private_pension",
+    "summary": "Voluntary private pension fund (Pillar III) managed by Raiffeisen Asset Management: contributions from 100 lei/month up to 15% of gross income, tax-deductible up to the RON equivalent of 400 EUR/year, payout from age 60, medium risk.",
+    "key_features": [
+      "Minimum contribution 100 lei/month; maximum 15% of monthly gross salary income; can change or suspend/resume contributions",
+      "Contributions tax-deductible up to the RON equivalent of 400 EUR per year",
+      "Accumulated assets can be claimed from age 60 as lump sum or instalments over max 5 years",
+      "Management commission 0.165% per month on total fund assets",
+      "Invests in Romanian government securities, bonds, shares and bank deposits - 'grad de risc mediu'",
+      "Employer contributions possible; check balance and contribution history in Smart Mobile",
+      "Supervised by ASF; fund cannot go bankrupt by law (risk only for the administrator)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Fund management commission",
+        "value": "0.165% per month on total fund assets",
+        "notes": "Prospectus section 'Structura cheltuielilor fondului' has details (not retrieved)"
+      },
+      {
+        "name": "Minimum monthly contribution",
+        "value": "100 lei",
+        "notes": ""
+      },
+      {
+        "name": "Tax",
+        "value": "Contributions deductible up to the RON equivalent of 400 EUR/year; payouts subject to legal deductions at payment date",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Salaried or equivalent-income individual (contribution cap 15% of gross monthly income)",
+      "Appointment in branch via online request form; Premium Invest / Private Banking clients can use their relationship manager",
+      "Read the pension scheme prospectus before joining"
+    ],
+    "min_amount": {
+      "value": 100,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Payout from age 60"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "retirement",
+      "long_term_growth",
+      "tax_optimisation"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/fonduri-de-pensii-facultative.html",
+      "https://www.raiffeisenfonduri.ro/pensii/raiffeisen-acumulare/"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "flexicredit-nevoi-personale",
+    "name": "Flexicredit - credit de nevoi personale fără ipotecă",
+    "category": "personal_loan",
+    "summary": "Unsecured RON consumer loan from 500 to 50,000 EUR equivalent over 18-60 months, fixed rate 5.55%-17.95%, approved on the spot and available 100% online in Smart Mobile; optional life & unemployment insurance gives a 2% rate discount.",
+    "key_features": [
+      "Fixed rate for the whole loan: 5.55% - 17.95% p.a. (DAE 7.90% - 39.4%); campaign 'dobândă fixă de la 5,55%' valid 15.10 - 26.11.2026",
+      "Amount: 500 - 50,000 EUR equivalent in RON; term 18 months - 5 years; no collateral",
+      "Online in Smart Mobile in about 10 minutes if eligible; ID card + consent to consult ANAF income database is usually all you need",
+      "Rate depends on profile: 'client de casă' (>=2,000 RON recurring monthly income in a Raiffeisen account) -1%; Premium -1.2%; optional life+unemployment insurance -2%",
+      "3 months payment holiday from the 7th month of repayment on request (max 3 instalments)",
+      "Free change of the instalment due date; equal or decreasing instalments"
+    ],
+    "interest_rate_or_return": {
+      "value": 5.55,
+      "unit": "% p.a. fixed (minimum of range; range 5.55% - 17.95%)",
+      "conditions": "Minimum rate valid for customers receiving >= 2,000 RON recurring monthly income in a Raiffeisen account and adding the optional life+unemployment insurance (Uniqa). Cost sheet 15.10.2026: 'client de casă' 5.55%-14.95%; Premium 5.35%-14.75% (with insurance). DAE range 7.90%-39.4%.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Analysis fee (comision analiză dosar)",
+        "value": "200 lei",
+        "notes": "From representative examples"
+      },
+      {
+        "name": "Monthly administration fee",
+        "value": "5 lei",
+        "notes": "From representative examples"
+      },
+      {
+        "name": "Early repayment commission",
+        "value": "0.50% in the last year of the contract; 1.00% before the last year",
+        "notes": "Cost sheet 15.10.2026 'Comision de plată anticipată'"
+      },
+      {
+        "name": "Optional life & unemployment insurance (Uniqa)",
+        "value": "Single premium financed in the loan = loan value x 0.12% x number of loan months",
+        "notes": "Examples: 3,600 lei on 50,000 lei over 60 months; 1,080 lei over 18 months; 7,200 lei over 120 months (refinancing)"
+      },
+      {
+        "name": "Payment holiday",
+        "value": "3 instalments from month 7",
+        "notes": "On request; interest continues per contract (conditions not retrieved)"
+      }
+    ],
+    "eligibility": [
+      "Age 21 to 63 (women) / 65 (men) at the end of the loan",
+      "Income at least equal to the minimum net wage in the economy",
+      "At least 3 months at current workplace (permanent contract, or fixed-term covering the loan, or fixed-term with >=2 successive renewals)",
+      "No executed loans or loans repaid with large repeated delays",
+      "Meeting all criteria does not guarantee approval; bank may refuse without detailed reasons"
+    ],
+    "min_amount": {
+      "value": 500,
+      "currency": "EUR (equivalent in RON)"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "18 months - 60 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "debt_consolidation",
+      "car_purchase",
+      "home_renovation",
+      "unexpected_expenses",
+      "education",
+      "wedding_event"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-de-nevoi-personale-fara-ipoteca.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/costuri/costuri-complete-flexicredit-standard/20261015-costuri-flexicredit-standard-complete.pdf.coredownload.inline.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "flexicredit-refinantare-fara-ipoteca",
+    "name": "Flexicredit Refinanțare - credit de refinanțare fără ipotecă",
+    "category": "personal_loan",
+    "summary": "Unsecured RON loan to refinance consumer loans/cards from other banks into one fixed instalment, from 5.55% fixed (campaign 15.10-26.11.2026), 500-50,000 EUR equivalent, with optional extra cash and a 3-month payment holiday after 6 months.",
+    "key_features": [
+      "Refinance any loans from other banks into a single fixed monthly instalment",
+      "Fixed rate 5.55% - 17.95% (DAE 7.88% - 39.4%)",
+      "Amount 500 - 50,000 EUR equivalent in RON; optional additional sum (extra cash) repayable over max 5 years",
+      "Term 18 months - 10 years (10 years only when refinancing loans taken before 08.07.2020; 5 years for loans granted after that date)",
+      "3 months pause on instalments available after the first 6 months; optional life & unemployment insurance (2% rate discount)"
+    ],
+    "interest_rate_or_return": {
+      "value": 5.55,
+      "unit": "% p.a. fixed (minimum of range 5.55% - 17.95%)",
+      "conditions": "Same pricing logic as Flexicredit: lowest rate with >=2,000 RON recurring income at Raiffeisen and optional insurance; DAE 7.88% - 39.4%.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Analysis fee",
+        "value": "200 lei",
+        "notes": "Example"
+      },
+      {
+        "name": "Monthly administration fee",
+        "value": "5 lei",
+        "notes": "Example"
+      },
+      {
+        "name": "Early repayment commission",
+        "value": "Not retrieved for this product page; Flexicredit standard cost sheet shows 0.50% (last year) / 1.00% (before last year)",
+        "notes": "Verify in the product's full cost sheet"
+      }
+    ],
+    "eligibility": [
+      "Age 21 to 63 (women) / 65 (men) at loan end",
+      "Income >= minimum net wage",
+      ">=3 months at current workplace",
+      "Documents: ID of applicant (and spouse if applicable) + ANAF income consent; extra documents possible"
+    ],
+    "min_amount": {
+      "value": 500,
+      "currency": "EUR (equivalent in RON)"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "18 months - 10 years (see conditions)"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "debt_consolidation",
+      "lower_monthly_payments"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-de-refinantare-fara-ipoteca.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credite-de-refinantare.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "overdraft-descoperit-de-cont",
+    "name": "Overdraft (descoperit de cont)",
+    "category": "personal_loan",
+    "summary": "Revolving RON overdraft facility of up to 6 net monthly salaries/pensions for customers whose income is paid into a Raiffeisen current account; variable rate IRCC + 9.99% (15.56%), or IRCC + 4.99% (10.56%) with ZERO Simplu; interest only on the amount used.",
+    "key_features": [
+      "Limit up to the equivalent of 6 net salaries/pensions, RON only",
+      "Interest only on used amounts; no fees if the limit is not used",
+      "Variable rate = IRCC (5.57% on 01.10.2026) + bank margin: 9.99% standard -> 15.56%, DAE 22.84%; ZERO Simplu holders get the margin reduced by 5 pp to 4.99% -> 10.56%, DAE 14.08% (example)",
+      "Limit can be increased when income grows; Premium package: 0% interest on first 500 lei used",
+      "Requested in any branch; income verified through ANAF consent"
+    ],
+    "interest_rate_or_return": {
+      "value": 15.56,
+      "unit": "% p.a. variable (IRCC + 9.99% margin)",
+      "conditions": "As of 01.10.2026: IRCC 5.57%; standard margin 9.99% -> 15.56% (DAE 22.84%). With ZERO Simplu package: margin 4.99% -> 10.56% (DAE 14.08%). Unauthorised overdraft = rate + 3%.",
+      "as_of": "2026-10-01 (cost sheet date)"
+    },
+    "fees": [
+      {
+        "name": "Analysis fee",
+        "value": "0 lei",
+        "notes": "Representative example"
+      },
+      {
+        "name": "Unused limit",
+        "value": "No fees or commissions",
+        "notes": ""
+      },
+      {
+        "name": "Unauthorised overdraft",
+        "value": "Interest rate + 3 percentage points",
+        "notes": ""
+      },
+      {
+        "name": "ZERO Simplu package fee used in the DAE examples",
+        "value": "12 lei",
+        "notes": "Quoted from the examples; the page does not say whether this is per month or for the whole 3 months"
+      }
+    ],
+    "eligibility": [
+      "Individual aged 21-65",
+      "Salary or pension paid into a Raiffeisen current account with debit card",
+      "Income >= minimum net wage; >= 3 months at current job; no loans repaid with delays",
+      "Consent to ANAF income consultation; ID card"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Revolving facility; renewal per contract (not retrieved)"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "short_term_liquidity",
+      "unexpected_expenses"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/overdraft.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "credit-ipotecar-casa-ta",
+    "name": "Credit ipotecar Casa Ta",
+    "category": "mortgage",
+    "summary": "RON mortgage for buying, building or renovating a home or land: 3 to 30 years, 5,000-300,000 EUR equivalent, minimum 15% down payment; fixed rate 3 years from 5.05% or 5 years from 5.65% (Premium customers with life insurance), then IRCC + 2.30%.",
+    "key_features": [
+      "3-year fixed: from 5.05%, then variable IRCC + 2.30% (7.87% at IRCC 5.57%); 5-year fixed: from 5.65%, then IRCC + 2.30%",
+      "Standard (non-Premium) offer: 3-year fixed 6.50%, then IRCC + 3.75% (9.32%)",
+      "Amount 5,000 - 300,000 EUR equivalent in RON; term 3-30 years; down payment minimum 15%",
+      "Pre-approval in max 24 hours, valid 45 days; first instalment can start in the 2nd month; 3 months payment pause any time after the first 6 months",
+      "Salary into a Raiffeisen account gives a 1% interest reduction on RON loans (FAQ)",
+      "Wide income acceptance: salary, pension, rent, independent activity; optional life insurance"
+    ],
+    "interest_rate_or_return": {
+      "value": 5.05,
+      "unit": "% p.a. fixed 3 years (then variable IRCC + 2.30%)",
+      "conditions": "Lowest rate: Premium customers (>=2,000 EUR monthly income received in Raiffeisen account over last 3 months, or >=40,000 EUR assets with Raiffeisen Group, Premium package) with life insurance via Raiffeisen/Uniqa (0.2% discount). Standard offer 6.50% fixed 3 years then IRCC+3.75%. 5-year fixed from 5.65% (Premium). Cost sheet dated 22.10.2026; IRCC 5.57% valid 01.10.2026.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Analysis fee",
+        "value": "900 lei",
+        "notes": ""
+      },
+      {
+        "name": "Property valuation fee",
+        "value": "605 lei apartment / 787 lei house (VAT incl.)",
+        "notes": "Indicative, per valuation report"
+      },
+      {
+        "name": "Mandatory property insurance (PAD)",
+        "value": "130 lei",
+        "notes": "Plus optional voluntary home insurance 0.11% x property value (annual premium rate used in examples)"
+      },
+      {
+        "name": "Current-account package",
+        "value": "3 lei/month (Standard package)",
+        "notes": ""
+      },
+      {
+        "name": "Life insurance (optional, example)",
+        "value": "0.026% of loan value per month",
+        "notes": "Used in DAE examples; gives 0.2% rate discount"
+      },
+      {
+        "name": "Early repayment commission",
+        "value": "0 (inferred from cost-sheet layout; verify)",
+        "notes": "Cost sheet lists 'Comision rambursare anticipată' followed by '0'"
+      },
+      {
+        "name": "Notary and land-registry costs",
+        "value": "Paid by client; not in DAE",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Age 21 to 63 (women) / 65 (men) at final maturity - applies to applicant and co-debtors with income",
+      "Income at least the minimum net wage per economy for each participant",
+      "At least 3 months at current workplace (permanent; fixed-term covering the loan; or fixed-term with >=2 successive renewals)",
+      "No executed loans / loans repaid with major repeated delays",
+      "Documents: ID, ANAF income consent (applicant + co-debtor), property documents (antecontract, ownership, land-book extract, valuation documents)",
+      "Meeting criteria does not give a right to the loan; bank may refuse without detailed reasons"
+    ],
+    "min_amount": {
+      "value": 5000,
+      "currency": "EUR (equivalent in RON)"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "3 - 30 years"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "home_purchase",
+      "home_construction",
+      "home_renovation"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-imobiliar-casa-ta.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/costuri/garantate/costuri-casa-ta-dobanda-fixa-3-ani/20261022-Costuri-casa-ta-dobanda-fixa-3-ani.pdf.coredownload.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "credit-ipotecar-casa-ta-verde",
+    "name": "Credit ipotecar Casa Ta Verde",
+    "category": "mortgage",
+    "summary": "Green mortgage for energy-efficient homes (RoGBC Green Homes or energy class A/B issued after 15.02.2023): fixed 4.85% for 3 years or 5.45% for 5 years for Premium customers, then IRCC + 2.10%; same limits as Casa Ta.",
+    "key_features": [
+      "3-year fixed from 4.85%, then variable IRCC + 2.10% (7.67%); 5-year fixed from 5.45%, then IRCC + 2.10%",
+      "Standard offer: 3-year fixed 6.30%, 5-year fixed 6.90%, then IRCC + 3.55% (9.12%)",
+      "Property must hold Green Homes (RoGBC) certification or energy class A / superior / B (certificate issued after 15.02.2023)",
+      "Amount 5,000-300,000 EUR equivalent; term 3-30 years; minimum 15% down payment",
+      "Early repayment commission shown as 0 in the 3-year cost sheet"
+    ],
+    "interest_rate_or_return": {
+      "value": 4.85,
+      "unit": "% p.a. fixed 3 years (then variable IRCC + 2.10%)",
+      "conditions": "Premium customers with life insurance; property meeting green criteria. Standard offer 6.30% (3y) / 6.90% (5y). Cost sheets 20-22.10.2026; IRCC 5.57%.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Analysis fee",
+        "value": "900 lei",
+        "notes": ""
+      },
+      {
+        "name": "Valuation fee",
+        "value": "605 lei apartment / 787 lei house (VAT incl.)",
+        "notes": ""
+      },
+      {
+        "name": "PAD insurance",
+        "value": "130 lei",
+        "notes": "Optional home insurance 0.11% x value"
+      },
+      {
+        "name": "Standard current-account package",
+        "value": "3 lei/month",
+        "notes": ""
+      },
+      {
+        "name": "Early repayment commission",
+        "value": "0 (3-year cost sheet)",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Age 21 to 63 (women) / 65 (men) at final maturity - applies to applicant and co-debtors with income",
+      "Income at least the minimum net wage per economy for each participant",
+      "At least 3 months at current workplace (permanent; fixed-term covering the loan; or fixed-term with >=2 successive renewals)",
+      "No executed loans / loans repaid with major repeated delays",
+      "Documents: ID, ANAF income consent (applicant + co-debtor), property documents (antecontract, ownership, land-book extract, valuation documents)",
+      "Meeting criteria does not give a right to the loan; bank may refuse without detailed reasons"
+    ],
+    "min_amount": {
+      "value": 5000,
+      "currency": "EUR (equivalent in RON)"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "3 - 30 years"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "home_purchase",
+      "green_home"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-imobiliar-casa-ta-verde.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/costuri/garantate/costuri-casa-ta-verde-dobanda-fixa-3-ani/20261022-Costuri-casa-ta-verde-dobanda-fixa-3-ani.pdf.coredownload.pdf",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/costuri/garantate/costuri-casa-ta-verde-dobanda-fixa-5-ani/20261020-Costuri-casa-ta-verde-dobanda-fixa-5-ani.pdf.coredownload.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "credit-ipotecar-noua-casa",
+    "name": "Credit ipotecar Noua Casă (program guvernamental, prima locuință)",
+    "category": "mortgage",
+    "summary": "State-guaranteed first-home mortgage (FNGCIMM) in RON at variable IRCC + 2% (7.57%), financing up to 95% of homes priced up to 70,000 EUR (85% for new/consolidated homes 70,001-140,000 EUR), 3-30 years; lending resumed on 25.05.2026 under the 2026 ceiling.",
+    "key_features": [
+      "Variable rate IRCC + 2% = 7.57% (DAE 8.23% / 8.25%); FNGCIMM management fee 0.15% per year on the state-guaranteed balance",
+      "Financing up to 95% (price <= 70,000 EUR; new or old) or 85% (price 70,001-140,000 EUR; new/consolidated only); down payment 5% or 15%",
+      "Maximum loan: up to 66,500 EUR equivalent (price <= 70,000 EUR) or 59,501 - 119,000 EUR equivalent (new/consolidated, price 70,001 - 140,000 EUR)",
+      "State guarantee 50% (price <= 70,000 EUR) or 60% (70,001-140,000 EUR); collateral deposit equal to 3 interest instalments",
+      "Term 3-30 years; pre-approval valid 45 days; only completed, land-registered homes"
+    ],
+    "interest_rate_or_return": {
+      "value": 7.57,
+      "unit": "% p.a. variable (IRCC + 2%)",
+      "conditions": "Formula IRCC + 2%; IRCC 5.56% for Q1 2026 used in the cost sheet dated 01.10.2026 -> 7.57%. DAE computed for 230,000 lei over 30 years: 8.23% / 8.25%.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "FNGCIMM management commission",
+        "value": "0.15% per year on the state-guaranteed share of the balance",
+        "notes": ""
+      },
+      {
+        "name": "Property valuation",
+        "value": "605 lei apartment / 787 lei house (VAT incl.)",
+        "notes": ""
+      },
+      {
+        "name": "Standard current-account package",
+        "value": "3 lei/month",
+        "notes": ""
+      },
+      {
+        "name": "PAD property insurance",
+        "value": "130 lei + premium rate for property insurance",
+        "notes": "Only property insurance is mandatory"
+      },
+      {
+        "name": "Collateral deposit",
+        "value": "Equal to 3 interest instalments",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Age 21 to 63 (women) / 65 (men) at maturity; income >= minimum net wage per participant; >= 3 months at current job",
+      "At application you do not own (alone or with spouse) any home, OR own at most one home, acquired other than through Noua Casă, with usable area under 50 sq m - proven by a notarised sworn statement",
+      "No executed loans / no large repeated delays",
+      "Documents: ID, ANAF consent, notarised declaration; later antecontract, ownership documents, land-book extract, energy certificate"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "3 - 30 years"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "home_purchase",
+      "first_home"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/creditul-imobiliar-prin-programul-guvernamental-noua-casa.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "flexicredit-integral-refinantare-ipoteca",
+    "name": "Flexicredit Integral - refinanțare garantată cu ipotecă",
+    "category": "mortgage",
+    "summary": "Mortgage-backed refinancing loan to merge several loans into one: 5,000-200,000 EUR equivalent, 6 months-30 years, up to 85% of the pledged property value; fixed 3 years from 4.85% or 5 years from 5.45% (Premium, green property), then IRCC + 2.10%.",
+    "key_features": [
+      "Merge all existing loans into one with a lower fixed instalment; fixed rate for 3 or 5 years",
+      "Premium + life insurance pricing: 3y 4.85% / 5y 5.45%, then IRCC + 2.10% (7.67%); standard 3y 6.50%, then IRCC + 3.75% (9.32%)",
+      "Amount 5,000 - 200,000 EUR equivalent; term 6 months - 30 years; up to 85% of pledged property value (depends on location)",
+      "Collateral: mortgage on one or more properties of borrower, co-debtor and/or first-degree relatives/in-laws",
+      "Page advertises a 2,000 lei bonus when refinancing at Raiffeisen (regulation dated 2025-07-08 - check current validity)"
+    ],
+    "interest_rate_or_return": {
+      "value": 4.85,
+      "unit": "% p.a. fixed 3 years (then variable IRCC + 2.10%)",
+      "conditions": "Premium customers refinancing exclusively mortgage loans on a property with energy certificate A/B (after 15.02.2023) or RoGBC and taking life insurance. Standard offer 6.50% fixed 3y then IRCC + 3.75% = 9.32%. Cost sheet 22.10.2026.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Analysis fee",
+        "value": "900 lei",
+        "notes": ""
+      },
+      {
+        "name": "Valuation fee",
+        "value": "605 lei apartment / 787 lei house (VAT incl.)",
+        "notes": ""
+      },
+      {
+        "name": "PAD insurance",
+        "value": "130 lei",
+        "notes": ""
+      },
+      {
+        "name": "Conditional payment order (for refinancing)",
+        "value": "Applies - amount not retrieved (cost sheet lists 'Comision ordin plată condiționat')",
+        "notes": "Fee list: conditional payment orders 5 EUR issuance (SWIFT included) when used to take over loans from other banks"
+      },
+      {
+        "name": "Early repayment commission",
+        "value": "See cost sheet (not parsed reliably)",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Age 21 to 63 (women) / 65 (men) at final maturity - applies to applicant and co-debtors with income",
+      "Income at least the minimum net wage per economy for each participant",
+      "At least 3 months at current workplace (permanent; fixed-term covering the loan; or fixed-term with >=2 successive renewals)",
+      "No executed loans / loans repaid with major repeated delays",
+      "Documents: ID, ANAF income consent (applicant + co-debtor), property documents (antecontract, ownership, land-book extract, valuation documents)",
+      "Meeting criteria does not give a right to the loan; bank may refuse without detailed reasons"
+    ],
+    "min_amount": {
+      "value": 5000,
+      "currency": "EUR (equivalent in RON)"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "6 months - 30 years"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "debt_consolidation",
+      "lower_monthly_payments"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-de-refinantare-garantat-cu-ipoteca.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/costuri/garantate/costuri-complete-flexi-integral-oferta-3-ani-dobanda-fixa/20261022-Costuri-credit-refinantare-flexi-integral-dobanda-fixa-3-ani.pdf.coredownload.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-credit-visa-standard",
+    "name": "Card de credit / cumpărături Raiffeisen Visa Standard",
+    "category": "credit_card",
+    "summary": "Entry credit card in RON (limit 700-50,000 lei) with up to 56 days interest-free grace, annual fee 40 lei, 26% interest on revolving balance, interest-free instalments 3/6/9 months anywhere via Smart Mobile and up to 12 fixed instalments at Multishop partners.",
+    "key_features": [
+      "Limit 700 - 50,000 lei; merchant limit 100% of credit line, cash 40% (daily cash max 3,000 lei)",
+      "Grace period up to 56 days: 0% interest on merchant purchases if the full amount is repaid by the due date",
+      "Minimum monthly repayment 5% of used amount (min 10 lei)",
+      "Interest 26% p.a. on revolving balance/cash/transfers (DAE example 32.40%); penalty 3%",
+      "Split purchases in 3 / 6 / 9 interest-free instalments anywhere in the world from Smart Mobile (campaign 01.07 - 31.10.2026): 3 for any amount, 6 for >=500 lei, 9 for >=1,000 lei; up to 12 fixed interest-free instalments at Multishop partners; reduced-interest instalments 14.99%-19.99%",
+      "Up to 4 free supplementary cards; Apple Pay / Google Pay / Garmin Pay",
+      "Yellow Friday promo: 150 lei bonus for transactions >= 1,000 lei when the card is requested via Smart Mobile (campaign 20.10 - 02.11.2026)"
+    ],
+    "interest_rate_or_return": {
+      "value": 26.0,
+      "unit": "% p.a. (interest on revolving/cash balance; 0% on merchant purchases repaid in full by due date)",
+      "conditions": "Fee list 1 Sep 2026; DAE example: 5,367 lei repaid in 12 equal instalments at 26% -> instalment 512.71 lei, total 6,152.52 lei, DAE 32.40%.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Annual account administration fee (any number of cards)",
+        "value": "40 lei",
+        "notes": "Due at first debit/credit movement and yearly after"
+      },
+      {
+        "name": "Issue / reissue / renewal fee",
+        "value": "25 lei",
+        "notes": "Reissue not charged if at bank's initiative or damaged card"
+      },
+      {
+        "name": "Merchant payments",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Cash withdrawal at Raiffeisen ATM",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Balance enquiry at Raiffeisen ATM",
+        "value": "1 leu (free in Smart Mobile)",
+        "notes": ""
+      },
+      {
+        "name": "Penalty interest rate (rata dobânzii penalizatoare)",
+        "value": "3% p.a. per fee list",
+        "notes": "Fee list s.7; how it combines with the normal rate is defined in the contract (not retrieved)"
+      },
+      {
+        "name": "Optional 'Protecția rambursărilor' insurance",
+        "value": "0.5% of the highest credit used in the cycle (+ unpaid instalment part)",
+        "notes": "After a free period"
+      },
+      {
+        "name": "Cash withdrawal at other Romanian banks / abroad ATM",
+        "value": "1% of amount + 2.5 lei",
+        "notes": "Fee list s.7 (Standard/eMAG/Platinum column group as parsed)"
+      },
+      {
+        "name": "Reduced-interest instalments ('Rate cu dobândă redusă')",
+        "value": "3/6 months 19.99%; 12/18 months 17.99%; 24/36/48/60 months 14.99%",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Age 22-65",
+      "Net family income at least the minimum net wage per economy",
+      "At least 3 months at current workplace",
+      "No executed loans / no loans repaid with delays",
+      "Employees and pensioners can apply with ID only (no income certificate) - per page"
+    ],
+    "min_amount": {
+      "value": 700,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Credit line of undetermined period; instalments 3-60 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "shopping",
+      "short_term_liquidity",
+      "instalment_purchases"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/cardul-de-cumparaturi-standard.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/carduri-de-cumparaturi.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-credit-emag",
+    "name": "Card de credit Raiffeisen eMAG",
+    "category": "credit_card",
+    "summary": "Co-branded RON credit card (limit 700-50,000 lei) with eMAG loyalty points (up to 10% back on eMAG orders), up to 24 fixed interest-free instalments; annual fee 60 lei, 26% interest on revolving balance.",
+    "key_features": [
+      "eMAG loyalty points: up to 10% back in points on fully-paid eMAG orders",
+      "Up to 24 fixed interest-free instalments (or up to 60 reduced-interest) and 3/6/9 interest-free instalments in Smart Mobile",
+      "Limit 700 - 50,000 lei; grace period up to 56 days; minimum repayment 5% (min 10 lei)",
+      "Annual fee 60 lei; interest 26% on revolving balance (DAE example 33.37%)",
+      "Yellow Friday promo: 150 lei bonus on >=1,000 lei transactions (20.10 - 02.11.2026)"
+    ],
+    "interest_rate_or_return": {
+      "value": 26.0,
+      "unit": "% p.a. (revolving/cash balance)",
+      "conditions": "DAE example 33.37% (5,367 lei over 12 months at 26%); 0% on merchant purchases repaid in full within the grace period.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Annual account administration fee (any number of cards)",
+        "value": "60 lei",
+        "notes": "Due at first debit/credit movement and yearly after"
+      },
+      {
+        "name": "Issue / reissue / renewal fee",
+        "value": "25 lei",
+        "notes": "Reissue not charged if at bank's initiative or damaged card"
+      },
+      {
+        "name": "Merchant payments",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Cash withdrawal at Raiffeisen ATM",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Balance enquiry at Raiffeisen ATM",
+        "value": "1 leu (free in Smart Mobile)",
+        "notes": ""
+      },
+      {
+        "name": "Penalty interest rate (rata dobânzii penalizatoare)",
+        "value": "3% p.a. per fee list",
+        "notes": "Fee list s.7; how it combines with the normal rate is defined in the contract (not retrieved)"
+      },
+      {
+        "name": "Optional 'Protecția rambursărilor' insurance",
+        "value": "0.5% of the highest credit used in the cycle (+ unpaid instalment part)",
+        "notes": "After a free period"
+      },
+      {
+        "name": "Cash withdrawal at other banks / abroad",
+        "value": "1% + 2.5 lei",
+        "notes": "Fee list s.7"
+      }
+    ],
+    "eligibility": [
+      "Age 22-65",
+      "Net family income at least the minimum net wage per economy",
+      "At least 3 months at current workplace",
+      "No executed loans / no loans repaid with delays",
+      "Employees and pensioners can apply with ID only (no income certificate) - per page"
+    ],
+    "min_amount": {
+      "value": 700,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Instalments 3-60 months"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "shopping",
+      "online_shopping",
+      "instalment_purchases"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/cardul-de-cumparaturi-emag.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-credit-visa-platinum",
+    "name": "Card de credit Raiffeisen Visa Platinum",
+    "category": "credit_card",
+    "summary": "Premium RON credit card (limit 5,000-90,000 lei) with free travel insurance, Business Lounge access, monthly cashback of 12.5 lei that offsets the 150-lei annual fee, and interest-free instalments.",
+    "key_features": [
+      "Limit 5,000 - 90,000 lei; daily cash limit 5,000 lei; grace up to 56 days",
+      "Cashback 12.5 lei per cycle with purchases >= 1,500 lei - covers the annual administration fee",
+      "Free complete travel insurance package; free Visa Business Lounge access; LoungeKey entries 30 EUR/person",
+      "Up to 12 fixed interest-free or 60 reduced-interest instalments; 3/6/9 interest-free via Smart Mobile",
+      "Annual fee 150 lei; interest 26% on revolving balance (DAE example 37.88%)"
+    ],
+    "interest_rate_or_return": {
+      "value": 26.0,
+      "unit": "% p.a. (revolving/cash balance)",
+      "conditions": "DAE example 37.88% (5,367 lei, 12 months).",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Annual account administration fee (any number of cards)",
+        "value": "150 lei (offset by 12.5 lei monthly cashback if purchases >= 1,500 lei in a cycle)",
+        "notes": "Due at first debit/credit movement and yearly after"
+      },
+      {
+        "name": "Issue / reissue / renewal fee",
+        "value": "25 lei",
+        "notes": "Reissue not charged if at bank's initiative or damaged card"
+      },
+      {
+        "name": "Merchant payments",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Cash withdrawal at Raiffeisen ATM",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Balance enquiry at Raiffeisen ATM",
+        "value": "1 leu (free in Smart Mobile)",
+        "notes": ""
+      },
+      {
+        "name": "Penalty interest rate (rata dobânzii penalizatoare)",
+        "value": "3% p.a. per fee list",
+        "notes": "Fee list s.7; how it combines with the normal rate is defined in the contract (not retrieved)"
+      },
+      {
+        "name": "Optional 'Protecția rambursărilor' insurance",
+        "value": "0.5% of the highest credit used in the cycle (+ unpaid instalment part)",
+        "notes": "After a free period"
+      },
+      {
+        "name": "Cash withdrawal other banks/abroad",
+        "value": "1% + 2.5 lei",
+        "notes": "Fee list s.7 (grouping inferred)"
+      }
+    ],
+    "eligibility": [
+      "Age 22-65",
+      "Net family income at least the minimum net wage per economy",
+      "At least 3 months at current workplace",
+      "No executed loans / no loans repaid with delays",
+      "Employees and pensioners can apply with ID only (no income certificate) - per page"
+    ],
+    "min_amount": {
+      "value": 5000,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "travel",
+      "shopping",
+      "lounge_access"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/cardul-de-cumparaturi-platinum.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-credit-visa-signature",
+    "name": "Card de credit Raiffeisen Visa Signature",
+    "category": "credit_card",
+    "summary": "High-end credit card (limit 15,000-120,000 lei, net income at least 2,000 EUR) with 10 free LoungeKey entries, preferential FX abroad, 0.5% cashback in Romania, 0% ATM cash fee worldwide and 22% interest; annual fee 500 lei.",
+    "key_features": [
+      "Limit 15,000 - 120,000 lei; daily cash limit 10,000 lei",
+      "10 free LoungeKey airport lounge entries per year for holder + guest, then 30 EUR/entry",
+      "Preferential FX rate abroad; 3/6 interest-free instalments for purchases above 300 lei abroad; zero ATM cash fee worldwide (page)",
+      "0.5% cashback on RON purchases at supermarkets, fuel stations, pharmacies, restaurants, cafes in Romania (not for instalment-posted purchases)",
+      "Free travel insurance; up to 4 free supplementary cards",
+      "Annual fee 500 lei; interest 22% on revolving balance (DAE example 51.85%)"
+    ],
+    "interest_rate_or_return": {
+      "value": 22.0,
+      "unit": "% p.a. (revolving/cash balance)",
+      "conditions": "DAE example 51.85% (5,367 lei over 12 months; high because the 500-lei annual fee is included).",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Annual account administration fee (any number of cards)",
+        "value": "500 lei",
+        "notes": "Due at first debit/credit movement and yearly after"
+      },
+      {
+        "name": "Issue / reissue / renewal fee",
+        "value": "25 lei",
+        "notes": "Reissue not charged if at bank's initiative or damaged card"
+      },
+      {
+        "name": "Merchant payments",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Cash withdrawal at Raiffeisen ATM",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Balance enquiry at Raiffeisen ATM",
+        "value": "1 leu (free in Smart Mobile)",
+        "notes": ""
+      },
+      {
+        "name": "Penalty interest rate (rata dobânzii penalizatoare)",
+        "value": "3% p.a. per fee list",
+        "notes": "Fee list s.7; how it combines with the normal rate is defined in the contract (not retrieved)"
+      },
+      {
+        "name": "Optional 'Protecția rambursărilor' insurance",
+        "value": "0.5% of the highest credit used in the cycle (+ unpaid instalment part)",
+        "notes": "After a free period"
+      },
+      {
+        "name": "LoungeKey",
+        "value": "10 free entries/year then 30 EUR/person",
+        "notes": ""
+      },
+      {
+        "name": "Cash withdrawal other-bank ATMs",
+        "value": "Fee list shows 2% for the premium column group; product page says 0% at ATMs worldwide - conflict, verify",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Age 22-65",
+      "Net income at least 2,000 EUR per applicant",
+      "At least 3 months at current workplace",
+      "No executed loans / delays"
+    ],
+    "min_amount": {
+      "value": 15000,
+      "currency": "RON"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "travel",
+      "premium_lifestyle",
+      "lounge_access"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/cardul-visa-credit-signature.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-credit-visa-infinite",
+    "name": "Card de credit Raiffeisen Visa Infinite",
+    "category": "credit_card",
+    "summary": "Top-tier credit card (limit up to 320,000 lei per fee list) with unlimited LoungeKey entries for holder + one guest; annual fee 2,000 lei; 22% interest on revolving balance. Only the fee list was retrieved - no product page.",
+    "key_features": [
+      "Maximum limit 320,000 lei; daily cash limit 20,000 lei; cash max 40% of limit",
+      "Annual administration fee 2,000 lei",
+      "Unlimited LoungeKey for card user and one guest; extra guests 30 EUR/entry",
+      "Interest 22% (fee list); free travel insurance"
+    ],
+    "interest_rate_or_return": {
+      "value": 22.0,
+      "unit": "% p.a. (revolving/cash balance)",
+      "conditions": "Fee list 1 Sep 2026.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Annual account administration fee (any number of cards)",
+        "value": "2,000 lei",
+        "notes": "Due at first debit/credit movement and yearly after"
+      },
+      {
+        "name": "Issue / reissue / renewal fee",
+        "value": "25 lei",
+        "notes": "Reissue not charged if at bank's initiative or damaged card"
+      },
+      {
+        "name": "Merchant payments",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Cash withdrawal at Raiffeisen ATM",
+        "value": "0%",
+        "notes": ""
+      },
+      {
+        "name": "Balance enquiry at Raiffeisen ATM",
+        "value": "1 leu (free in Smart Mobile)",
+        "notes": ""
+      },
+      {
+        "name": "Penalty interest rate (rata dobânzii penalizatoare)",
+        "value": "3% p.a. per fee list",
+        "notes": "Fee list s.7; how it combines with the normal rate is defined in the contract (not retrieved)"
+      },
+      {
+        "name": "Optional 'Protecția rambursărilor' insurance",
+        "value": "0.5% of the highest credit used in the cycle (+ unpaid instalment part)",
+        "notes": "After a free period"
+      }
+    ],
+    "eligibility": [
+      "Eligibility not retrieved (no product page); expected to be above Signature - NOT verified"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "premium_lifestyle",
+      "travel"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-debit-galben-visa-lei",
+    "name": "Cardul Galben - card de debit Visa standard în lei",
+    "category": "debit_card",
+    "summary": "Standard contactless Visa debit card in RON; free merchant payments, 3D Secure, Apple/Google/Garmin Pay; part of ZERO Simplu with free RON ATM withdrawals at any Romanian bank; stand-alone fees 25 lei/year.",
+    "key_features": [
+      "Visa contactless; payments up to 100 lei without PIN (PIN may be requested above 200 lei depending on POS)",
+      "0 commission for merchant payments; 3D Secure auto-enrolled; Apple Pay, Google Pay, Garmin Pay",
+      "Free RON cash withdrawal from any Romanian bank ATM when the card is in a current-account package",
+      "Smart Mobile: PIN view, block/unblock, SavingBox/Plătești și economisești, instant payments, direct debit",
+      "Visa offers and discounts (visa.ro); 'Cardul Galben care face bine' charity link (details not retrieved)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Initial issue/replacement at expiry",
+        "value": "0 lei",
+        "notes": "Fee list s.6, Visa lei (Cardul Galben)"
+      },
+      {
+        "name": "Annual administration",
+        "value": "25 lei",
+        "notes": "Not charged separately inside a package (inferred)"
+      },
+      {
+        "name": "Card delivery",
+        "value": "15 lei",
+        "notes": ""
+      },
+      {
+        "name": "Minimum initial deposit per card (outside a package)",
+        "value": "25 lei",
+        "notes": ""
+      },
+      {
+        "name": "ATM cash (Raiffeisen, other Romanian banks, abroad)",
+        "value": "1.5%, min 10 lei",
+        "notes": "Outside package benefits; packages include free RON ATM withdrawals"
+      },
+      {
+        "name": "Gambling transactions",
+        "value": "1% + 10 lei",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individuals (Romanian or foreign citizens incl. diplomatic missions / international organisations) with a Raiffeisen current account"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "daily_spending",
+      "salary_account"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/cardul-galben.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/carduri-de-debit.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-debit-visa-gold",
+    "name": "Card de debit Visa Gold",
+    "category": "debit_card",
+    "summary": "Gold debit card in RON: 3 free Business Lounge entries per year, 12% BlackCab discount, concierge/road-assistance offers and zero cash fee at RON ATMs with a package; stand-alone: 70 lei issue + 200 lei/year.",
+    "key_features": [
+      "3 free Business Lounge entries/year (Romania + Vienna airports) on payments >= 2,000 lei",
+      "12% discount at BlackCab",
+      "Concierge and roadside assistance discounts",
+      "Zero fee on RON ATM withdrawals when you also hold a current-account package",
+      "Smart Hour BNR-rate FX; Apple/Google/Garmin Pay"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Initial issue / replacement",
+        "value": "70 lei",
+        "notes": ""
+      },
+      {
+        "name": "Annual administration",
+        "value": "200 lei",
+        "notes": "Included in Gold package"
+      },
+      {
+        "name": "Card delivery",
+        "value": "15 lei",
+        "notes": ""
+      },
+      {
+        "name": "Minimum initial deposit (outside package)",
+        "value": "300 lei",
+        "notes": ""
+      },
+      {
+        "name": "ATM cash",
+        "value": "1.5% min 10 lei",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individuals (Romanian or foreign citizens incl. diplomatic missions / international organisations) with a Raiffeisen current account"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "travel",
+      "daily_spending"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/card-debit-visa-gold.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-debit-visa-platinum",
+    "name": "Card de debit Visa Platinum",
+    "category": "debit_card",
+    "summary": "Platinum debit card (RON): 6 free lounge entries, 15% BlackCab discount, free travel insurance and up to 2 supplementary cards; part of the Premium package.",
+    "key_features": [
+      "6 free Visa Business Lounge entries/year",
+      "15% BlackCab discount",
+      "Free travel insurance package, 24/7, for you and family",
+      "Up to 2 supplementary cards",
+      "Concierge/roadside assistance offers"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Initial issue / replacement",
+        "value": "70 lei",
+        "notes": "Fee list column shared with Visa Gold"
+      },
+      {
+        "name": "Annual administration",
+        "value": "200 lei",
+        "notes": ""
+      },
+      {
+        "name": "Card delivery",
+        "value": "15 lei",
+        "notes": ""
+      },
+      {
+        "name": "Minimum initial deposit (outside package)",
+        "value": "300 lei",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individuals (Romanian or foreign citizens incl. diplomatic missions / international organisations) with a Raiffeisen current account"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "travel",
+      "premium_lifestyle"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/carduri-de-debit.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-debit-visa-signature-infinite",
+    "name": "Carduri de debit Visa Signature și Visa Infinite",
+    "category": "debit_card",
+    "summary": "Premium-tier debit cards: Signature (annual 500 lei, 10 free lounge entries) and Infinite (annual 2,000 lei, unlimited lounge entries for holder + 1 guest). Only the fee list was retrieved.",
+    "key_features": [
+      "Visa Signature: 10 free lounge entries/year, then 30 EUR/person",
+      "Visa Infinite: unlimited lounge entries for card user + one guest; extra guests 30 EUR",
+      "Free travel insurance on Signature/Infinite debit cards (insurance page)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Visa Signature - issue / annual / delivery / min deposit",
+        "value": "70 lei / 500 lei / 0 lei / 570 lei",
+        "notes": "Fee list s.6"
+      },
+      {
+        "name": "Visa Infinite - issue / annual (main / supplementary) / delivery / min deposit",
+        "value": "100 lei / 2,000 lei (1,000 lei supplementary) / 0 lei / 2,100 lei",
+        "notes": ""
+      },
+      {
+        "name": "ATM cash",
+        "value": "1.5% min 10 lei",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Eligibility not retrieved - NOT FOUND (no product page)"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "premium_lifestyle",
+      "travel"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "card-debit-visa-eur-usd",
+    "name": "Carduri de debit Visa EUR și Visa USD",
+    "category": "debit_card",
+    "summary": "Visa debit cards on EUR or USD accounts: no currency-conversion fee when paying in the euro area (EUR card), 5 EUR/USD issue fee and 10 EUR/USD annual fee.",
+    "key_features": [
+      "EUR card: no conversion fees for payments in euro-area countries",
+      "USD card: better FX rate between current accounts Mon-Fri 8:30-18:00 (page)",
+      "Contactless Visa, 3D Secure; Smart Hour for RON<->EUR"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Issue / replacement (EUR / USD)",
+        "value": "5 EUR / 5 USD",
+        "notes": ""
+      },
+      {
+        "name": "Annual administration",
+        "value": "10 EUR / 10 USD",
+        "notes": ""
+      },
+      {
+        "name": "Delivery",
+        "value": "3 EUR / 3.50 USD",
+        "notes": ""
+      },
+      {
+        "name": "Minimum initial deposit",
+        "value": "50 EUR / 50 USD",
+        "notes": "Outside a package"
+      },
+      {
+        "name": "ATM cash",
+        "value": "1.5% min 10 lei equivalent",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individuals (Romanian or foreign citizens incl. diplomatic missions / international organisations) with a Raiffeisen current account"
+    ],
+    "min_amount": {
+      "value": 50,
+      "currency": "EUR/USD (initial deposit outside a package)"
+    },
+    "currencies": [
+      "EUR",
+      "USD"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "travel",
+      "fx_spending"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/carduri/carduri-de-debit.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "asigurare-locuinta-welcome-home",
+    "name": "Asigurarea completă a locuinței Welcome Home (UNIQA)",
+    "category": "insurance",
+    "summary": "Voluntary comprehensive home insurance with cover up to 3,000,000 lei, price fixed for 5 years, PAD (mandatory natural-disaster policy) handled by the bank, issued 100% in Smart Mobile in about 5 minutes; claims paid within 7 working days of complete documents.",
+    "key_features": [
+      "Covers home and contents up to 3,000,000 lei (about 600,000 EUR): storms, floods, earthquake, avalanche, accidental leaks, installation damage (boilers, A/C, solar panels), pest-control interventions",
+      "Price fixed for 5 years if conditions unchanged; 10% discount with green-home certificate",
+      "Bank arranges the mandatory PAD policy if you do not have one",
+      "Temporary accommodation up to 250 RON/day (max 5 days); rent cover 2,000 RON/month up to 3 months (limit 6,000 RON); 24/7 plumber/electric intervention up to 1,000 RON/year; civil liability up to 25,000 RON/year; emergency measures up to 15% of the sum insured",
+      "Sum insured chosen by the customer based on real home value; 10% of it automatically covers contents",
+      "Claims 100% digital (daunerapide.uniqa.ro, phone 0374.400.400), paid in max 7 working days after all documents"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Premium",
+        "value": "Not published on the page (personalised in Smart Mobile)",
+        "notes": ""
+      },
+      {
+        "name": "PAD (mandatory)",
+        "value": "Arranged by the bank if missing",
+        "notes": "Mortgage examples use PAD = 130 lei"
+      }
+    ],
+    "eligibility": [
+      "Raiffeisen customer with Smart Mobile; new customers can open an account in 8 minutes first",
+      "Insured home owned by customer or parents/grandparents (needs an active PAD policy)",
+      "Insurer: UNIQA Asigurări S.A."
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Policy with price fixed 5 years"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "home_protection",
+      "home_purchase"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurare-completa-locuinta-welcome-home.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "asigurare-calatorie-around-the-world",
+    "name": "Asigurare de călătorie anuală UNIQA Travel Around The World",
+    "category": "insurance",
+    "summary": "Annual multi-trip travel insurance bought only in Smart Mobile: 149 lei/year for one person or 268 lei/year for you plus up to 4 co-insured; medical cover up to 30,000 EUR per insured per year, up to 45 days per trip.",
+    "key_features": [
+      "149 lei/year (1 person) or 268 lei/year (you + up to 4 co-insured, max 5 insured)",
+      "Unlimited trips abroad during the year, each up to 45 consecutive days; worldwide except Romania and country of citizenship/residence",
+      "Medical treatment abroad up to 30,000 EUR per insured per year; emergency dental; medical repatriation; amateur sports; luggage/flight/documents; road assistance up to 1,750 EUR; civil liability 5,000 EUR; trip cancellation (storno)",
+      "Optional clauses: extreme sports; accident cover",
+      "Can be activated within 3 days even after leaving the country; 24/7 assistance via CORIS Assistance"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Premium - individual",
+        "value": "149 lei per year",
+        "notes": ""
+      },
+      {
+        "name": "Premium - family (you + up to 4 co-insured)",
+        "value": "268 lei per year",
+        "notes": "Page also says 'maximum 5 insured'"
+      }
+    ],
+    "eligibility": [
+      "Raiffeisen Smart Mobile user (product available exclusively in the app)"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "1 year"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "travel"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurare-de-calatorie-around-the-world.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurari-de-calatorie.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "asigurare-calatorie-atasata-cardurilor",
+    "name": "Asigurare de călătorie gratuită atașată cardurilor Platinum / Signature / Infinite",
+    "category": "insurance",
+    "summary": "Free travel insurance (UNIQA, CORIS assistance) for holders of Visa Platinum, Signature or Infinite debit cards and Visa Credit Platinum, Signature or Infinite cards: unlimited trips per year, up to 60 consecutive days per trip, family covered.",
+    "key_features": [
+      "Free for Visa Platinum/Signature/Infinite debit and Visa Credit Platinum/Signature/Infinite cards",
+      "Unlimited trips in a year, each up to 60 consecutive days; valid worldwide except Romania/country of citizenship or residence; family members covered",
+      "Covers organisation and payment of emergency medical services and travel expenses",
+      "Standard/eMAG credit card holders who bought the optional policy before 12 July 2024 keep it under their original terms (50 lei/year)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Cost",
+        "value": "0 lei for eligible cards",
+        "notes": "Fee list s.7C: 'Gratuit' for the eligible cards"
+      }
+    ],
+    "eligibility": [
+      "Hold one of the listed Raiffeisen cards",
+      "Insurance becomes active when leaving Romania / country of residence"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Per card validity"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "travel"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurari-de-calatorie.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "asigurare-viata-protect-plus",
+    "name": "Asigurări de viață cu economisire garantată - Junior Protect Plus / Senior Protect Plus (UNIQA)",
+    "category": "insurance",
+    "summary": "Endowment-type life insurance with guaranteed savings: from 100 lei/month, policy issued on the spot, no medical exam. Junior Protect Plus builds capital for a child; Senior Protect Plus gives protection and savings for the adult. Guaranteed insured sum plus a guaranteed supplementary benefit at maturity.",
+    "key_features": [
+      "Minimum premium 100 lei/month; 4 monthly-premium variants; Junior: flexible contract durations; Senior: 3 durations",
+      "Pays the insured sum + supplementary benefit (guaranteed) at maturity, plus a share of the insurer's investment result if any",
+      "Junior: if the policyholder dies from an accident, UNIQA pays the remaining premiums and the child still receives the sum at maturity",
+      "Senior: accident-related invalidity/death protection; UNIQA takes over premiums on invalidity",
+      "Premium paid automatically by ConfortaBill direct debit (free for insurance contract holders)",
+      "No medical exam or occupation assessment; grace period for unpaid premium, then suspension; surrender value may apply"
+    ],
+    "interest_rate_or_return": {
+      "value": null,
+      "unit": "guaranteed (not retrieved)",
+      "conditions": "The guaranteed interest rate / supplementary benefit is stated in the KID (Junior/Senior Protect Plus KID dated 2026-06-19) - figures not retrieved.",
+      "as_of": "2026-10-28"
+    },
+    "fees": [
+      {
+        "name": "Monthly premium",
+        "value": "from 100 lei/month",
+        "notes": "4 premium variants"
+      }
+    ],
+    "eligibility": [
+      "Sold in any Raiffeisen branch (contract signed with the relationship manager)",
+      "Junior: for parents/relatives wanting to save for a child",
+      "Insurer: UNIQA Asigurări de Viață S.A."
+    ],
+    "min_amount": {
+      "value": 100,
+      "currency": "RON (per month)"
+    },
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Multiple durations (not retrieved)"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "child_education",
+      "retirement",
+      "long_term_saving",
+      "protection"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurari-de-viata-cu-componenta-de-economisire-garantata.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "asigurare-viata-invest-protect",
+    "name": "Asigurări de viață unit-linked - Future Invest Protect / Active Invest Protect (UNIQA)",
+    "category": "insurance",
+    "summary": "Unit-linked life insurance (50% protection / 50% investment according to the bank's FAQ) for medium/high income customers: Future Invest Protect for a child, Active Invest Protect for an adult. Value linked to chosen investment funds; sums and premiums indexed yearly; free GenePlanet DNA test at 250 lei/month premium.",
+    "key_features": [
+      "Protection against death/invalidity plus investment in funds chosen by the customer according to risk profile",
+      "FAQ: 50% of the money goes to protection, 50% to investment",
+      "Sums insured and premium adjusted annually for inflation",
+      "Free GenePlanet DNA test if minimum monthly premium is 250 lei and at least two payments are made",
+      "Not capital-guaranteed: policy value depends on fund performance"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Minimum monthly premium for the GenePlanet gift",
+        "value": "250 lei",
+        "notes": "Minimum premium for the product itself not retrieved"
+      }
+    ],
+    "eligibility": [
+      "For customers with medium or high income interested in protection plus medium/long-term investing",
+      "Meeting with a Raiffeisen officer in branch / call-back form",
+      "Insurer: UNIQA Asigurări de Viață S.A."
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Medium/long term (not retrieved)"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "child_education",
+      "long_term_growth",
+      "protection"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurare-de-viata-cu-componenta-investitionala.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "asigurare-accident-cont-curent",
+    "name": "Asigurare de viață în caz de accident (pentru titularii de cont curent)",
+    "category": "insurance",
+    "summary": "Low-cost accident cover for holders of a RON or EUR current account aged 18-64: 45,000 lei or 10,000 EUR paid on death or total permanent disability from accident, worldwide, for 6.75 lei or 1.50 EUR per month after the first free month.",
+    "key_features": [
+      "Sum insured 45,000 lei (RON policy) or 10,000 EUR (EUR policy) for death from accident or total permanent disability from accident, worldwide",
+      "Premium 6.75 lei/month or 1.50 EUR/month, first calendar month free, paid by automatic debit from the current account",
+      "Eligibility: holder of a RON or EUR current account at Raiffeisen aged 18-64; enrolled on one current account",
+      "Suspended in a month with unpaid premium; terminated after 6 consecutive unpaid months; can be cancelled any time (premiums not refunded)"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Monthly premium",
+        "value": "6.75 lei or 1.50 EUR",
+        "notes": "After 1 free calendar month"
+      }
+    ],
+    "eligibility": [
+      "Titular of a current account in RON or EUR at Raiffeisen Bank",
+      "Age 18-64",
+      "Enrolment in any branch"
+    ],
+    "min_amount": {
+      "value": 6.75,
+      "currency": "RON (per month)"
+    },
+    "currencies": [
+      "RON",
+      "EUR"
+    ],
+    "terms": [
+      "Monthly renewable"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "protection"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurari-de-viata-in-caz-de-accident.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "asigurare-viata-atasata-creditelor",
+    "name": "Asigurări de viață atașate creditelor (optionale)",
+    "category": "insurance",
+    "summary": "Optional life (and unemployment/hospitalisation/invalidity) insurance linked to Raiffeisen loans, cards and overdraft; premium single or monthly; on Flexicredit it gives a 2% rate discount; benefit pays the loan balance to the bank.",
+    "key_features": [
+      "Optional for all credit types (personal loans, mortgages, credit cards, overdraft)",
+      "Risks (depends on plan): death from any cause, hospitalisation, unemployment, total permanent invalidity",
+      "Flexicredit with optional life & unemployment insurance: 2% lower interest rate",
+      "Premium paid once for the whole loan period or monthly from the account associated with the loan",
+      "Beneficiary is the bank up to the outstanding debt; any excess goes to you or your heirs"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Premium - Flexicredit",
+        "value": "Single premium = loan value x 0.12% x loan months (financed)",
+        "notes": "Cost sheet footnote"
+      },
+      {
+        "name": "Premium - mortgages",
+        "value": "0.026% of loan value per month (example)",
+        "notes": "Casa Ta cost sheet example"
+      }
+    ],
+    "eligibility": [
+      "Taken when contracting the loan in any branch; check you hold a 'Certificat de asigurare' if already a borrower"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Loan term"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "protection",
+      "debt_protection"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurari-de-viata-atasate-creditelor.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/credite/credit-de-nevoi-personale-fara-ipoteca.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "asigurare-rca-smart-mobile",
+    "name": "Asigurare RCA online în Smart Mobile",
+    "category": "insurance",
+    "summary": "Compulsory motor third-party liability (RCA) bought in Smart Mobile through the Pago comparison platform: offers from several insurers, paid from the Raiffeisen account, policy by e-mail.",
+    "key_features": [
+      "Compare offers from multiple insurers and pick the cheapest",
+      "Issue up to 60 days before the current policy expires; renewal reminders",
+      "Pay the premium in the app from the Raiffeisen account; policy delivered by e-mail and stored in the app"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Premium",
+        "value": "Depends on insurer/offer (not published)",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Raiffeisen Smart Mobile user with vehicle and owner data"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [
+      "Policy period chosen by customer"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "car_ownership",
+      "mandatory_insurance"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/asigurari/asigurare-rca-online.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "smart-mobile",
+    "name": "Raiffeisen Smart Mobile (mobile banking)",
+    "category": "digital_service",
+    "summary": "Raiffeisen's mobile banking app: open accounts/deposits/loans, instant payments up to 49,999 lei 24/7, RoPay (send money by phone number), Smart Hour FX, savings and investment tools, card control and push notifications.",
+    "key_features": [
+      "Open account, savings, deposits, Flexicredit (about 10 minutes), investment plans and insurance from the app",
+      "Instant Payments 24/7/365 up to 49,999 lei per transaction; RoPay: send/receive money using a phone number",
+      "Free push notifications for transactions; card block/unblock; PIN view",
+      "Smart Hour FX, Smart Market cashback, Plătești și economisești (SavingBox)",
+      "See total interest earned on savings and deposits (helps decide whether to file the annual single declaration)",
+      "Google Pay / Apple Pay / Garmin Pay enrolment"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Monthly subscription",
+        "value": "0 lei in ZERO Simplu / ZERO Tot; 4 lei standard",
+        "notes": ""
+      },
+      {
+        "name": "Instant payments",
+        "value": "0 lei in ZERO packages (RoPay 0 lei per fee list); standard price on the product page 0.45 lei",
+        "notes": "Pages disagree for non-ZERO customers"
+      },
+      {
+        "name": "Intrabank own accounts",
+        "value": "0 lei",
+        "notes": ""
+      },
+      {
+        "name": "Intrabank between customers",
+        "value": "3 lei (0 in ZERO)",
+        "notes": ""
+      },
+      {
+        "name": "Interbank RON",
+        "value": "4 lei + 0.51 lei clearing (<50,000 lei) or 6 lei (>=50,000 lei); 0 in ZERO",
+        "notes": ""
+      },
+      {
+        "name": "External RON payments",
+        "value": "4 lei",
+        "notes": ""
+      },
+      {
+        "name": "FX payments interbank",
+        "value": "4 lei + SWIFT 50 lei/message",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Individuals with at least a current account or a Raiffeisen credit card",
+      "Non-customers: onboarding in app with ID photo + selfie video, about 8 minutes"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON",
+      "EUR",
+      "USD"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "daily_spending",
+      "saving_tools",
+      "money_management"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/digital-banking/mobile-banking.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/plati-cu-telefonul.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "smart-hour-schimb-valutar",
+    "name": "Smart Hour - schimb valutar RON<->EUR la curs BNR",
+    "category": "digital_service",
+    "summary": "FX window in Smart Mobile every business day 10:00-11:00: exchange RON<->EUR at the BNR rate, up to 1,500 EUR per day and 10,000 EUR per month.",
+    "key_features": [
+      "Mon-Fri 10:00-11:00; BNR reference rate on the exchange date",
+      "Limits: 1,500 EUR/day, 10,000 EUR/month",
+      "Included in ZERO Simplu, Gold, Premium and debit card offers"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Exchange commission",
+        "value": "None beyond BNR rate (rate is the BNR rate)",
+        "notes": "Outside the window standard bank FX rates apply (not retrieved)"
+      }
+    ],
+    "eligibility": [
+      "Customers with RON and EUR accounts and Smart Mobile"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON",
+      "EUR"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "travel",
+      "fx_saving",
+      "daily_spending"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/digital-banking/mobile-banking.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/conturi-si-pachete-de-cont-curent/pachetul-de-cont-curent-zero-simplu.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "smart-market",
+    "name": "Smart Market (cashback, vouchere, puncte)",
+    "category": "digital_service",
+    "summary": "Rewards area in Smart Mobile: card-payment cashback, vouchers and instant discounts, loyalty points (1 point = 1 leu), games and carbon-footprint view.",
+    "key_features": [
+      "Cashback credited to your account for card payments in activated campaigns",
+      "Instant discounts and vouchers at partner shops",
+      "Loyalty points for Raiffeisen products (loans, overdraft, cards, insurance); 1 point = 1 leu",
+      "Monthly carbon footprint estimate from transactions"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Cost",
+        "value": "0 lei",
+        "notes": "Included in Smart Mobile"
+      }
+    ],
+    "eligibility": [
+      "Raiffeisen card/account holder with Smart Mobile; accept Smart Market regulation"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "cashback",
+      "daily_spending"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/digital-banking/smart-market.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "smartinvest-plan-investitii-recurente",
+    "name": "SmartInvest - plan de investiții recurente în fondurile Raiffeisen",
+    "category": "digital_service",
+    "summary": "Monthly automatic investment plan from your current account into any Raiffeisen Asset Management fund from 200 RON / 50 EUR / 50 USD per month; zero cost to open and close; stop any time.",
+    "key_features": [
+      "Automatic monthly debit from the current account into chosen fund(s) (since July 2024 all 13 RAM funds are eligible)",
+      "Minimum 200 RON / 50 EUR / 50 USD per month (depending on fund currency)",
+      "0 cost at opening and closing the plan; modify amounts or stop whenever you want",
+      "If the monthly amount is below one unit price, start with a purchase of at least one unit",
+      "View portfolio in real time in Smart Mobile",
+      "Cancel in Smart Mobile via 'Plăți viitoare' or sign a revocation form in branch"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "Plan opening / closing",
+        "value": "0",
+        "notes": ""
+      },
+      {
+        "name": "Fund ongoing costs",
+        "value": "0.86% - 2.43% per year depending on fund",
+        "notes": "See each fund"
+      }
+    ],
+    "eligibility": [
+      "Appropriateness test / MiFID questionnaire completed",
+      "Raiffeisen current account",
+      "Open from Smart Mobile: Produse -> Fonduri de investiții"
+    ],
+    "min_amount": {
+      "value": 200,
+      "currency": "RON (or 50 EUR / 50 USD per month)"
+    },
+    "currencies": [
+      "RON",
+      "EUR",
+      "USD"
+    ],
+    "terms": [
+      "Flexible, no fixed term"
+    ],
+    "risk_level": null,
+    "good_for": [
+      "long_term_growth",
+      "regular_saving",
+      "retirement",
+      "child_education",
+      "home_purchase"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/investitii/smartinvest-planuri-de-investitii-inteligente.html"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  },
+  {
+    "slug": "fixpay-transferuri-programate",
+    "name": "FixPay - ordine de plată programate / transferuri automate",
+    "category": "digital_service",
+    "summary": "Scheduled payment orders: set a recurring transfer (e.g. salary account -> savings account, Flexidepozit, SmartInvest style transfers) that executes automatically; free for transfers to Raiffeisen savings and Flexidepozit; counts as an 'electronic transaction' for package fee waivers.",
+    "key_features": [
+      "Automatic recurring transfers between your accounts (e.g. monthly saving)",
+      "Free service for automatic transfers into Super Acces Plus and Flexidepozit",
+      "FixPay payments count as an electronic transaction for the monthly zero-fee condition of packages"
+    ],
+    "interest_rate_or_return": null,
+    "fees": [
+      {
+        "name": "FixPay scheduled transfer",
+        "value": "1.5 lei/transfer (fee list)",
+        "notes": "Pages state FixPay is free for transfers to savings accounts and Flexidepozit"
+      },
+      {
+        "name": "Direct debit",
+        "value": "1.5 lei/payment (fee list); 0 for utilities in ZERO Simplu via ConfortaBill",
+        "notes": ""
+      }
+    ],
+    "eligibility": [
+      "Raiffeisen current account holder"
+    ],
+    "min_amount": null,
+    "currencies": [
+      "RON"
+    ],
+    "terms": [],
+    "risk_level": null,
+    "good_for": [
+      "regular_saving",
+      "habit_building",
+      "bills_automation"
+    ],
+    "source_urls": [
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/cont-de-economii.html",
+      "https://www.raiffeisen.ro/ro/persoane-fizice/produsele-noastre/economii/depozit-cu-depuneri-ulterioare.html",
+      "https://www.raiffeisen.ro/content/dam/rbi/retail/eu/ro/documents/pf/tarife-comisioane-standard-pf.sv.pdf"
+    ],
+    "retrieved_at": "2026-10-28",
+    "openable_via_transfer": true,
+    "rule_eligible": true,
+    "rates_by_term": []
+  }
+]
