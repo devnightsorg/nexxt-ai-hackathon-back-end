@@ -9,6 +9,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ProductsModule } from './products/products.module';
 import { SecurityModule } from './security/security.module';
 import { SecurityController } from './security/security.controller';
+import { SeedModule } from './seed/seed.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
     ProductsModule,
     GoalsModule,
     BankingModule,
+    SeedModule,
   ],
   controllers: [HealthController, SecurityController],
 })
