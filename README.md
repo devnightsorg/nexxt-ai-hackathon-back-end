@@ -3,7 +3,7 @@
 Backend NestJS care simulează Raiffeisen Bank România: conturi, tranzacții, plăți, obiective de
 economisire, catalogul real de produse, oferte personalizate, o bază de cunoștințe (RAG cu
 Postgres + pgvector) și un **asistent financiar AI** (Claude Haiku 5.5 prin Anthropic, cu
-Qwen3-32B prin Featherless ca rezervă) care recomandă doar produse din catalog și **nu mută niciodată bani singur**: creează propuneri pe
+DeepSeek-V4.1-Flash prin Featherless ca rezervă) care recomandă doar produse din catalog și **nu mută niciodată bani singur**: creează propuneri pe
 care utilizatorul le confirmă. Peste tot stă un strat de securitate: JWT + chei API cu scopuri și
 limite, rate limiting, „AI firewall” (detecție prompt injection, redactare PII, filtrare
 output), motor de politici pentru bani și un jurnal de audit cu lanț de hash-uri verificabil.
@@ -33,7 +33,7 @@ Featherless nu răspunde, ingestia doar scrie un warning în log și aplicația 
 | Rol | Furnizor | Model implicit | Variabile |
 |---|---|---|---|
 | Agentul principal (tool calling, răspunsuri) | Anthropic, dacă există `ANTHROPIC_API_KEY` | `claude-haiku-5-5` | `ANTHROPIC_API_KEY`, `ANTHROPIC_AGENT_MODEL` |
-| Agentul principal (rezervă) | Featherless | `Qwen/Qwen3-32B` | `FEATHERLESS_API_KEY`, `AGENT_MODEL` |
+| Agentul principal (rezervă) | Featherless | `deepseek-ai/DeepSeek-V4.1-Flash` | `FEATHERLESS_API_KEY`, `AGENT_MODEL` |
 | Modelul rapid (clasificatorul anti-injection, reformularea ofertelor) | Featherless | `Qwen/Qwen3.8-27B` | `FAST_MODEL`, `FAST_TIMEOUT_MS` (implicit 15000) |
 | Embeddings pentru RAG | Featherless | `Qwen/Qwen3-Embedding-4B` (1024 dimensiuni) | `EMBEDDING_MODEL`, `EMBED_TIMEOUT_MS` |
 
@@ -46,9 +46,17 @@ Featherless nu răspunde, ingestia doar scrie un warning în log și aplicația 
   (API-ul nu mai acceptă parametri de sampling), cu prompt caching automat pe promptul de sistem și
   pe unelte. `thinking: disabled` merge cu Claude Haiku 5.5; Claude Opus 5.5 și Sonnet 5.5 îl
   refuză, deci nu le pune în `ANTHROPIC_AGENT_MODEL` fără a schimba codul.
-- Pe Featherless, cu `AGENT_THINKING=false` (implicit), cererile trimit
-  `chat_template_kwargs.enable_thinking=false` (Qwen3.5 și mai noi) plus `/no_think` (Qwen3 mai
-  vechi). `AGENT_THINKING` se aplică doar agentului: modelul rapid rulează mereu fără thinking.
+- Pe Featherless, cu `AGENT_THINKING=false` (implicit), cererile trimit `/no_think` și
+  `chat_template_kwargs.enable_thinking=false` (Qwen3.5 și mai noi, DeepSeek, Kimi, GLM). Primele
+  modele Qwen3 (`Qwen/Qwen3-32B`, `Qwen/Qwen3-8B`, …) primesc doar `/no_think`: cu
+  `chat_template_kwargs` Featherless le ignoră uneltele și agentul nu mai apelează niciun tool.
+  `AGENT_THINKING` se aplică doar agentului: modelul rapid rulează mereu fără thinking.
+- `AGENT_MODEL` implicit a fost ales printr-un benchmark pe conversații reale (Andrei: „depozit de
+  5000 lei pe 12 luni”, „mută 3000 lei în economii pentru Japonia”, „sold și cheltuieli luna
+  asta”): DeepSeek-V4.1-Flash a creat propunerea cerută în 14/14 cazuri, cu răspunsuri ancorate în
+  unelte, la o mediană de ~7 s pe tură. `Qwen/Qwen3-32B` și `moonshotai/Kimi-K2.6` merg și ele
+  (Kimi întreabă înainte de a deschide un cont de economii); `Qwen/Qwen3.8-27B` și
+  `zai-org/GLM-5.3-Flash` nu sunt recomandate ca agent (apeluri de unelte ca text, răspunsuri goale).
 - Vectorii sunt `vector(1024)`: modelul de embeddings trebuie să accepte `dimensions: 1024`
   (Qwen3-Embedding-4B are nativ 2560 și îi trunchiază). Fiecare document din baza de cunoștințe
   reține modelul cu care a fost vectorizat, așa că la schimbarea `EMBEDDING_MODEL` următoarea
@@ -101,6 +109,10 @@ marcate *public*. Detalii și scheme: `/docs`.
 | Securitate | `GET /security/events`, `GET /security/audit`, `GET /security/audit/verify` *(admin)* |
 | MCP | `POST /mcp` (Streamable HTTP, cheie API) |
 | Sistem | `GET /health` *(public)*, `/docs` *(public)* |
+
+`GET /offers` recalculează ofertele active la fiecare apel, dar păstrează id-ul fiecărei oferte
+(cheie: regulă + produs), așa că un id luat din listă rămâne valabil pentru `accept`/`dismiss`.
+Ofertele care nu se mai aplică dispar; cele acceptate sau refuzate nu mai apar 7 zile.
 
 ## Fluxul agentului: propunere → confirmare
 

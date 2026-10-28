@@ -13,7 +13,7 @@ export class OffersController {
   @Get()
   @RequireScopes('offers:read')
   @ApiQuery({ name: 'explain', required: false, type: Boolean, description: 'Rewrite reasoning with the fast model' })
-  @ApiOkResponse({ description: 'Personalised offers (regenerated on each call)' })
+  @ApiOkResponse({ description: 'Active personalised offers, recomputed on each call; an offer keeps its id while it applies' })
   list(@CurrentPrincipal() p: Principal, @Query('explain') explain?: string): Promise<OfferDto[]> {
     return this.offers.list(p.userId, { explain: explain === 'true' || explain === '1' });
   }
@@ -21,7 +21,7 @@ export class OffersController {
   @Post(':id/accept')
   @HttpCode(200)
   @RequireScopes('actions:propose')
-  @ApiOkResponse({ description: 'Accepted offer, plus a pending proposal (openable products) or a credit pre-check' })
+  @ApiOkResponse({ description: 'Accepted offer (not shown again for 7 days), plus a pending proposal (openable products) or a credit pre-check' })
   @ApiNotFoundResponse({ description: 'Oferta nu există' })
   @ApiConflictResponse({ description: 'Oferta nu mai este activă' })
   accept(@CurrentPrincipal() p: Principal, @Param('id') id: string) {

@@ -13,7 +13,7 @@ describe('config', () => {
       ANTHROPIC_API_KEY: '',
       ANTHROPIC_AGENT_MODEL: 'claude-haiku-5-5',
       AGENT_PROVIDER: 'featherless',
-      AGENT_MODEL: 'Qwen/Qwen3-32B',
+      AGENT_MODEL: 'deepseek-ai/DeepSeek-V4.1-Flash',
       FAST_MODEL: 'Qwen/Qwen3.8-27B',
       EMBEDDING_MODEL: 'Qwen/Qwen3-Embedding-4B',
       AGENT_THINKING: false,
@@ -41,7 +41,8 @@ describe('config', () => {
     expect(c.SEED_ON_START).toBe(false);
   });
 
-  it('treats empty values as unset', () => expect(config({ PORT: '', AGENT_MODEL: '' })).toMatchObject({ PORT: 3000, AGENT_MODEL: 'Qwen/Qwen3-32B' }));
+  it('treats empty values as unset', () =>
+    expect(config({ PORT: '', AGENT_MODEL: '' })).toMatchObject({ PORT: 3000, AGENT_MODEL: 'deepseek-ai/DeepSeek-V4.1-Flash' }));
 
   it('rejects malformed numbers, booleans and providers', () => {
     expect(() => config({ PORT: 'abc' })).toThrow('PORT');

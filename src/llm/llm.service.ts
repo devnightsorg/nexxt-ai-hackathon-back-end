@@ -95,6 +95,16 @@ export function withNoThink(messages: ChatMessage[]): ChatMessage[] {
   });
 }
 
+/**
+ * Whether thinking is switched off with `chat_template_kwargs` (besides /no_think). Original Qwen3 releases
+ * (Qwen/Qwen3-32B, Qwen/Qwen3-8B, …) honour /no_think, and on Featherless that field makes them ignore `tools`
+ * (plain-text "I'll check your accounts…" replies with no tool call), so they never get it. Qwen3.5+ and the
+ * other hybrid-thinking models ignore /no_think and need the template switch.
+ */
+export function usesTemplateThinkingSwitch(model: string): boolean {
+  return !/(^|\/)qwen3-\d/i.test(model);
+}
+
 function statusOf(err: unknown): number | undefined {
   const status = (err as { status?: unknown })?.status;
   return typeof status === 'number' ? status : undefined;
@@ -223,14 +233,15 @@ export class LlmService implements OnModuleInit {
     // AGENT_THINKING is for the agent only: the fast model (short JSON classifications) never thinks.
     const thinking = o.model === 'agent' && cfg.AGENT_THINKING;
     const messages = thinking ? o.messages : withNoThink(o.messages);
+    const model = o.model === 'agent' ? cfg.AGENT_MODEL : cfg.FAST_MODEL;
     const body: Record<string, unknown> = {
-      model: o.model === 'agent' ? cfg.AGENT_MODEL : cfg.FAST_MODEL,
+      model,
       messages,
       max_tokens: o.maxTokens ?? (o.model === 'agent' ? 1024 : 200),
       temperature: o.temperature ?? 0.3,
     };
     // Qwen3.5+ ignore /no_think and, with thinking on, often return empty content: switch it off in the template.
-    if (!thinking) body.chat_template_kwargs = { enable_thinking: false };
+    if (!thinking && usesTemplateThinkingSwitch(model)) body.chat_template_kwargs = { enable_thinking: false };
     if (o.tools?.length) body.tools = o.tools;
     const timeoutMs = o.timeoutMs ?? (o.model === 'agent' ? cfg.AGENT_TIMEOUT_MS : cfg.FAST_TIMEOUT_MS);
 

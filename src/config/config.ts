@@ -84,7 +84,7 @@ export function config(env: Env = process.env): AppConfig {
     ANTHROPIC_API_KEY: str(env, 'ANTHROPIC_API_KEY', ''),
     ANTHROPIC_AGENT_MODEL: str(env, 'ANTHROPIC_AGENT_MODEL', 'claude-haiku-5-5'),
     AGENT_PROVIDER: agentProvider(env),
-    AGENT_MODEL: str(env, 'AGENT_MODEL', 'Qwen/Qwen3-32B'),
+    AGENT_MODEL: str(env, 'AGENT_MODEL', 'deepseek-ai/DeepSeek-V4.1-Flash'),
     FAST_MODEL: str(env, 'FAST_MODEL', 'Qwen/Qwen3.8-27B'),
     EMBEDDING_MODEL: str(env, 'EMBEDDING_MODEL', 'Qwen/Qwen3-Embedding-4B'),
     AGENT_THINKING: bool(env, 'AGENT_THINKING', false),

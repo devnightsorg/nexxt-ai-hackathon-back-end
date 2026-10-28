@@ -18,6 +18,7 @@ import { detectInjection } from '../security/guardrails/injection';
 import { extractRates, guardOutput } from '../security/guardrails/output-guard';
 import { PiiVault } from '../security/guardrails/pii-vault';
 import { buildSystemPrompt } from './system-prompt';
+import { parseToolArguments } from './tool-arguments';
 import { AGENT_TOOLS, AgentDeps, AgentTool, hasToolScope, toolsForPrincipal, toToolDefs, ToolError } from './tools';
 import { recommendProduct } from './tools/offers.tools';
 import { Citation, newTurnState, Recommendation, TurnState } from './turn-state';
@@ -474,12 +475,8 @@ export class AgentService {
     if (!tool) return fail(`Unealtă necunoscută: ${tc.name}`);
     if (!hasToolScope(ctx.principal, tool.scope)) return fail(`Permisiune lipsă: ${tool.scope}`);
 
-    let raw: unknown;
-    try {
-      raw = JSON.parse(tc.arguments?.trim() ? tc.arguments : '{}');
-    } catch {
-      return fail('Argumente JSON invalide');
-    }
+    const raw = parseToolArguments(tc.arguments);
+    if (raw === undefined) return fail('Argumente JSON invalide');
     const parsed = tool.schema.safeParse(raw);
     if (!parsed.success) {
       const issues = parsed.error.issues.map((i) => `${i.path.join('.') || 'args'}: ${i.message}`).join('; ');

@@ -10,11 +10,12 @@ import { Projection } from '../finance/projection';
 import { GoalsService } from '../goals/goals.service';
 import { LlmService } from '../llm/llm.service';
 import { PrismaService } from '../prisma/prisma.service';
-import { termMonthsOf } from '../products/catalog.types';
+import { CatalogProduct, termMonthsOf } from '../products/catalog.types';
 import { ProductsService } from '../products/products.service';
 import { AuditService } from '../security/audit/audit.service';
 import { creditPrecheck } from './credit-precheck';
 import { generateOfferCandidates, OfferCandidate, RuleId } from './offer-rules';
+import { planOfferSync } from './offer-sync';
 
 export interface OfferDto {
   id: string;
@@ -47,6 +48,11 @@ const EXPLAIN_PROMPT =
   'Păstrează EXACT toate cifrele, sumele, procentele și numele produselor. Nu adăuga cifre noi. Răspunde doar cu textul.';
 
 type Terms = OfferDto['terms'];
+
+/** Transaction-scoped advisory lock on one user's offers. */
+function lockUserOffers(tx: Prisma.TransactionClient, userId: string): Promise<number> {
+  return tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`offers:${userId}`}))`;
+}
 
 function numbersIn(text: string): string[] {
   return text.match(/\d[\d.,]*\d|\d/g) ?? [];
@@ -91,20 +97,23 @@ export class OffersService {
       now,
     });
 
-    // Dismissed offers keep `expiresAt = dismissedAt + 7 days` as their suppression window.
-    const dismissed = await this.prisma.offer.findMany({
-      where: { userId, status: 'dismissed', expiresAt: { gt: now } },
-      select: { ruleId: true, productSlug: true },
-    });
-    const blocked = new Set(dismissed.map((d) => `${d.ruleId}|${d.productSlug ?? ''}`));
-    const fresh = candidates.filter((c) => !blocked.has(`${c.ruleId}|${c.productSlug ?? ''}`));
-
+    // Upsert by (ruleId, productSlug) so ids survive regeneration (list → accept never races a new id).
+    // The per-user lock serialises concurrent regenerations (UI, agent tool, MCP) and accept/dismiss.
     const expiresAt = new Date(now.getTime() + OFFER_TTL_MS);
     const rows = await this.prisma.$transaction(async (tx) => {
-      await tx.offer.deleteMany({ where: { userId, status: 'active' } });
-      const created: Offer[] = [];
-      for (const c of fresh) created.push(await tx.offer.create({ data: this.toRow(userId, c, expiresAt) }));
-      return created;
+      await lockUserOffers(tx, userId);
+      const existing = await tx.offer.findMany({
+        where: { userId },
+        select: { id: true, ruleId: true, productSlug: true, status: true, expiresAt: true, createdAt: true },
+      });
+      const plan = planOfferSync(existing, candidates, now);
+      if (plan.deleteIds.length) await tx.offer.deleteMany({ where: { userId, status: 'active', id: { in: plan.deleteIds } } });
+      const out: Offer[] = [];
+      for (const { candidate, rowId } of plan.upserts) {
+        const data = this.toRow(userId, candidate, expiresAt);
+        out.push(rowId ? await tx.offer.update({ where: { id: rowId }, data }) : await tx.offer.create({ data }));
+      }
+      return out;
     });
 
     const names = new Map(products.map((p) => [p.slug, p.name]));
@@ -117,40 +126,49 @@ export class OffersService {
     p: Principal,
     id: string,
   ): Promise<{ offer: OfferDto; proposal?: ProposalDto; precheck?: ReturnType<typeof creditPrecheck> }> {
-    const row = await this.findActive(p.userId, id);
-    const product = row.productSlug ? await this.products.get(row.productSlug) : null;
-    const terms = row.terms as unknown as Terms;
+    // Claimed first, so a concurrent accept or regeneration cannot propose it twice or reset it.
+    const { before: row, after: updated } = await this.claim(p.userId, id, 'accepted');
+    let product: CatalogProduct | null = null;
     let proposal: ProposalDto | undefined;
     let precheck: ReturnType<typeof creditPrecheck> | undefined;
-
-    if (row.actionable && product) {
-      const accounts = await this.accounts.listForUser(p.userId);
-      const source = accounts.find((a) => a.type === 'current' && a.status === 'active');
-      if (!source) throw new BadRequestException(NO_CURRENT_ACCOUNT);
-      const amount = terms.suggestedAmount ?? terms.monthlyContribution ?? product.min_amount?.value;
-      if (amount === undefined || amount === null) throw new BadRequestException('Suma nu poate fi determinată');
-      proposal = await this.actions.propose(
-        p,
-        {
-          type: 'open_product',
-          productSlug: product.slug,
-          fromAccountId: source.id,
-          amount,
-          ...(terms.termMonths ? { termMonths: terms.termMonths } : {}),
-          reason: row.title.slice(0, 300),
-        },
-        { proposedVia: 'offer' },
-      );
-    } else if (product && CREDIT_CATEGORIES.includes(product.category)) {
-      const snapshot = await this.stats.snapshot(p.userId);
-      const termsList = termMonthsOf(product);
-      precheck = creditPrecheck(snapshot, {
-        annualRatePct: product.interest_rate_or_return?.value ?? undefined,
-        termMonths: termsList.length ? termsList[termsList.length - 1] : undefined,
+    try {
+      product = row.productSlug ? await this.products.get(row.productSlug) : null;
+      const terms = row.terms as unknown as Terms;
+      if (row.actionable && product) {
+        const accounts = await this.accounts.listForUser(p.userId);
+        const source = accounts.find((a) => a.type === 'current' && a.status === 'active');
+        if (!source) throw new BadRequestException(NO_CURRENT_ACCOUNT);
+        const amount = terms.suggestedAmount ?? terms.monthlyContribution ?? product.min_amount?.value;
+        if (amount === undefined || amount === null) throw new BadRequestException('Suma nu poate fi determinată');
+        proposal = await this.actions.propose(
+          p,
+          {
+            type: 'open_product',
+            productSlug: product.slug,
+            fromAccountId: source.id,
+            amount,
+            ...(terms.termMonths ? { termMonths: terms.termMonths } : {}),
+            reason: row.title.slice(0, 300),
+          },
+          { proposedVia: 'offer' },
+        );
+      } else if (product && CREDIT_CATEGORIES.includes(product.category)) {
+        const snapshot = await this.stats.snapshot(p.userId);
+        const termsList = termMonthsOf(product);
+        precheck = creditPrecheck(snapshot, {
+          annualRatePct: product.interest_rate_or_return?.value ?? undefined,
+          termMonths: termsList.length ? termsList[termsList.length - 1] : undefined,
+        });
+      }
+    } catch (e) {
+      // Nothing was proposed: the offer goes back to active with its original expiry.
+      await this.prisma.offer.updateMany({
+        where: { id, status: 'accepted' },
+        data: { status: 'active', expiresAt: row.expiresAt },
       });
+      throw e;
     }
 
-    const updated = await this.prisma.offer.update({ where: { id }, data: { status: 'accepted' } });
     await this.audit.record({
       ...actorFromPrincipal(p),
       userId: p.userId,
@@ -163,11 +181,7 @@ export class OffersService {
   }
 
   async dismiss(p: Principal, id: string): Promise<OfferDto> {
-    const row = await this.findActive(p.userId, id);
-    const updated = await this.prisma.offer.update({
-      where: { id },
-      data: { status: 'dismissed', expiresAt: new Date(Date.now() + OFFER_TTL_MS) },
-    });
+    const { before: row, after: updated } = await this.claim(p.userId, id, 'dismissed');
     await this.audit.record({
       ...actorFromPrincipal(p),
       userId: p.userId,
@@ -179,11 +193,19 @@ export class OffersService {
     return this.toDto(updated, new Map(name && row.productSlug ? [[row.productSlug, name]] : []));
   }
 
-  private async findActive(userId: string, id: string): Promise<Offer> {
-    const row = await this.prisma.offer.findFirst({ where: { id, userId } });
-    if (!row) throw new NotFoundException(OFFER_NOT_FOUND);
-    if (row.status !== 'active' || row.expiresAt <= new Date()) throw new ConflictException(OFFER_NOT_ACTIVE);
-    return row;
+  /**
+   * Moves an active offer to accepted/dismissed under the user's offer lock. `expiresAt` becomes the end of
+   * the 7-day window during which regeneration does not show that (ruleId, productSlug) again.
+   */
+  private claim(userId: string, id: string, status: 'accepted' | 'dismissed'): Promise<{ before: Offer; after: Offer }> {
+    return this.prisma.$transaction(async (tx) => {
+      await lockUserOffers(tx, userId);
+      const before = await tx.offer.findFirst({ where: { id, userId } });
+      if (!before) throw new NotFoundException(OFFER_NOT_FOUND);
+      if (before.status !== 'active' || before.expiresAt <= new Date()) throw new ConflictException(OFFER_NOT_ACTIVE);
+      const after = await tx.offer.update({ where: { id }, data: { status, expiresAt: new Date(Date.now() + OFFER_TTL_MS) } });
+      return { before, after };
+    });
   }
 
   private async productName(slug: string): Promise<string | null> {
