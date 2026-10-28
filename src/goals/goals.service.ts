@@ -25,6 +25,8 @@ export interface UpdateGoalInput {
 }
 
 const GOAL_NOT_FOUND = 'Obiectivul nu există';
+/** `ActionProposal.result.reason` of proposals rejected because their goal was deleted. */
+export const GOAL_DELETED_REASON = 'goal_deleted';
 const ACCOUNT_NOT_FOUND = 'Contul nu există';
 const AVG_MONTH_MS = 30.4375 * 24 * 60 * 60 * 1000;
 
@@ -107,9 +109,37 @@ export class GoalsService {
     return toGoalDto(goal);
   }
 
-  async remove(userId: string, id: string): Promise<void> {
-    await this.findOwned(userId, id);
-    await this.prisma.goal.delete({ where: { id } });
+  /**
+   * Hard delete, in one transaction: pending proposals made for the goal (by goalId or in its goal chat) are
+   * rejected with `result.reason = 'goal_deleted'`, its chats stop pointing at it and its active offers go.
+   * No money moves: the linked account keeps its balance and `savedAmount` was only bookkeeping.
+   */
+  async remove(userId: string, id: string): Promise<{ rejectedProposalIds: string[] }> {
+    return this.prisma.$transaction(async (tx) => {
+      const goal = await tx.goal.findFirst({ where: { id, userId }, select: { id: true } });
+      if (!goal) throw new NotFoundException(GOAL_NOT_FOUND);
+      const chats = await tx.conversation.findMany({ where: { userId, goalId: id }, select: { id: true } });
+      const pending = await tx.actionProposal.findMany({
+        where: {
+          userId,
+          status: 'pending',
+          OR: [{ payload: { path: ['goalId'], equals: id } }, { conversationId: { in: chats.map((c) => c.id) } }],
+        },
+        select: { id: true },
+      });
+      const now = new Date();
+      if (pending.length) {
+        // Only rows still pending: a proposal confirmed a moment earlier keeps its outcome.
+        await tx.actionProposal.updateMany({
+          where: { id: { in: pending.map((r) => r.id) }, status: 'pending' },
+          data: { status: 'rejected', decidedAt: now, result: { reason: GOAL_DELETED_REASON, goalId: id } },
+        });
+      }
+      await tx.conversation.updateMany({ where: { userId, goalId: id }, data: { goalId: null } });
+      await tx.offer.deleteMany({ where: { userId, status: 'active', terms: { path: ['goalId'], equals: id } } });
+      await tx.goal.delete({ where: { id } });
+      return { rejectedProposalIds: pending.map((r) => r.id) };
+    });
   }
 
   private async findOwned(userId: string, id: string): Promise<Goal> {

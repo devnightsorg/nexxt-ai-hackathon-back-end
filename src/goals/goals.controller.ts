@@ -33,8 +33,11 @@ export class GoalsController {
   @Delete(':id')
   @HttpCode(204)
   @RequireScopes('goals:write')
-  @ApiNoContentResponse()
-  remove(@CurrentPrincipal() p: Principal, @Param('id') id: string): Promise<void> {
-    return this.goals.remove(p.userId, id);
+  @ApiNoContentResponse({
+    description:
+      'Deletes the goal; money stays in its accounts. Pending proposals for it are rejected (confirming one gives 409). 404 if unknown or already deleted.',
+  })
+  async remove(@CurrentPrincipal() p: Principal, @Param('id') id: string): Promise<void> {
+    await this.goals.remove(p.userId, id);
   }
 }
