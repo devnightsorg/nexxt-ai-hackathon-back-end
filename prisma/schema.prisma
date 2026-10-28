@@ -250,6 +250,8 @@ model Conversation {
   userId    String
   channel   Channel
   apiKeyId  String?
+  /// Goal this conversation is about (goal chat); proposals made in it count toward that goal.
+  goalId    String?
   title     String?
   piiVault  Json     @default("{}")
   createdAt DateTime @default(now())
@@ -278,6 +280,8 @@ model ActionProposal {
   id             String       @id @default(uuid())
   userId         String
   conversationId String?
+  /// Offer whose acceptance created this proposal; a proposal that never executes releases the offer.
+  offerId        String?
   type           ActionType
   payload        Json
   policyVerdict  Json
@@ -291,6 +295,8 @@ model ActionProposal {
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   conversation Conversation? @relation(fields: [conversationId], references: [id])
+
+  @@index([offerId])
 }
 
 model ApiKey {

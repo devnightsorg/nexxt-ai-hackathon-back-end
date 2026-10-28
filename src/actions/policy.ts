@@ -12,6 +12,8 @@ export type ProposeInput =
       beneficiaryName?: string;
       amount: number;
       reason?: string;
+      /** Goal this money is for; on execution it counts toward the goal's progress. */
+      goalId?: string;
     }
   | {
       type: 'open_product';
@@ -20,6 +22,8 @@ export type ProposeInput =
       amount: number;
       termMonths?: number;
       reason?: string;
+      /** Goal this money is for; the opened account is linked to it (or counted toward it). */
+      goalId?: string;
     };
 
 export interface PolicyContext {

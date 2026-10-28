@@ -21,7 +21,10 @@ export class OffersController {
   @Post(':id/accept')
   @HttpCode(200)
   @RequireScopes('actions:propose')
-  @ApiOkResponse({ description: 'Accepted offer (not shown again for 7 days), plus a pending proposal (openable products) or a credit pre-check' })
+  @ApiOkResponse({
+    description:
+      'Accepted offer plus a pending proposal (openable products) or a credit pre-check. Hidden for 7 days only while its proposal is pending or executed; a rejected/expired proposal or a pre-check leaves it available.',
+  })
   @ApiNotFoundResponse({ description: 'Oferta nu există' })
   @ApiConflictResponse({ description: 'Oferta nu mai este activă' })
   accept(@CurrentPrincipal() p: Principal, @Param('id') id: string) {

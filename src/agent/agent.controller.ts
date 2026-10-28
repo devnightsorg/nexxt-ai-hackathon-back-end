@@ -19,6 +19,11 @@ export class AgentChatDto {
   @IsString()
   @MaxLength(64)
   conversationId?: string;
+  @ApiPropertyOptional({ description: 'Goal this conversation is about (goal chat): money proposed in it counts toward that goal' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  goalId?: string;
 }
 
 @ApiTags('agent')
@@ -33,7 +38,7 @@ export class AgentController {
   @HttpCode(200)
   @ApiOkResponse({ description: 'Agent reply with recommendations, pending proposals, citations and guardrail info' })
   chat(@CurrentPrincipal() p: Principal, @Body() body: AgentChatDto): Promise<AgentReply> {
-    return this.agent.chat(p, { message: body.message, conversationId: body.conversationId }, 'web');
+    return this.agent.chat(p, { message: body.message, conversationId: body.conversationId, goalId: body.goalId }, 'web');
   }
 
   @Get('conversations')

@@ -19,6 +19,7 @@ function cand(ruleId: RuleId, productSlug: string | null, suggestedAmount = 1000
     citations: [],
     score: 1,
     actionable: !!productSlug,
+    goalId: null,
   };
 }
 
@@ -72,6 +73,21 @@ describe('planOfferSync', () => {
   it('accepted offers keep their status while their window runs, even if the candidate still applies', () => {
     const accepted = row('o-a', 'goal_term_deposit', 'depozit', 'accepted', { expiresAt: days(5) });
     expect(planOfferSync([accepted], [cand('goal_term_deposit', 'depozit')], NOW)).toEqual({ upserts: [], deleteIds: [] });
+  });
+
+  it('released accepted offer (its proposal was rejected/expired, or a pre-check) is shown again with the same id', () => {
+    const released = row('o-a', 'home_goal', 'economii', 'accepted', { expiresAt: days(6), released: true });
+    const plan = planOfferSync([released], [cand('home_goal', 'economii')], NOW);
+    expect(plan.upserts.map((u) => u.rowId)).toEqual(['o-a']);
+    expect(plan.deleteIds).toEqual([]);
+  });
+
+  it('a released accepted row never un-hides a key that a dismissal still suppresses', () => {
+    const existing = [
+      row('o-a', 'home_goal', 'economii', 'accepted', { released: true, createdAt: days(-2) }),
+      row('o-d', 'home_goal', 'economii', 'dismissed', { expiresAt: days(2), createdAt: days(-1) }),
+    ];
+    expect(planOfferSync(existing, [cand('home_goal', 'economii')], NOW)).toEqual({ upserts: [], deleteIds: [] });
   });
 
   it('accepted/dismissed offers that no longer apply are kept as history (never deleted)', () => {

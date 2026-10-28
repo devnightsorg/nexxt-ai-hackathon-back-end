@@ -35,9 +35,14 @@ export function monthsUntil(target: Date, now: Date = new Date()): number {
   return Math.max(0, Math.ceil((target.getTime() - now.getTime()) / AVG_MONTH_MS));
 }
 
+/**
+ * Progress = the linked account's balance (an account opened for the goal) plus `savedAmount`
+ * (money put toward the goal elsewhere: confirmed transfers, or manual tracking).
+ */
 export function toGoalDto(g: GoalWithAccount, now: Date = new Date()): GoalDto {
   const target = toMoney(g.targetAmount);
-  const current = toMoney(g.linkedAccount ? g.linkedAccount.balance : g.savedAmount);
+  const linked = g.linkedAccount ? new Prisma.Decimal(g.linkedAccount.balance) : new Prisma.Decimal(0);
+  const current = toMoney(linked.plus(g.savedAmount));
   const monthsLeft = g.targetDate ? monthsUntil(g.targetDate, now) : null;
   return {
     id: g.id,

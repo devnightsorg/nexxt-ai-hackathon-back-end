@@ -193,6 +193,29 @@ describe('offer rules', () => {
     expect(out.every((c) => c.kind === 'tip')).toBe(true);
   });
 
+  it('goal-driven offers carry the goal id (accepting them counts toward that goal)', () => {
+    const out = generateOfferCandidates(
+      input({
+        user: { age: 31, riskProfile: 'dynamic' },
+        snapshot: snapshot({ idleCash: 29_000, avgMonthlyIncome: 9000, avgMonthlySpending: 5000, savingsBalance: 20_000 }),
+        goals: [
+          goal({ id: 'g-vac', type: 'vacation', targetAmount: 12_000, monthsLeft: 8 }),
+          goal({ id: 'g-home', type: 'home', targetAmount: 60_000, monthsLeft: 36, requiredMonthlySaving: 1600 }),
+        ],
+      }),
+    );
+    expect(out.find((c) => c.ruleId === 'goal_term_deposit')?.goalId).toBe('g-vac');
+    expect(out.find((c) => c.ruleId === 'home_goal')?.goalId).toBe('g-home');
+    expect(out.find((c) => c.ruleId === 'idle_cash_savings')?.goalId).toBeNull();
+  });
+
+  it('youth_package is not offered to someone already holding a youth package', () => {
+    const young = { user: { age: 22, riskProfile: 'conservative' as const } };
+    expect(ids(generateOfferCandidates(input(young)))).toContain('youth_package');
+    expect(ids(generateOfferCandidates(input({ ...young, ownedProductSlugs: ['pachet-tineri'] })))).not.toContain('youth_package');
+    expect(ids(generateOfferCandidates(input({ ...young, ownedProductSlugs: ['alt-pachet'] })))).toContain('youth_package');
+  });
+
   it('returns ≤ 5 sorted by score; actionable only for openable categories', () => {
     const out = generateOfferCandidates(
       input({

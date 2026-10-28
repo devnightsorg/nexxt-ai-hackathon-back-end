@@ -23,6 +23,8 @@ export interface RuleInput {
   goals: GoalDto[];
   products: CatalogProduct[];
   ownedAccountTypes: AccountType[];
+  /** Catalog slugs of the user's active accounts. */
+  ownedProductSlugs?: string[];
   interestTaxRate: number;
   now: Date;
 }
@@ -40,6 +42,8 @@ export interface OfferCandidate {
   citations: { title: string; sourceUrl: string }[];
   score: number;
   actionable: boolean;
+  /** Goal the offer is for (goal_term_deposit, home_goal). */
+  goalId: string | null;
 }
 
 /** 400 EUR/an deductibil ≈ 165 RON/lună. */
@@ -138,6 +142,7 @@ function productCandidate(
     monthlyContribution?: number | null;
     termMonths?: number | null;
     goalTarget?: number;
+    goalId?: string;
   },
 ): OfferCandidate {
   const actionable = OPENABLE_CATEGORIES.includes(product.category);
@@ -167,6 +172,7 @@ function productCandidate(
     citations: citationsOf(product),
     score,
     actionable,
+    goalId: f.goalId ?? null,
   };
 }
 
@@ -184,6 +190,7 @@ function tipCandidate(ruleId: RuleId, score: number, title: string, reasoning: s
     citations: [],
     score,
     actionable: false,
+    goalId: null,
   };
 }
 
@@ -228,6 +235,7 @@ const goalTermDeposit: Rule = (i) => {
     title: `Depozit pe ${months(pick.termMonths)} pentru „${goal.name}”`,
     suggestedAmount: amount,
     termMonths: pick.termMonths,
+    goalId: goal.id,
     reasoning:
       `Obiectivul „${goal.name}” are nevoie de încă ${ron(remaining)} în ${months(goal.monthsLeft!)}. ` +
       `Un depozit ${pick.product.name} pe ${months(pick.termMonths)}` +
@@ -273,6 +281,7 @@ const homeGoal: Rule = (i) => {
       title: `Economisește pentru „${goal.name}” cu ${housing.name}`,
       monthlyContribution: monthly > 0 ? monthly : null,
       goalTarget: goal.targetAmount,
+      goalId: goal.id,
       reasoning: `Pentru „${goal.name}” mai ai de strâns ${ron(remaining)}. Îți propunem ${ron(monthly)} pe lună în ${housing.name}.${tail}`,
     });
   }
@@ -286,6 +295,7 @@ const homeGoal: Rule = (i) => {
       suggestedAmount: depositAmount,
       monthlyContribution: monthly > 0 ? monthly : null,
       termMonths: deposit.termMonths,
+      goalId: goal.id,
       reasoning:
         `Pentru „${goal.name}” mai ai de strâns ${ron(remaining)}. ` +
         `Poți plasa ${ron(depositAmount)} într-un ${deposit.product.name} pe ${months(deposit.termMonths)}` +
@@ -299,6 +309,7 @@ const homeGoal: Rule = (i) => {
     title: `Economisește lunar pentru avansul locuinței`,
     monthlyContribution: monthly,
     goalTarget: remaining,
+    goalId: goal.id,
     reasoning: `Pentru „${goal.name}” mai ai de strâns ${ron(remaining)}. Îți propunem ${ron(monthly)} pe lună în ${savings.name}.${tail}`,
   });
 };
@@ -385,10 +396,12 @@ const subscriptionsTip: Rule = (i) => {
 
 const youthPackage: Rule = (i) => {
   if (i.user.age === null || i.user.age > 26) return null;
-  const p = i.products
-    .filter((x) => (x.category === 'account_package' || x.category === 'current_account') && isRuleEligible(x))
-    .filter((x) => YOUTH_RE.test(x.name) || (x.good_for ?? []).some((g) => YOUTH_RE.test(g)))
-    .sort(byRateThenSlug)[0];
+  const isYouth = (x: CatalogProduct) => YOUTH_RE.test(x.name) || (x.good_for ?? []).some((g) => YOUTH_RE.test(g));
+  const youth = i.products.filter((x) => (x.category === 'account_package' || x.category === 'current_account') && isYouth(x));
+  const owned = new Set(i.ownedProductSlugs ?? []);
+  // Already on a youth package → nothing to offer.
+  if (youth.some((x) => owned.has(x.slug))) return null;
+  const p = youth.filter(isRuleEligible).sort(byRateThenSlug)[0];
   if (!p) return null;
   return productCandidate(i, 'youth_package', 65, p, {
     title: `Pachet pentru tineri: ${p.name}`,

@@ -22,6 +22,10 @@ export interface ProposalDto {
   id: string;
   type: 'transfer' | 'open_product';
   status: ActionStatus;
+  /** Agent conversation the proposal was made in (null for REST/offer/MCP proposals). */
+  conversationId: string | null;
+  /** Offer whose acceptance created the proposal. */
+  offerId: string | null;
   payload: Record<string, unknown>;
   summary: string;
   policyVerdict: PolicyVerdict;
@@ -59,6 +63,8 @@ export function toProposalDto(row: ActionProposal): ProposalDto {
     id: row.id,
     type: row.type,
     status: row.status,
+    conversationId: row.conversationId,
+    offerId: row.offerId,
     payload,
     summary: typeof summary === 'string' ? summary : '',
     policyVerdict: row.policyVerdict as unknown as PolicyVerdict,
@@ -69,9 +75,50 @@ export function toProposalDto(row: ActionProposal): ProposalDto {
   };
 }
 
+export type GoalContribution =
+  | { goalId: string; via: 'linked_account'; accountId: string }
+  | { goalId: string; via: 'saved_amount'; amount: number };
+
+/**
+ * Counts executed money toward a goal (same transaction as the ledger booking):
+ * money landing in the goal's linked account is already counted by its balance; a newly opened account
+ * becomes the goal's linked account when it has none; anything else is added to `savedAmount`.
+ * A goal deleted in the meantime is skipped.
+ */
+export async function applyGoalContribution(
+  tx: Prisma.TransactionClient,
+  userId: string,
+  goalId: string,
+  amount: Prisma.Decimal,
+  target: { accountId: string | null; opened: boolean },
+): Promise<GoalContribution | null> {
+  const goal = await tx.goal.findFirst({ where: { id: goalId, userId }, select: { id: true, linkedAccountId: true } });
+  if (!goal) return null;
+  if (target.accountId && goal.linkedAccountId === target.accountId) {
+    return { goalId: goal.id, via: 'linked_account', accountId: target.accountId };
+  }
+  if (target.opened && target.accountId && !goal.linkedAccountId) {
+    await tx.goal.update({ where: { id: goal.id }, data: { linkedAccountId: target.accountId } });
+    return { goalId: goal.id, via: 'linked_account', accountId: target.accountId };
+  }
+  await tx.goal.update({ where: { id: goal.id }, data: { savedAmount: { increment: amount } } });
+  return { goalId: goal.id, via: 'saved_amount', amount: toMoney(amount) };
+}
+
 interface ResolvedContext {
   ctx: PolicyContext;
   names: { source: string | null; target: string | null; product: string | null };
+}
+
+export interface ProposeMeta {
+  proposedVia: string;
+  conversationId?: string;
+  offerId?: string;
+}
+
+export interface ListProposalsFilter {
+  status?: string;
+  conversationId?: string;
 }
 
 @Injectable()
@@ -83,9 +130,10 @@ export class ActionsService {
     private readonly audit: AuditService,
   ) {}
 
-  async propose(p: Principal, i: ProposeInput, meta: { proposedVia: string; conversationId?: string }): Promise<ProposalDto> {
+  async propose(p: Principal, i: ProposeInput, meta: ProposeMeta): Promise<ProposalDto> {
     this.requireScope(p, 'actions:propose');
     const input = this.normalize(i);
+    const goalName = input.goalId ? await this.goalName(p.userId, input.goalId) : null;
     const { ctx, names } = await this.buildContext(p, input);
     const verdict = evaluatePolicy(ctx);
     const auditBase = { ...actorFromPrincipal(p), userId: p.userId };
@@ -100,12 +148,13 @@ export class ActionsService {
       throw new PolicyDeniedException(verdict.violations);
     }
 
-    const summary = this.summarize(input, names);
+    const summary = this.summarize(input, names) + (goalName ? `, pentru „${goalName}”` : '');
     const expiresAt = new Date(Date.now() + config().ACTION_TTL_MINUTES * 60_000);
     const row = await this.prisma.actionProposal.create({
       data: {
         userId: p.userId,
         conversationId: meta.conversationId ?? null,
+        offerId: meta.offerId ?? null,
         type: input.type,
         payload: { ...input, summary } as unknown as Prisma.InputJsonValue,
         policyVerdict: verdict as unknown as Prisma.InputJsonValue,
@@ -118,12 +167,20 @@ export class ActionsService {
       ...auditBase,
       action: 'action.proposed',
       resource: `action:${row.id}`,
-      details: { type: input.type, amount: ctx.amount, riskLevel: verdict.riskLevel, proposedVia: meta.proposedVia },
+      details: {
+        type: input.type,
+        amount: ctx.amount,
+        riskLevel: verdict.riskLevel,
+        proposedVia: meta.proposedVia,
+        ...(input.goalId ? { goalId: input.goalId } : {}),
+        ...(meta.offerId ? { offerId: meta.offerId } : {}),
+      },
     });
     return toProposalDto(row);
   }
 
-  async list(p: Principal, status?: string): Promise<ProposalDto[]> {
+  async list(p: Principal, f: ListProposalsFilter = {}): Promise<ProposalDto[]> {
+    const { status, conversationId } = f;
     if (status !== undefined && !ACTION_STATUSES.includes(status as ActionStatus)) {
       throw new BadRequestException('Status invalid');
     }
@@ -132,7 +189,11 @@ export class ActionsService {
       data: { status: 'expired' },
     });
     const rows = await this.prisma.actionProposal.findMany({
-      where: { userId: p.userId, ...(status ? { status: status as ActionStatus } : {}) },
+      where: {
+        userId: p.userId,
+        ...(status ? { status: status as ActionStatus } : {}),
+        ...(conversationId ? { conversationId } : {}),
+      },
       orderBy: { createdAt: 'desc' },
       take: 100,
     });
@@ -250,6 +311,7 @@ export class ActionsService {
       throw new BadRequestException('Contul sursă lipsește');
     }
     const reason = typeof i.reason === 'string' && i.reason.trim() ? i.reason.trim().slice(0, 300) : undefined;
+    const goal = typeof i.goalId === 'string' && i.goalId.trim() ? { goalId: i.goalId.trim() } : {};
     if (i.type === 'transfer') {
       const toIban = i.toIban ? i.toIban.replace(/\s+/g, '').toUpperCase() : undefined;
       if (i.toAccountId && toIban) throw new BadRequestException('Specificați exact unul dintre toAccountId și toIban');
@@ -261,6 +323,7 @@ export class ActionsService {
         ...(i.beneficiaryName ? { beneficiaryName: i.beneficiaryName.trim().slice(0, 120) } : {}),
         amount: i.amount,
         ...(reason ? { reason } : {}),
+        ...goal,
       };
     }
     if (typeof i.productSlug !== 'string' || !i.productSlug) throw new BadRequestException('Produsul lipsește');
@@ -274,7 +337,15 @@ export class ActionsService {
       amount: i.amount,
       ...(i.termMonths !== undefined ? { termMonths: i.termMonths } : {}),
       ...(reason ? { reason } : {}),
+      ...goal,
     };
+  }
+
+  /** Name of one of the user's goals, or 404 (a proposal never points at someone else's goal). */
+  private async goalName(userId: string, goalId: string): Promise<string> {
+    const goal = await this.prisma.goal.findFirst({ where: { id: goalId, userId }, select: { name: true } });
+    if (!goal) throw new NotFoundException('Obiectivul nu există');
+    return goal.name;
   }
 
   private async buildContext(p: Principal, input: ProposeInput, excludeProposalId?: string): Promise<ResolvedContext> {
@@ -357,8 +428,8 @@ export class ActionsService {
   private async execute(p: Principal, input: ProposeInput, product: CatalogProduct | null): Promise<Record<string, unknown>> {
     const amount = new Prisma.Decimal(input.amount);
     if (input.type === 'transfer') {
-      const { debit, credit } = await this.prisma.$transaction((tx) =>
-        this.ledger.transfer(tx, {
+      return this.prisma.$transaction(async (tx) => {
+        const { debit, credit } = await this.ledger.transfer(tx, {
           userId: p.userId,
           fromAccountId: input.fromAccountId,
           toAccountId: input.toAccountId,
@@ -366,22 +437,31 @@ export class ActionsService {
           counterpartyName: input.beneficiaryName,
           amount,
           description: input.reason || 'Transfer',
-        }),
-      );
-      return { debitTransactionId: debit.id, creditTransactionId: credit?.id ?? null };
+        });
+        const ownTarget = credit
+          ? await tx.account.findFirst({ where: { id: credit.accountId, userId: p.userId }, select: { id: true } })
+          : null;
+        const goal = input.goalId
+          ? await applyGoalContribution(tx, p.userId, input.goalId, amount, { accountId: ownTarget?.id ?? null, opened: false })
+          : null;
+        return { debitTransactionId: debit.id, creditTransactionId: credit?.id ?? null, ...(goal ? { goal } : {}) };
+      });
     }
     if (!product) throw new NotFoundException('Produsul nu există');
     const termMonths = product.category === 'term_deposit' ? input.termMonths : undefined;
-    const account = await this.prisma.$transaction((tx) =>
-      this.ledger.openAccount(tx, {
+    return this.prisma.$transaction(async (tx) => {
+      const account = await this.ledger.openAccount(tx, {
         userId: p.userId,
         product: { slug: product.slug, name: product.name, category: product.category },
         fromAccountId: input.fromAccountId,
         amount,
         termMonths,
         annualRatePct: annualRateFor(product, input.termMonths),
-      }),
-    );
-    return { accountId: account.id, accountType: account.type, balance: toMoney(account.balance) };
+      });
+      const goal = input.goalId
+        ? await applyGoalContribution(tx, p.userId, input.goalId, amount, { accountId: account.id, opened: true })
+        : null;
+      return { accountId: account.id, accountType: account.type, balance: toMoney(account.balance), ...(goal ? { goal } : {}) };
+    });
   }
 }

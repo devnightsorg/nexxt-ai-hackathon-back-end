@@ -15,7 +15,7 @@ import { ProductsService } from '../products/products.service';
 import { AuditService } from '../security/audit/audit.service';
 import { creditPrecheck } from './credit-precheck';
 import { generateOfferCandidates, OfferCandidate, RuleId } from './offer-rules';
-import { planOfferSync } from './offer-sync';
+import { planOfferSync, StoredOffer } from './offer-sync';
 
 export interface OfferDto {
   id: string;
@@ -29,6 +29,8 @@ export interface OfferDto {
     monthlyContribution: number | null;
     termMonths: number | null;
     projection: Projection | null;
+    /** Goal the offer is for; accepting and confirming it counts toward that goal. */
+    goalId?: string | null;
   };
   reasoning: string;
   citations: { title: string; sourceUrl: string }[];
@@ -93,6 +95,7 @@ export class OffersService {
       goals,
       products,
       ownedAccountTypes: accounts.filter((a) => a.status === 'active').map((a) => a.type as AccountType),
+      ownedProductSlugs: accounts.filter((a) => a.status === 'active' && a.productSlug).map((a) => a.productSlug as string),
       interestTaxRate: config().INTEREST_TAX_RATE,
       now,
     });
@@ -100,12 +103,13 @@ export class OffersService {
     // Upsert by (ruleId, productSlug) so ids survive regeneration (list → accept never races a new id).
     // The per-user lock serialises concurrent regenerations (UI, agent tool, MCP) and accept/dismiss.
     const expiresAt = new Date(now.getTime() + OFFER_TTL_MS);
-    const rows = await this.prisma.$transaction(async (tx) => {
+    const saved = await this.prisma.$transaction(async (tx) => {
       await lockUserOffers(tx, userId);
-      const existing = await tx.offer.findMany({
+      const rows = await tx.offer.findMany({
         where: { userId },
         select: { id: true, ruleId: true, productSlug: true, status: true, expiresAt: true, createdAt: true },
       });
+      const existing = await this.markReleased(tx, userId, rows, now);
       const plan = planOfferSync(existing, candidates, now);
       if (plan.deleteIds.length) await tx.offer.deleteMany({ where: { userId, status: 'active', id: { in: plan.deleteIds } } });
       const out: Offer[] = [];
@@ -117,7 +121,7 @@ export class OffersService {
     });
 
     const names = new Map(products.map((p) => [p.slug, p.name]));
-    let dtos = rows.map((r) => this.toDto(r, names));
+    let dtos = saved.map((r) => this.toDto(r, names));
     if (o.explain) dtos = await Promise.all(dtos.map((d) => this.explain(d)));
     return dtos;
   }
@@ -149,8 +153,9 @@ export class OffersService {
             amount,
             ...(terms.termMonths ? { termMonths: terms.termMonths } : {}),
             reason: row.title.slice(0, 300),
+            ...(terms.goalId ? { goalId: terms.goalId } : {}),
           },
-          { proposedVia: 'offer' },
+          { proposedVia: 'offer', offerId: row.id },
         );
       } else if (product && CREDIT_CATEGORIES.includes(product.category)) {
         const snapshot = await this.stats.snapshot(p.userId);
@@ -191,6 +196,27 @@ export class OffersService {
     });
     const name = row.productSlug ? await this.productName(row.productSlug) : null;
     return this.toDto(updated, new Map(name && row.productSlug ? [[row.productSlug, name]] : []));
+  }
+
+  /**
+   * Flags accepted offers (inside their window) that have no live proposal: none pending or executed among
+   * the proposals created from them in the last 7 days. Those stop hiding their key, so "Accept" followed by
+   * "Not now" (or an expired/failed proposal, or a credit pre-check) leaves the offer available.
+   */
+  private async markReleased(tx: Prisma.TransactionClient, userId: string, rows: StoredOffer[], now: Date): Promise<StoredOffer[]> {
+    const accepted = rows.filter((r) => r.status === 'accepted' && r.expiresAt > now).map((r) => r.id);
+    if (!accepted.length) return rows;
+    const live = await tx.actionProposal.findMany({
+      where: {
+        userId,
+        offerId: { in: accepted },
+        createdAt: { gte: new Date(now.getTime() - OFFER_TTL_MS) },
+        OR: [{ status: 'executed' }, { status: 'pending', expiresAt: { gt: now } }],
+      },
+      select: { offerId: true },
+    });
+    const liveIds = new Set(live.map((l) => l.offerId));
+    return rows.map((r) => (r.status === 'accepted' && accepted.includes(r.id) && !liveIds.has(r.id) ? { ...r, released: true } : r));
   }
 
   /**
@@ -245,6 +271,7 @@ export class OffersService {
       monthlyContribution: c.monthlyContribution,
       termMonths: c.termMonths,
       projection: c.projection,
+      goalId: c.goalId,
     };
     return {
       userId,

@@ -22,9 +22,9 @@ export class ActionsController {
 
   @Get()
   @RequireScopes('actions:propose')
-  @ApiOkResponse({ description: 'Your action proposals, newest first' })
+  @ApiOkResponse({ description: 'Your action proposals, newest first (optionally only one conversation)' })
   list(@CurrentPrincipal() p: Principal, @Query() q: ListActionsQueryDto): Promise<ProposalDto[]> {
-    return this.actions.list(p, q.status);
+    return this.actions.list(p, { status: q.status, conversationId: q.conversationId });
   }
 
   @Get(':id')

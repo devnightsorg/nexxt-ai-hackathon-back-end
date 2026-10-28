@@ -52,6 +52,12 @@ export class ProposeActionDto {
   @IsString()
   @MaxLength(300)
   reason?: string;
+
+  @ApiPropertyOptional({ description: 'One of your goals this money is for; on execution it counts toward its progress' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  goalId?: string;
 }
 
 export class ListActionsQueryDto {
@@ -59,4 +65,10 @@ export class ListActionsQueryDto {
   @IsOptional()
   @IsIn(['pending', 'rejected', 'executed', 'failed', 'expired'])
   status?: string;
+
+  @ApiPropertyOptional({ description: 'Only proposals made in this agent conversation' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(64)
+  conversationId?: string;
 }

@@ -181,6 +181,7 @@ export const MCP_TOOLS: McpToolDef[] = [
       termMonths: z.number().int().min(1).max(600).optional(),
       amount: z.number(),
       reason: z.string().max(300).optional(),
+      goalId: z.string().min(1).max(64).optional(),
     },
     handler: (d, p, a) =>
       d.actions.propose(p, a as ProposeInput, { proposedVia: `mcp:${p.apiKeyId ?? p.userId}` }),

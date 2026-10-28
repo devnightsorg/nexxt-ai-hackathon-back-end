@@ -1,6 +1,6 @@
 import { BadRequestException, HttpException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Conversation, Prisma } from '@prisma/client';
-import { ActionsService, ProposalDto } from '../actions/actions.service';
+import { ActionsService, ProposalDto, toProposalDto } from '../actions/actions.service';
 import { actorFromPrincipal, Principal } from '../auth/principal';
 import { AccountsService } from '../banking/accounts.service';
 import { StatsService } from '../banking/stats.service';
@@ -43,6 +43,8 @@ export interface AgentReply {
 export interface ChatInput {
   message: string;
   conversationId?: string;
+  /** Goal the conversation is about (goal chat); stored on the conversation. */
+  goalId?: string;
 }
 
 export interface ConversationSummary {
@@ -106,6 +108,64 @@ export function productsMentioned(reply: string, catalog: CatalogProduct[], max 
   return found;
 }
 
+/** Goal named in a conversation's opening message: the longest goal name found there as a whole phrase. */
+export function inferGoalId(text: string, goals: { id: string; name: string }[]): string | null {
+  const haystack = ` ${normalizeName(text)} `;
+  const hits = goals
+    .map((g) => ({ id: g.id, name: normalizeName(g.name) }))
+    .filter((g) => g.name.length >= 3 && haystack.includes(` ${g.name} `));
+  if (!hits.length) return null;
+  const best = hits.reduce((a, b) => (b.name.length > a.name.length ? b : a));
+  // Two different goals named in the opening message (neither contains the other) → ambiguous.
+  return hits.every((h) => best.name.includes(h.name)) ? best.id : null;
+}
+
+/** Messages of blocked turns (prompt injection) are kept for the transcript but never fed back to the model. */
+function isBlockedMessage(m: { attachments: Prisma.JsonValue }): boolean {
+  return !!m.attachments && typeof m.attachments === 'object' && (m.attachments as { blocked?: unknown }).blocked === true;
+}
+
+/**
+ * Chronological user/assistant messages minus blocked turns: flagged ones, and turns stored before the flag
+ * existed (an assistant refusal and the user message it answered).
+ */
+export function historyForModel<T extends { role: string; content: string; attachments: Prisma.JsonValue }>(chronological: T[]): T[] {
+  const out: T[] = [];
+  for (const m of chronological) {
+    if (isBlockedMessage(m)) continue;
+    if (m.role === 'assistant' && m.content === REFUSAL_TEXT) {
+      if (out.length && out[out.length - 1].role === 'user') out.pop();
+      continue;
+    }
+    out.push(m);
+  }
+  return out;
+}
+
+const STATUS_NOTE: Record<string, string> = {
+  executed: 'the customer confirmed it and it was EXECUTED (the money moved; balances already include it)',
+  rejected: 'the customer REJECTED it; nothing happened',
+  expired: 'it EXPIRED without confirmation; nothing happened',
+  failed: 'it FAILED at confirmation; nothing happened',
+};
+
+/**
+ * For the model only: what became of the proposals an earlier assistant reply announced, so it never presents
+ * an executed proposal as still waiting for confirmation (or counts it twice).
+ */
+export function proposalStatusNote(
+  attachments: Prisma.JsonValue,
+  status: Map<string, { summary: string; status: string }>,
+): string {
+  const ids = (attachments as { proposals?: unknown } | null)?.proposals;
+  if (!Array.isArray(ids)) return '';
+  const notes = ids
+    .map((id) => (typeof id === 'string' ? status.get(id) : undefined))
+    .filter((x): x is { summary: string; status: string } => !!x && x.status in STATUS_NOTE)
+    .map((x) => `"${x.summary}": ${STATUS_NOTE[x.status]}`);
+  return notes.length ? `\n\n[Bank status update, not part of the reply above: since then ${notes.join('; ')}.]` : '';
+}
+
 function truncate(s: string, max: number): string {
   return s.length > max ? `${s.slice(0, max - 13)}…[trunchiat]` : s;
 }
@@ -167,6 +227,7 @@ export class AgentService {
 
     // 1. Conversation + vault.
     const conv = await this.loadOrCreateConversation(p, i.conversationId, channel);
+    let goal: { id: string; name: string } | null = null;
     const vault = new PiiVault((conv.piiVault ?? {}) as Record<string, string>);
     const turn = newTurnState();
     const toolMessages: StoredToolMessage[] = [];
@@ -198,29 +259,53 @@ export class AgentService {
       if (injection.severity === 'suspicious') warnings.push('Mesaj suspect (euristici)');
       try {
         // 4. Prompt + tools.
-        const [user, catalog, history] = await Promise.all([
+        const [user, catalog, recent, proposals] = await Promise.all([
           this.prisma.user.findUniqueOrThrow({ where: { id: p.userId } }),
           this.products.getAll(),
           this.prisma.message.findMany({
             where: { conversationId: conv.id, role: { in: ['user', 'assistant'] } },
             orderBy: { createdAt: 'desc' },
-            take: HISTORY_LIMIT,
+            take: HISTORY_LIMIT * 2,
+          }),
+          this.prisma.actionProposal.findMany({
+            where: { conversationId: conv.id, userId: p.userId },
+            orderBy: { createdAt: 'desc' },
+            take: 20,
           }),
         ]);
+        const history = historyForModel([...recent].reverse()).slice(-HISTORY_LIMIT);
+        goal = await this.conversationGoal(p, conv, i.goalId, redacted);
+        const now = new Date();
+        const proposalStatus = new Map(
+          proposals.map((x) => [
+            x.id,
+            {
+              summary: vault.redact(toProposalDto(x).summary),
+              status: x.status === 'pending' && x.expiresAt <= now ? 'expired' : x.status,
+            },
+          ]),
+        );
         const system = buildSystemPrompt({
           firstName: user.fullName.split(/\s+/)[0] ?? user.fullName,
           age: user.age,
           occupation: user.occupation,
           riskProfile: user.riskProfile,
-          today: new Date().toISOString().slice(0, 10),
+          today: now.toISOString().slice(0, 10),
           catalogIndex: catalog.map((c) => `${c.slug} — ${c.name} (${c.category})`).join('\n'),
+          channel,
+          goal: goal ? { id: goal.id, name: vault.redact(goal.name) } : null,
+          proposals: [...proposalStatus.values()].slice(0, 10),
         });
         const messages: ChatMessage[] = [
           { role: 'system', content: system },
           ...history
-            .reverse()
             .filter((m) => m.content)
-            .map((m): ChatMessage => (m.role === 'user' ? { role: 'user', content: m.content } : { role: 'assistant', content: m.content })),
+            .map(
+              (m): ChatMessage =>
+                m.role === 'user'
+                  ? { role: 'user', content: m.content }
+                  : { role: 'assistant', content: m.content + proposalStatusNote(m.attachments, proposalStatus) },
+            ),
           { role: 'user', content: redacted },
         ];
         const allowedTools = toolsForPrincipal(p);
@@ -241,7 +326,7 @@ export class AgentService {
           if (first.status === 'rejected') throw first.reason;
           if (classification?.offTopic) warnings.push('Cerere în afara subiectului financiar');
           let res: ChatResult = first.value;
-          const ctx = { principal: p, conversationId: conv.id, channel, turn, deps: this.deps };
+          const ctx = { principal: p, conversationId: conv.id, channel, turn, deps: this.deps, goalId: goal?.id ?? null };
 
           // 6. Tool loop.
           const max = config().AGENT_MAX_ITERATIONS;
@@ -332,7 +417,13 @@ export class AgentService {
     const at = () => new Date(base + seq++);
     await this.prisma.$transaction([
       this.prisma.message.create({
-        data: { conversationId: conv.id, role: 'user', content: redacted, createdAt: at() },
+        data: {
+          conversationId: conv.id,
+          role: 'user',
+          content: redacted,
+          ...(blocked ? { attachments: { blocked: true } as Prisma.InputJsonValue } : {}),
+          createdAt: at(),
+        },
       }),
       ...toolMessages.map((t) =>
         this.prisma.message.create({
@@ -354,6 +445,7 @@ export class AgentService {
           attachments: {
             recommendations: turn.recommendations.map((r) => r.productSlug),
             proposals: turn.proposals.map((x) => x.id),
+            ...(blocked ? { blocked: true } : {}),
           } as unknown as Prisma.InputJsonValue,
           createdAt: at(),
         },
@@ -362,7 +454,8 @@ export class AgentService {
         where: { id: conv.id },
         data: {
           piiVault: vault.toJSON() as Prisma.InputJsonValue,
-          ...(conv.title ? {} : { title: truncate(redacted.replace(/\s+/g, ' ').trim(), 80) }),
+          ...(conv.title || blocked ? {} : { title: truncate(redacted.replace(/\s+/g, ' ').trim(), 80) }),
+          ...(goal && !blocked && goal.id !== conv.goalId ? { goalId: goal.id } : {}),
         },
       }),
     ]);
@@ -429,6 +522,39 @@ export class AgentService {
       createdAt: c.createdAt,
       updatedAt: c.updatedAt,
     };
+  }
+
+  /**
+   * Goal the conversation is about: the client's goalId, else the one stored on the conversation, else the goal
+   * named in the conversation's opening message (the app's goal chat starts with the goal's details).
+   * Only the user's own, non-cancelled goals count.
+   */
+  private async conversationGoal(
+    p: Principal,
+    conv: Conversation,
+    requested: string | undefined,
+    currentMessage: string,
+  ): Promise<{ id: string; name: string } | null> {
+    const goals = await this.prisma.goal.findMany({
+      where: { userId: p.userId, status: { not: 'cancelled' } },
+      select: { id: true, name: true },
+      orderBy: { createdAt: 'desc' },
+    });
+    const byId = (id: string | null | undefined) => (id ? (goals.find((g) => g.id === id) ?? null) : null);
+    if (requested) {
+      const g = byId(requested);
+      if (!g) throw new NotFoundException('Obiectivul nu există');
+      return g;
+    }
+    if (conv.goalId) return byId(conv.goalId);
+    const opening = await this.prisma.message.findMany({
+      where: { conversationId: conv.id, role: 'user' },
+      orderBy: { createdAt: 'asc' },
+      take: 5,
+      select: { content: true, attachments: true },
+    });
+    const first = opening.find((m) => !isBlockedMessage(m))?.content ?? currentMessage;
+    return byId(inferGoalId(first, goals));
   }
 
   private async loadOrCreateConversation(p: Principal, id: string | undefined, channel: 'web' | 'mcp'): Promise<Conversation> {

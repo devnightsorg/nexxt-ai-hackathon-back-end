@@ -107,7 +107,48 @@ describe('offers (stable ids)', () => {
     expect(ids(await list())).not.toContain(target!.id);
     expect((await prisma.offer.findUniqueOrThrow({ where: { id: target!.id } })).status).toBe('accepted');
     await post(`/offers/${target!.id}/accept`).expect(409);
+  });
+
+  it('"Not now" on the proposal of an accepted offer brings the same offer back', async () => {
+    const offers = await list();
+    const target = offers.find((o) => o.actionable)!;
+    const res = await post(`/offers/${target.id}/accept`).expect(200);
+    expect(res.body.proposal.offerId).toBe(target.id);
+    expect(ids(await list())).not.toContain(target.id);
+
     await post(`/actions/${res.body.proposal.id}/reject`).expect(200);
+    const back = await list();
+    expect(ids(back)).toContain(target.id);
+    expect(back.find((o) => o.id === target.id)?.status).toBe('active');
+  });
+
+  it('an expired offer proposal releases the offer too; an executed one keeps it hidden', async () => {
+    const offers = await list();
+    const [a, b] = offers.filter((o) => o.actionable);
+    const ra = await post(`/offers/${a.id}/accept`).expect(200);
+    await prisma.actionProposal.update({ where: { id: ra.body.proposal.id }, data: { expiresAt: new Date(Date.now() - 1000) } });
+    expect(ids(await list())).toContain(a.id);
+
+    if (b) {
+      const rb = await post(`/offers/${b.id}/accept`).expect(200);
+      await post(`/actions/${rb.body.proposal.id}/confirm`).expect(200);
+      expect(ids(await list())).not.toContain(b.id);
+    }
+  });
+
+  it('a credit pre-check offer stays available after it is accepted', async () => {
+    const maria = await loginAs(app, 'maria.ionescu@demo.ro', DEMO_PASSWORD);
+    const get = async () =>
+      (await request(app.getHttpServer()).get('/offers').set('Authorization', `Bearer ${maria}`).expect(200)).body as OfferBody[];
+    const debt = (await get()).find((o) => o.ruleId === 'credit_card_debt')!;
+    expect(debt).toBeDefined();
+    const res = await request(app.getHttpServer())
+      .post(`/offers/${debt.id}/accept`)
+      .set('Authorization', `Bearer ${maria}`)
+      .expect(200);
+    expect(res.body.precheck).toBeDefined();
+    const again = (await get()).find((o) => o.id === debt.id);
+    expect(again?.status).toBe('active');
   });
 
   it('a refused accept leaves the offer active', async () => {

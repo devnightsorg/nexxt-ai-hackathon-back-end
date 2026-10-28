@@ -109,7 +109,7 @@ export class UpdateGoalBody {
   @IsEnum(GoalStatus)
   status?: GoalStatus;
 
-  @ApiPropertyOptional({ description: 'Manually tracked savings (used when no account is linked)' })
+  @ApiPropertyOptional({ description: 'Savings toward the goal outside its linked account (added to that balance)' })
   @IsOptional()
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)

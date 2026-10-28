@@ -28,6 +28,8 @@ export interface AgentToolContext {
   channel: 'web' | 'mcp';
   turn: TurnState;
   deps: AgentDeps;
+  /** Goal the conversation is about (goal chat): money proposed here counts toward it by default. */
+  goalId?: string | null;
 }
 
 export interface AgentTool<A> {
