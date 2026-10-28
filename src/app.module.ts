@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ActionsModule } from './actions/actions.module';
 import { AuthModule } from './auth/auth.module';
 import { BankingModule } from './banking/banking.module';
 import { GoalsModule } from './goals/goals.module';
@@ -24,6 +25,7 @@ import { UsersModule } from './users/users.module';
     GoalsModule,
     BankingModule,
     SeedModule,
+    ActionsModule,
   ],
   controllers: [HealthController, SecurityController],
 })
