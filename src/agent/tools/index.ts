@@ -5,6 +5,7 @@ import { ACTIONS_TOOLS } from './actions.tools';
 import { BANKING_TOOLS } from './banking.tools';
 import { CATALOG_TOOLS } from './catalog.tools';
 import { GOALS_TOOLS } from './goals.tools';
+import { MONEY_MAP_TOOLS } from './money-map.tools';
 import { OFFERS_TOOLS } from './offers.tools';
 import type { AgentTool } from './types';
 
@@ -16,6 +17,7 @@ export const AGENT_TOOLS: AgentTool<any>[] = [
   ...GOALS_TOOLS,
   ...CATALOG_TOOLS,
   ...OFFERS_TOOLS,
+  ...MONEY_MAP_TOOLS,
   ...ACTIONS_TOOLS,
 ];
 

@@ -3,7 +3,7 @@ import type { LadderResult } from './ladder';
 import type { DebtSummary } from './lenders';
 
 const lei = (n: number): string => `${Math.round(n).toLocaleString('en-US')} lei`;
-const r1 = (n: number): number => Math.round(n * 10) / 10;
+const r1 = (n: number): number => Math.floor(n * 10) / 10;
 const pct = (n: number): number => Math.round(n * 100);
 
 /** One templated sentence (no LLM) about the current step, with the facts it quotes. */

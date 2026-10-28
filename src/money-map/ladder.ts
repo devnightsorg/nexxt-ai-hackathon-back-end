@@ -36,7 +36,8 @@ export interface LadderResult {
   facts: LadderFacts;
 }
 
-const r1 = (n: number): number => Math.round(n * 10) / 10;
+/** Months shown to the user: floored, so 0.97 never reads as a full month. */
+const r1 = (n: number): number => Math.floor(n * 10) / 10;
 const r2 = (n: number): number => Math.round((n + Number.EPSILON) * 100) / 100;
 const lei = (n: number): string => `${Math.round(n).toLocaleString('en-US')} lei`;
 const pct = (n: number): string => `${Math.round(n * 100)}%`;

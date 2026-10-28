@@ -16,6 +16,7 @@ import { ProductsService } from '../products/products.service';
 import { AuditService } from '../security/audit/audit.service';
 import { AGENT_THROTTLE } from '../security/principal-throttler.guard';
 import { UsersService } from '../users/users.service';
+import { MoneyMapService } from '../money-map/money-map.service';
 import { McpDeps, registerMcpTools } from './mcp-tools';
 
 export const MCP_METHOD_NOT_ALLOWED = {
@@ -38,12 +39,13 @@ export class McpController {
     goals: GoalsService,
     offers: OffersService,
     knowledge: KnowledgeService,
+    moneyMap: MoneyMapService,
     products: ProductsService,
     agent: AgentService,
     actions: ActionsService,
     audit: AuditService,
   ) {
-    this.deps = { users, stats, goals, offers, knowledge, products, agent, actions, audit };
+    this.deps = { users, stats, goals, offers, knowledge, moneyMap, products, agent, actions, audit };
   }
 
   @Post()

@@ -178,16 +178,18 @@ function engineDrafts(i: RankInput, make: MakeDraft): Draft[] {
           : 'Set a monthly spending plan before payday',
         impact: cut,
         fact: top ? `${top.category}_ron_per_month=${Math.round(top.monthlyAvg)}` : `surplus_ron=${Math.round(i.ladder.facts.surplus)}`,
-        rule: 'Spending above income is the first thing to fix',
+        rule:
+          L[0].status === 'green'
+            ? 'You told us money feels tight, so the first action is about spending'
+            : 'Cash flow is the first step to fix',
       }),
     );
   }
   const expensive = i.debt.payments.filter((p) => p.kind !== 'bank');
   if (expensive.length) {
-    const first = expensive[0];
     out.push(
       make(3, 'expensive_debt_payoff', 'tip', null, {
-        title: `Pay off ${first.lender} first to free ${lei(first.monthlyAvg)}/month`,
+        title: `Pay off ${expensive.map((p) => p.lender).join(' and ')} first to free ${lei(i.debt.expensiveMonthly)}/month`,
         impact: i.debt.expensiveMonthly,
         fact: expensive.map((p) => `${p.lender.toLowerCase().replace(/\s+/g, '_')}_ron_per_month=${p.monthlyAvg}`).join(', '),
         rule: 'Non-bank and buy-now-pay-later credit costs the most; clear it before saving more',

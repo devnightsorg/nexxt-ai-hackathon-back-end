@@ -15,6 +15,7 @@ const EXPECTED: Record<string, string | null> = {
   get_personalised_offers: 'offers:read',
   recommend_product: 'offers:read',
   credit_precheck: 'profile:read',
+  get_money_map: 'accounts:read',
   propose_transfer: 'actions:propose',
   propose_open_product: 'actions:propose',
 };
