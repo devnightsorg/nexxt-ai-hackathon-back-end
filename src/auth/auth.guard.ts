@@ -2,6 +2,7 @@ import { CanActivate, ExecutionContext, ForbiddenException, Injectable, Unauthor
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { config } from '../config/config';
+import { ApiKeysService } from './api-keys.service';
 import { ADMIN_ONLY_KEY, AuthedRequest, IS_PUBLIC_KEY, REQUIRED_SCOPES_KEY, USER_ONLY_KEY } from './decorators';
 import { Principal, Scope, SCOPES } from './principal';
 
@@ -18,6 +19,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly jwt: JwtService,
+    private readonly apiKeys: ApiKeysService,
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -48,8 +50,9 @@ export class AuthGuard implements CanActivate {
     const token = match[1];
 
     if (token.startsWith('rk_')) {
-      // API keys are wired in with ApiKeysService.authenticate (Task 4).
-      throw new UnauthorizedException(AUTH_REQUIRED);
+      const principal = await this.apiKeys.authenticate(token);
+      if (!principal) throw new UnauthorizedException(AUTH_REQUIRED);
+      return principal;
     }
 
     let payload: JwtPayload;
