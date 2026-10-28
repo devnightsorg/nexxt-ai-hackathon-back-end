@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ActionsModule } from './actions/actions.module';
+import { AgentModule } from './agent/agent.module';
 import { AuthModule } from './auth/auth.module';
 import { BankingModule } from './banking/banking.module';
 import { GoalsModule } from './goals/goals.module';
@@ -28,6 +29,7 @@ import { UsersModule } from './users/users.module';
     SeedModule,
     ActionsModule,
     OffersModule,
+    AgentModule,
   ],
   controllers: [HealthController, SecurityController],
 })
