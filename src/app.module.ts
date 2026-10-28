@@ -7,6 +7,7 @@ import { GoalsModule } from './goals/goals.module';
 import { HealthController } from './health/health.controller';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 import { LlmModule } from './llm/llm.module';
+import { McpModule } from './mcp/mcp.module';
 import { OffersModule } from './offers/offers.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ProductsModule } from './products/products.module';
@@ -30,6 +31,7 @@ import { UsersModule } from './users/users.module';
     ActionsModule,
     OffersModule,
     AgentModule,
+    McpModule,
   ],
   controllers: [HealthController, SecurityController],
 })
