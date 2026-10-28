@@ -10,13 +10,16 @@ describe('config', () => {
       JWT_EXPIRES_IN: '2h',
       FEATHERLESS_API_KEY: '',
       FEATHERLESS_BASE_URL: 'https://api.featherless.ai/v1',
+      ANTHROPIC_API_KEY: '',
+      ANTHROPIC_AGENT_MODEL: 'claude-haiku-5-5',
+      AGENT_PROVIDER: 'featherless',
       AGENT_MODEL: 'Qwen/Qwen3-32B',
-      FAST_MODEL: 'Qwen/Qwen3-8B',
-      EMBEDDING_MODEL: 'Qwen/Qwen3-Embedding-0.6B',
+      FAST_MODEL: 'Qwen/Qwen3.8-27B',
+      EMBEDDING_MODEL: 'Qwen/Qwen3-Embedding-4B',
       AGENT_THINKING: false,
       AGENT_MAX_ITERATIONS: 6,
       AGENT_TIMEOUT_MS: 60000,
-      FAST_TIMEOUT_MS: 10000,
+      FAST_TIMEOUT_MS: 15000,
       EMBED_TIMEOUT_MS: 30000,
       POLICY_MAX_PER_ACTION: 50000,
       POLICY_DAILY_LIMIT: 100000,
@@ -40,9 +43,17 @@ describe('config', () => {
 
   it('treats empty values as unset', () => expect(config({ PORT: '', AGENT_MODEL: '' })).toMatchObject({ PORT: 3000, AGENT_MODEL: 'Qwen/Qwen3-32B' }));
 
-  it('rejects malformed numbers and booleans', () => {
+  it('rejects malformed numbers, booleans and providers', () => {
     expect(() => config({ PORT: 'abc' })).toThrow('PORT');
     expect(() => config({ AGENT_THINKING: 'maybe' })).toThrow('AGENT_THINKING');
+    expect(() => config({ AGENT_PROVIDER: 'openai' })).toThrow('AGENT_PROVIDER');
+  });
+
+  it('defaults AGENT_PROVIDER to anthropic only when ANTHROPIC_API_KEY is set; an explicit value wins', () => {
+    expect(config({ ANTHROPIC_API_KEY: 'sk-ant-x' }).AGENT_PROVIDER).toBe('anthropic');
+    expect(config({ ANTHROPIC_API_KEY: '  ' }).AGENT_PROVIDER).toBe('featherless');
+    expect(config({ ANTHROPIC_API_KEY: 'sk-ant-x', AGENT_PROVIDER: 'Featherless' }).AGENT_PROVIDER).toBe('featherless');
+    expect(config({ AGENT_PROVIDER: 'anthropic' }).AGENT_PROVIDER).toBe('anthropic');
   });
 
   it('reads process.env on every call (no caching)', () => {

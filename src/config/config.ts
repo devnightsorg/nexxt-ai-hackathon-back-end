@@ -6,6 +6,12 @@ export interface AppConfig {
   JWT_EXPIRES_IN: string;
   FEATHERLESS_API_KEY: string;
   FEATHERLESS_BASE_URL: string;
+  ANTHROPIC_API_KEY: string;
+  /** Claude model used for the agent when AGENT_PROVIDER is 'anthropic'. */
+  ANTHROPIC_AGENT_MODEL: string;
+  /** Who serves the main agent; the fast model and embeddings always use Featherless. */
+  AGENT_PROVIDER: AgentProvider;
+  /** Featherless agent model (used when AGENT_PROVIDER is 'featherless'). */
   AGENT_MODEL: string;
   FAST_MODEL: string;
   EMBEDDING_MODEL: string;
@@ -24,6 +30,8 @@ export interface AppConfig {
   THROTTLE_LIMIT: number;
   AGENT_THROTTLE_LIMIT: number;
 }
+
+export type AgentProvider = 'anthropic' | 'featherless';
 
 type Env = Record<string, string | undefined>;
 
@@ -55,6 +63,14 @@ function bool(env: Env, name: string, fallback: boolean): boolean {
   throw new Error(`Config ${name} must be true or false, got "${value}"`);
 }
 
+/** Explicit AGENT_PROVIDER wins; otherwise Anthropic when ANTHROPIC_API_KEY is set, else Featherless. */
+function agentProvider(env: Env): AgentProvider {
+  const value = raw(env, 'AGENT_PROVIDER')?.toLowerCase();
+  if (value === undefined) return raw(env, 'ANTHROPIC_API_KEY') ? 'anthropic' : 'featherless';
+  if (value === 'anthropic' || value === 'featherless') return value;
+  throw new Error(`Config AGENT_PROVIDER must be anthropic or featherless, got "${value}"`);
+}
+
 /** Reads the environment on every call (no caching), so tests can change values per app instance. */
 export function config(env: Env = process.env): AppConfig {
   return {
@@ -65,13 +81,16 @@ export function config(env: Env = process.env): AppConfig {
     JWT_EXPIRES_IN: str(env, 'JWT_EXPIRES_IN', '2h'),
     FEATHERLESS_API_KEY: str(env, 'FEATHERLESS_API_KEY', ''),
     FEATHERLESS_BASE_URL: str(env, 'FEATHERLESS_BASE_URL', 'https://api.featherless.ai/v1'),
+    ANTHROPIC_API_KEY: str(env, 'ANTHROPIC_API_KEY', ''),
+    ANTHROPIC_AGENT_MODEL: str(env, 'ANTHROPIC_AGENT_MODEL', 'claude-haiku-5-5'),
+    AGENT_PROVIDER: agentProvider(env),
     AGENT_MODEL: str(env, 'AGENT_MODEL', 'Qwen/Qwen3-32B'),
-    FAST_MODEL: str(env, 'FAST_MODEL', 'Qwen/Qwen3-8B'),
-    EMBEDDING_MODEL: str(env, 'EMBEDDING_MODEL', 'Qwen/Qwen3-Embedding-0.6B'),
+    FAST_MODEL: str(env, 'FAST_MODEL', 'Qwen/Qwen3.8-27B'),
+    EMBEDDING_MODEL: str(env, 'EMBEDDING_MODEL', 'Qwen/Qwen3-Embedding-4B'),
     AGENT_THINKING: bool(env, 'AGENT_THINKING', false),
     AGENT_MAX_ITERATIONS: num(env, 'AGENT_MAX_ITERATIONS', 6),
     AGENT_TIMEOUT_MS: num(env, 'AGENT_TIMEOUT_MS', 60000),
-    FAST_TIMEOUT_MS: num(env, 'FAST_TIMEOUT_MS', 10000),
+    FAST_TIMEOUT_MS: num(env, 'FAST_TIMEOUT_MS', 15000),
     EMBED_TIMEOUT_MS: num(env, 'EMBED_TIMEOUT_MS', 30000),
     POLICY_MAX_PER_ACTION: num(env, 'POLICY_MAX_PER_ACTION', 50000),
     POLICY_DAILY_LIMIT: num(env, 'POLICY_DAILY_LIMIT', 100000),

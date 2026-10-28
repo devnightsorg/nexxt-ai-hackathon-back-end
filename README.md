@@ -2,8 +2,8 @@
 
 Backend NestJS care simulează Raiffeisen Bank România: conturi, tranzacții, plăți, obiective de
 economisire, catalogul real de produse, oferte personalizate, o bază de cunoștințe (RAG cu
-Postgres + pgvector) și un **asistent financiar AI** (Qwen3-32B prin Featherless) care
-recomandă doar produse din catalog și **nu mută niciodată bani singur**: creează propuneri pe
+Postgres + pgvector) și un **asistent financiar AI** (Claude Haiku 5.5 prin Anthropic, cu
+Qwen3-32B prin Featherless ca rezervă) care recomandă doar produse din catalog și **nu mută niciodată bani singur**: creează propuneri pe
 care utilizatorul le confirmă. Peste tot stă un strat de securitate: JWT + chei API cu scopuri și
 limite, rate limiting, „AI firewall” (detecție prompt injection, redactare PII, filtrare
 output), motor de politici pentru bani și un jurnal de audit cu lanț de hash-uri verificabil.
@@ -11,10 +11,10 @@ Agenții externi (ai clientului) se pot conecta printr-un **server MCP privat** 
 
 ## Pornire rapidă
 
-Ai nevoie doar de Docker și de o cheie Featherless.
+Ai nevoie de Docker, de o cheie Featherless și, opțional, de o cheie Anthropic.
 
 ```bash
-cp .env.example .env          # apoi completează FEATHERLESS_API_KEY=... în .env
+cp .env.example .env          # apoi completează FEATHERLESS_API_KEY=... (și ANTHROPIC_API_KEY=...) în .env
 docker compose up --build
 ```
 
@@ -27,6 +27,34 @@ Featherless nu răspunde, ingestia doar scrie un warning în log și aplicația 
 - Health: `curl http://localhost:3000/health` → `{"status":"ok","db":"up"}`
 - Porturile de pe host sunt configurabile: `API_PORT=3001 DB_PORT=5434 docker compose -p alt up --build -d`
 - Toate celelalte variabile au valori implicite (vezi `.env.example` / `src/config/config.ts`).
+
+## Modele LLM și variabile de mediu
+
+| Rol | Furnizor | Model implicit | Variabile |
+|---|---|---|---|
+| Agentul principal (tool calling, răspunsuri) | Anthropic, dacă există `ANTHROPIC_API_KEY` | `claude-haiku-5-5` | `ANTHROPIC_API_KEY`, `ANTHROPIC_AGENT_MODEL` |
+| Agentul principal (rezervă) | Featherless | `Qwen/Qwen3-32B` | `FEATHERLESS_API_KEY`, `AGENT_MODEL` |
+| Modelul rapid (clasificatorul anti-injection, reformularea ofertelor) | Featherless | `Qwen/Qwen3.8-27B` | `FAST_MODEL`, `FAST_TIMEOUT_MS` (implicit 15000) |
+| Embeddings pentru RAG | Featherless | `Qwen/Qwen3-Embedding-4B` (1024 dimensiuni) | `EMBEDDING_MODEL`, `EMBED_TIMEOUT_MS` |
+
+- **`AGENT_PROVIDER`** (`anthropic` | `featherless`) alege cine servește agentul. Dacă lipsește:
+  `anthropic` când `ANTHROPIC_API_KEY` e completat, altfel `featherless`. Modelul rapid și
+  embeddings rămân mereu pe Featherless.
+- La pornire, logul arată cine servește fiecare rol:
+  `docker compose logs api | grep "LLM routing"`.
+- Pe Anthropic agentul rulează fără thinking (`thinking: disabled`) și fără `temperature`
+  (API-ul nu mai acceptă parametri de sampling), cu prompt caching automat pe promptul de sistem și
+  pe unelte. `thinking: disabled` merge cu Claude Haiku 5.5; Claude Opus 5.5 și Sonnet 5.5 îl
+  refuză, deci nu le pune în `ANTHROPIC_AGENT_MODEL` fără a schimba codul.
+- Pe Featherless, cu `AGENT_THINKING=false` (implicit), cererile trimit
+  `chat_template_kwargs.enable_thinking=false` (Qwen3.5 și mai noi) plus `/no_think` (Qwen3 mai
+  vechi).
+- Vectorii sunt `vector(1024)`: modelul de embeddings trebuie să accepte `dimensions: 1024`
+  (Qwen3-Embedding-4B are nativ 2560 și îi trunchiază). Fiecare document din baza de cunoștințe
+  reține modelul cu care a fost vectorizat, așa că la schimbarea `EMBEDDING_MODEL` următoarea
+  pornire re-vectorizează automat tot (inclusiv documentele adăugate prin API).
+- Dacă un furnizor nu răspunde (cheie lipsă, timeout, eroare), agentul intră în modul degradat
+  (`degraded: true`), iar căutarea în baza de cunoștințe trece pe full-text.
 
 ## Credențiale demo
 

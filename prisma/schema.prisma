@@ -196,15 +196,17 @@ model Goal {
 }
 
 model KbDocument {
-  id          String   @id @default(uuid())
-  sourcePath  String   @unique
-  title       String
-  category    String
-  productSlug String?
-  sourceUrls  String[]
-  contentHash String
-  content     String
-  updatedAt   DateTime @updatedAt
+  id             String   @id @default(uuid())
+  sourcePath     String   @unique
+  title          String
+  category       String
+  productSlug    String?
+  sourceUrls     String[]
+  contentHash    String
+  content        String
+  /// Embedding model that produced this document's chunk vectors; a different EMBEDDING_MODEL triggers a re-embed.
+  embeddingModel String?
+  updatedAt      DateTime @updatedAt
 
   chunks KbChunk[]
 }

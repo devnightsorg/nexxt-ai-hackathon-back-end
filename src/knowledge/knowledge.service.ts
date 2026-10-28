@@ -80,7 +80,11 @@ export class KnowledgeService {
     private readonly llm: LlmService,
   ) {}
 
-  /** Idempotent ingestion of every markdown file under `dir` (content-hash based). */
+  /**
+   * Idempotent ingestion of every markdown file under `dir`. A document is skipped only when its content hash
+   * and embedding model are unchanged and every chunk has a vector; a new EMBEDDING_MODEL re-embeds everything
+   * (vectors from different models live in different spaces), including documents added through the API.
+   */
   async ingestDirectory(dir = `${config().KNOWLEDGE_DIR}/docs`): Promise<IngestSummary> {
     const summary: IngestSummary = { documents: 0, chunks: 0, embedded: 0, skipped: 0 };
     let files: string[];
@@ -90,16 +94,23 @@ export class KnowledgeService {
       this.logger.warn(`Knowledge dir ${dir} unreadable: ${(err as Error).message}`);
       return summary;
     }
+    const embeddingModel = config().EMBEDDING_MODEL;
     const slugs = new Set((await this.prisma.product.findMany({ select: { slug: true } })).map((p) => p.slug));
+    const seen: string[] = [];
 
     for (const file of files) {
       summary.documents++;
       const raw = await fs.readFile(file, 'utf8');
       const contentHash = sha256(raw);
       const sourcePath = path.relative(process.cwd(), file).split(path.sep).join('/');
+      seen.push(sourcePath);
       const existing = await this.prisma.kbDocument.findUnique({ where: { sourcePath } });
 
       if (existing && existing.contentHash === contentHash) {
+        if (existing.embeddingModel !== embeddingModel) {
+          summary.embedded += await this.reembedDocument(existing.id, embeddingModel);
+          continue;
+        }
         const pending = await this.unembeddedChunks(existing.id);
         if (pending.length === 0) {
           summary.skipped++;
@@ -125,8 +136,8 @@ export class KnowledgeService {
       await this.prisma.$transaction([
         this.prisma.kbDocument.upsert({
           where: { sourcePath },
-          create: { id: docId, sourcePath, title, category, productSlug, sourceUrls, contentHash, content: raw },
-          update: { title, category, productSlug, sourceUrls, contentHash, content: raw },
+          create: { id: docId, sourcePath, title, category, productSlug, sourceUrls, contentHash, content: raw, embeddingModel },
+          update: { title, category, productSlug, sourceUrls, contentHash, content: raw, embeddingModel },
         }),
         this.prisma.kbChunk.deleteMany({ where: { documentId: docId } }),
         this.prisma.kbChunk.createMany({ data: rows }),
@@ -134,8 +145,24 @@ export class KnowledgeService {
       summary.chunks += rows.length;
       summary.embedded += await this.embedChunks(rows);
     }
+
+    // Documents outside `dir` (API uploads, removed files): other embedding model, or chunks still without a vector.
+    const stale = await this.prisma.$queryRaw<{ id: string; embeddingModel: string | null }[]>`
+      SELECT d.id, d."embeddingModel" FROM "KbDocument" d
+      WHERE NOT (d."sourcePath" = ANY(${seen}::text[]))
+        AND (d."embeddingModel" IS DISTINCT FROM ${embeddingModel}
+             OR EXISTS (SELECT 1 FROM "KbChunk" c WHERE c."documentId" = d.id AND c.embedding IS NULL))`;
+    for (const doc of stale) {
+      summary.embedded +=
+        doc.embeddingModel === embeddingModel
+          ? await this.embedChunks(await this.unembeddedChunks(doc.id))
+          : await this.reembedDocument(doc.id, embeddingModel);
+    }
+
     this.logger.log(
-      `Knowledge ingest: ${summary.documents} documents, ${summary.chunks} chunks written, ${summary.embedded} embedded, ${summary.skipped} skipped`,
+      `Knowledge ingest (${embeddingModel}): ${summary.documents} documents, ${summary.chunks} chunks written, ` +
+        `${summary.embedded} embedded, ${summary.skipped} skipped` +
+        (stale.length ? ` (incl. ${stale.length} documents outside ${dir})` : ''),
     );
     return summary;
   }
@@ -156,6 +183,7 @@ export class KnowledgeService {
           sourceUrls: i.sourceUrls ?? [],
           contentHash: sha256(i.content),
           content: i.content,
+          embeddingModel: config().EMBEDDING_MODEL,
         },
       }),
       this.prisma.kbChunk.createMany({ data: rows }),
@@ -213,6 +241,18 @@ export class KnowledgeService {
       ORDER BY score DESC
       LIMIT ${k}`;
     return loose.map(toHit);
+  }
+
+  /**
+   * Drops a document's vectors and records the new model in one transaction (never old-model vectors under the
+   * new label), then embeds every chunk; chunks that fail stay NULL and are retried by the next ingest.
+   */
+  private async reembedDocument(documentId: string, embeddingModel: string): Promise<number> {
+    await this.prisma.$transaction([
+      this.prisma.$executeRaw`UPDATE "KbChunk" SET embedding = NULL WHERE "documentId" = ${documentId}`,
+      this.prisma.kbDocument.update({ where: { id: documentId }, data: { embeddingModel } }),
+    ]);
+    return this.embedChunks(await this.unembeddedChunks(documentId));
   }
 
   private unembeddedChunks(documentId: string): Promise<{ id: string; content: string }[]> {

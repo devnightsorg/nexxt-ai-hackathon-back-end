@@ -1,6 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import Anthropic from '@anthropic-ai/sdk';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import OpenAI from 'openai';
-import { config } from '../config/config';
+import { AppConfig, config } from '../config/config';
+import { fromAnthropicMessage, historyToolStubs, toAnthropicRequest } from './anthropic-adapter';
 
 export type ChatMessage = OpenAI.Chat.ChatCompletionMessageParam;
 export type ToolDef = OpenAI.Chat.ChatCompletionTool;
@@ -20,9 +22,9 @@ export interface ChatOptions {
   model: 'agent' | 'fast';
   messages: ChatMessage[];
   tools?: ToolDef[];
-  /** Default 1024 for agent, 200 for fast. */
+  /** Default 1024 for agent, 200 for fast (Featherless); 4096 for the agent on Anthropic. */
   maxTokens?: number;
-  /** Default 0.3. */
+  /** Default 0.3. Featherless only: the Anthropic Messages API no longer accepts sampling parameters. */
   temperature?: number;
   timeoutMs?: number;
 }
@@ -37,11 +39,34 @@ export class LlmUnavailableError extends Error {
 
 export const EMBEDDING_DIM = 1024;
 const EMBED_BATCH = 32;
+const ANTHROPIC_MAX_TOKENS = 4096;
 
 /** Minimal surface of the OpenAI client this service uses (lets unit tests inject a mock). */
 export interface LlmClient {
   chat: { completions: { create(body: unknown, opts?: unknown): Promise<unknown> } };
   embeddings: { create(body: unknown, opts?: unknown): Promise<unknown> };
+}
+
+/** Minimal surface of the Anthropic client this service uses (lets unit tests inject a mock). */
+export interface AnthropicClient {
+  messages: { create(body: unknown, opts?: unknown): Promise<unknown> };
+}
+
+/** One line naming the provider/model behind agent, fast and embeddings, plus missing-key warnings. */
+export function describeRouting(cfg: AppConfig = config()): { summary: string; warnings: string[] } {
+  const agent =
+    cfg.AGENT_PROVIDER === 'anthropic' ? `anthropic ${cfg.ANTHROPIC_AGENT_MODEL}` : `featherless ${cfg.AGENT_MODEL}`;
+  const summary =
+    `LLM routing: agent → ${agent} | fast → featherless ${cfg.FAST_MODEL} | ` +
+    `embeddings → featherless ${cfg.EMBEDDING_MODEL} (${EMBEDDING_DIM} dims)`;
+  const warnings: string[] = [];
+  if (cfg.AGENT_PROVIDER === 'anthropic' && !cfg.ANTHROPIC_API_KEY) {
+    warnings.push('AGENT_PROVIDER=anthropic but ANTHROPIC_API_KEY is empty: the agent will run in degraded mode');
+  }
+  if (!cfg.FEATHERLESS_API_KEY) {
+    warnings.push('FEATHERLESS_API_KEY is empty: fast model and embeddings are disabled (heuristics + full-text search only)');
+  }
+  return { summary, warnings };
 }
 
 export function stripThinking(text: string | null | undefined): string {
@@ -76,21 +101,40 @@ function isRetryable(err: unknown): boolean {
   return status !== undefined && (status === 429 || status >= 500);
 }
 
-/** OpenAI-compatible client for Featherless (chat + embeddings). */
+/**
+ * LLM gateway: Featherless (OpenAI-compatible) serves the fast model and embeddings, and the agent unless
+ * AGENT_PROVIDER is 'anthropic', in which case the agent goes to the Anthropic Messages API.
+ */
 @Injectable()
-export class LlmService {
+export class LlmService implements OnModuleInit {
   private readonly logger = new Logger(LlmService.name);
   private client: LlmClient | null = null;
   private clientKey = '';
+  private anthropic: AnthropicClient | null = null;
+  private anthropicKey = '';
 
+  onModuleInit(): void {
+    const { summary, warnings } = describeRouting();
+    this.logger.log(summary);
+    for (const w of warnings) this.logger.warn(w);
+  }
+
+  /** True when at least one provider is configured. */
   isEnabled(): boolean {
-    return config().FEATHERLESS_API_KEY.length > 0;
+    const cfg = config();
+    return cfg.FEATHERLESS_API_KEY.length > 0 || (cfg.AGENT_PROVIDER === 'anthropic' && cfg.ANTHROPIC_API_KEY.length > 0);
   }
 
   /** Overridable in tests. */
   setClient(client: LlmClient): void {
     this.client = client;
     this.clientKey = '__injected__';
+  }
+
+  /** Overridable in tests. */
+  setAnthropicClient(client: AnthropicClient): void {
+    this.anthropic = client;
+    this.anthropicKey = '__injected__';
   }
 
   private getClient(): LlmClient {
@@ -108,9 +152,57 @@ export class LlmService {
     return this.client;
   }
 
+  private getAnthropicClient(cfg: AppConfig): AnthropicClient {
+    if (this.anthropicKey === '__injected__' && this.anthropic) return this.anthropic;
+    if (!this.anthropic || this.anthropicKey !== cfg.ANTHROPIC_API_KEY) {
+      // Retries are ours (call(): one retry on 429/5xx), so the SDK must not retry on top.
+      this.anthropic = new Anthropic({ apiKey: cfg.ANTHROPIC_API_KEY, maxRetries: 0 }) as unknown as AnthropicClient;
+      this.anthropicKey = cfg.ANTHROPIC_API_KEY;
+    }
+    return this.anthropic;
+  }
+
   async chat(o: ChatOptions): Promise<ChatResult> {
-    if (!this.isEnabled()) throw new LlmUnavailableError('LLM dezactivat: FEATHERLESS_API_KEY lipsește');
     const cfg = config();
+    if (o.model === 'agent' && cfg.AGENT_PROVIDER === 'anthropic') return this.chatAnthropic(o, cfg);
+    return this.chatFeatherless(o, cfg);
+  }
+
+  private async chatAnthropic(o: ChatOptions, cfg: AppConfig): Promise<ChatResult> {
+    if (!cfg.ANTHROPIC_API_KEY) throw new LlmUnavailableError('LLM agent dezactivat: ANTHROPIC_API_KEY lipsește');
+    const client = this.getAnthropicClient(cfg);
+    const req = toAnthropicRequest(o.messages, o.tools);
+    // No temperature/top_p/top_k: the Messages API rejects sampling parameters.
+    // Thinking stays off so no thinking blocks have to be replayed through our provider-neutral tool loop.
+    const body: Anthropic.MessageCreateParamsNonStreaming = {
+      model: cfg.ANTHROPIC_AGENT_MODEL,
+      max_tokens: o.maxTokens ?? ANTHROPIC_MAX_TOKENS,
+      messages: req.messages,
+      thinking: { type: 'disabled' },
+      // Automatic prompt caching: tools + system prompt (and the growing tool loop) are a stable prefix.
+      cache_control: { type: 'ephemeral' },
+    };
+    if (req.system) body.system = req.system;
+    if (req.tools?.length) {
+      body.tools = req.tools;
+    } else {
+      // A final answer without tools still replays tool_use blocks, which must name declared tools.
+      const stubs = historyToolStubs(req.messages);
+      if (stubs.length > 0) {
+        body.tools = stubs;
+        body.tool_choice = { type: 'none' };
+      }
+    }
+    const timeoutMs = o.timeoutMs ?? cfg.AGENT_TIMEOUT_MS;
+    const res = (await this.call((signal) => client.messages.create(body, { signal }), timeoutMs, 'anthropic chat')) as
+      | Anthropic.Message
+      | undefined;
+    if (!res || !Array.isArray(res.content)) throw new LlmUnavailableError('Răspuns Anthropic invalid (fără conținut)');
+    return fromAnthropicMessage(res);
+  }
+
+  private async chatFeatherless(o: ChatOptions, cfg: AppConfig): Promise<ChatResult> {
+    if (!cfg.FEATHERLESS_API_KEY) throw new LlmUnavailableError('LLM dezactivat: FEATHERLESS_API_KEY lipsește');
     const client = this.getClient();
     const messages = cfg.AGENT_THINKING ? o.messages : withNoThink(o.messages);
     const body: Record<string, unknown> = {
@@ -119,6 +211,8 @@ export class LlmService {
       max_tokens: o.maxTokens ?? (o.model === 'agent' ? 1024 : 200),
       temperature: o.temperature ?? 0.3,
     };
+    // Qwen3.5+ ignore /no_think and, with thinking on, often return empty content: switch it off in the template.
+    if (!cfg.AGENT_THINKING) body.chat_template_kwargs = { enable_thinking: false };
     if (o.tools?.length) body.tools = o.tools;
     const timeoutMs = o.timeoutMs ?? (o.model === 'agent' ? cfg.AGENT_TIMEOUT_MS : cfg.FAST_TIMEOUT_MS);
 
@@ -137,9 +231,9 @@ export class LlmService {
   }
 
   async embed(texts: string[]): Promise<number[][]> {
-    if (!this.isEnabled()) throw new LlmUnavailableError('LLM dezactivat: FEATHERLESS_API_KEY lipsește');
-    if (texts.length === 0) return [];
     const cfg = config();
+    if (!cfg.FEATHERLESS_API_KEY) throw new LlmUnavailableError('LLM dezactivat: FEATHERLESS_API_KEY lipsește');
+    if (texts.length === 0) return [];
     const client = this.getClient();
     const out: number[][] = [];
     for (let i = 0; i < texts.length; i += EMBED_BATCH) {
@@ -147,7 +241,8 @@ export class LlmService {
       const res = (await this.call(
         (signal) =>
           client.embeddings.create(
-            { model: cfg.EMBEDDING_MODEL, input: batch, encoding_format: 'float' },
+            // Matryoshka models (Qwen3-Embedding-4B is 2560-d natively) truncate to the vector(1024) column.
+            { model: cfg.EMBEDDING_MODEL, input: batch, encoding_format: 'float', dimensions: EMBEDDING_DIM },
             { signal },
           ),
         cfg.EMBED_TIMEOUT_MS,

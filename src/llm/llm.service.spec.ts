@@ -1,11 +1,20 @@
-import { LlmClient, LlmService, LlmUnavailableError } from './llm.service';
+import { AnthropicClient, describeRouting, EMBEDDING_DIM, LlmClient, LlmService, LlmUnavailableError } from './llm.service';
+import { config } from '../config/config';
 
 function completion(content: string) {
   return { choices: [{ message: { role: 'assistant', content, tool_calls: undefined } }] };
 }
 
-function mockClient(create: jest.Mock): LlmClient {
-  return { chat: { completions: { create } }, embeddings: { create: jest.fn() } };
+function mockClient(create: jest.Mock, embed: jest.Mock = jest.fn()): LlmClient {
+  return { chat: { completions: { create } }, embeddings: { create: embed } };
+}
+
+function anthropicMessage(content: unknown[], stop_reason = 'end_turn') {
+  return { id: 'msg_1', type: 'message', role: 'assistant', model: 'claude-haiku-5-5', content, stop_reason };
+}
+
+function mockAnthropic(create: jest.Mock): AnthropicClient {
+  return { messages: { create } };
 }
 
 describe('LlmService', () => {
@@ -13,6 +22,12 @@ describe('LlmService', () => {
   beforeEach(() => {
     process.env.FEATHERLESS_API_KEY = 'test-key';
     process.env.AGENT_THINKING = 'false';
+    process.env.ANTHROPIC_API_KEY = '';
+    delete process.env.AGENT_PROVIDER;
+    delete process.env.AGENT_MODEL;
+    delete process.env.FAST_MODEL;
+    delete process.env.EMBEDDING_MODEL;
+    delete process.env.ANTHROPIC_AGENT_MODEL;
   });
   afterEach(() => {
     process.env = { ...saved };
@@ -28,6 +43,42 @@ describe('LlmService', () => {
     expect(body.messages[0].content).toBe('S\n/no_think');
     expect(body.max_tokens).toBe(200);
     expect(body.temperature).toBe(0.3);
+  });
+
+  it('thinking off → chat_template_kwargs.enable_thinking=false (Qwen3.5+) plus /no_think (older Qwen3)', async () => {
+    const create = jest.fn().mockResolvedValue(completion('{}'));
+    const svc = new LlmService();
+    svc.setClient(mockClient(create));
+    await svc.chat({ model: 'fast', messages: [{ role: 'user', content: 'hi' }] });
+    const body = create.mock.calls[0][0];
+    expect(body.model).toBe('Qwen/Qwen3.8-27B');
+    expect(body.chat_template_kwargs).toEqual({ enable_thinking: false });
+    expect(body.messages[0]).toEqual({ role: 'system', content: '/no_think' });
+
+    process.env.AGENT_THINKING = 'true';
+    await svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'hi' }] });
+    const thinking = create.mock.calls[1][0];
+    expect(thinking.model).toBe('Qwen/Qwen3-32B');
+    expect(thinking.chat_template_kwargs).toBeUndefined();
+    expect(thinking.messages).toEqual([{ role: 'user', content: 'hi' }]);
+  });
+
+  it('embeddings request dimensions=1024 from EMBEDDING_MODEL', async () => {
+    const vec = new Array(EMBEDDING_DIM).fill(0.01);
+    const embed = jest.fn().mockResolvedValue({ data: [{ index: 1, embedding: vec }, { index: 0, embedding: vec }] });
+    const svc = new LlmService();
+    svc.setClient(mockClient(jest.fn(), embed));
+    const out = await svc.embed(['a', 'b']);
+    expect(out).toHaveLength(2);
+    expect(embed.mock.calls[0][0]).toEqual({
+      model: 'Qwen/Qwen3-Embedding-4B',
+      input: ['a', 'b'],
+      encoding_format: 'float',
+      dimensions: EMBEDDING_DIM,
+    });
+
+    embed.mockResolvedValueOnce({ data: [{ index: 0, embedding: new Array(2560).fill(0) }] });
+    await expect(svc.embed(['x'])).rejects.toBeInstanceOf(LlmUnavailableError);
   });
 
   it('timeout → LlmUnavailableError; 503 then 200 → one retry succeeds', async () => {
@@ -75,5 +126,135 @@ describe('LlmService', () => {
     svc.setClient(mockClient(create));
     const r = await svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'x' }] });
     expect(r).toEqual({ content: '', toolCalls: [{ id: 'c1', name: 'list_goals', arguments: '{}' }] });
+  });
+
+  describe('Anthropic agent provider', () => {
+    beforeEach(() => {
+      process.env.ANTHROPIC_API_KEY = 'sk-ant-test';
+    });
+
+    const tools = [
+      {
+        type: 'function' as const,
+        function: { name: 'list_goals', description: 'Obiective', parameters: { type: 'object', properties: {} } },
+      },
+    ];
+
+    it('routes agent → Anthropic and fast → Featherless when ANTHROPIC_API_KEY is set', async () => {
+      const anthropicCreate = jest.fn().mockResolvedValue(anthropicMessage([{ type: 'text', text: 'Salut!' }]));
+      const openaiCreate = jest.fn().mockResolvedValue(completion('{"injection":false}'));
+      const svc = new LlmService();
+      svc.setClient(mockClient(openaiCreate));
+      svc.setAnthropicClient(mockAnthropic(anthropicCreate));
+
+      const agent = await svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'hi' }] });
+      expect(agent).toEqual({ content: 'Salut!', toolCalls: [] });
+      expect(anthropicCreate).toHaveBeenCalledTimes(1);
+      expect(openaiCreate).not.toHaveBeenCalled();
+
+      await svc.chat({ model: 'fast', messages: [{ role: 'user', content: 'hi' }] });
+      expect(openaiCreate).toHaveBeenCalledTimes(1);
+      expect(anthropicCreate).toHaveBeenCalledTimes(1);
+
+      process.env.AGENT_PROVIDER = 'featherless';
+      await svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'hi' }] });
+      expect(openaiCreate).toHaveBeenCalledTimes(2);
+      expect(openaiCreate.mock.calls[1][0].model).toBe('Qwen/Qwen3-32B');
+    });
+
+    it('builds the Messages request: model, max_tokens, system, tools, thinking off, caching — no sampling params', async () => {
+      const create = jest.fn().mockResolvedValue(
+        anthropicMessage([{ type: 'tool_use', id: 'toolu_1', name: 'list_goals', input: {} }], 'tool_use'),
+      );
+      const svc = new LlmService();
+      svc.setAnthropicClient(mockAnthropic(create));
+      const r = await svc.chat({
+        model: 'agent',
+        messages: [
+          { role: 'system', content: 'Ești asistentul băncii.' },
+          { role: 'user', content: 'Ce obiective am?' },
+        ],
+        tools,
+        temperature: 0.7,
+      });
+      expect(r).toEqual({ content: '', toolCalls: [{ id: 'toolu_1', name: 'list_goals', arguments: '{}' }] });
+
+      const [body, opts] = create.mock.calls[0];
+      expect(body).toEqual({
+        model: 'claude-haiku-5-5',
+        max_tokens: 4096,
+        system: 'Ești asistentul băncii.',
+        messages: [{ role: 'user', content: 'Ce obiective am?' }],
+        tools: [{ name: 'list_goals', description: 'Obiective', input_schema: { type: 'object', properties: {} } }],
+        thinking: { type: 'disabled' },
+        cache_control: { type: 'ephemeral' },
+      });
+      expect(body).not.toHaveProperty('temperature');
+      expect(body).not.toHaveProperty('top_p');
+      expect(body).not.toHaveProperty('top_k');
+      expect(body.system).not.toContain('/no_think');
+      expect(opts.signal).toBeInstanceOf(AbortSignal);
+
+      process.env.ANTHROPIC_AGENT_MODEL = 'claude-haiku-4-5';
+      await svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'x' }], maxTokens: 512 });
+      expect(create.mock.calls[1][0]).toMatchObject({ model: 'claude-haiku-4-5', max_tokens: 512 });
+    });
+
+    it('final call without tools still declares replayed tools, with tool_choice none', async () => {
+      const create = jest.fn().mockResolvedValue(anthropicMessage([{ type: 'text', text: 'Gata.' }]));
+      const svc = new LlmService();
+      svc.setAnthropicClient(mockAnthropic(create));
+      await svc.chat({
+        model: 'agent',
+        messages: [
+          { role: 'user', content: 'x' },
+          { role: 'assistant', content: null, tool_calls: [{ id: 'c1', type: 'function', function: { name: 'list_goals', arguments: '{}' } }] },
+          { role: 'tool', tool_call_id: 'c1', content: '[]' },
+        ],
+      });
+      const body = create.mock.calls[0][0];
+      expect(body.tools).toEqual([{ name: 'list_goals', input_schema: { type: 'object', properties: {} } }]);
+      expect(body.tool_choice).toEqual({ type: 'none' });
+    });
+
+    it('retries once on 429, times out, and maps failures and a missing key to LlmUnavailableError', async () => {
+      const flaky = jest
+        .fn()
+        .mockRejectedValueOnce(Object.assign(new Error('rate_limit_error'), { status: 429 }))
+        .mockResolvedValueOnce(anthropicMessage([{ type: 'text', text: 'ok' }]));
+      const svc = new LlmService();
+      svc.setAnthropicClient(mockAnthropic(flaky));
+      expect((await svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'x' }] })).content).toBe('ok');
+      expect(flaky).toHaveBeenCalledTimes(2);
+
+      const bad = jest.fn().mockRejectedValue(Object.assign(new Error('invalid_request_error'), { status: 400 }));
+      svc.setAnthropicClient(mockAnthropic(bad));
+      await expect(svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'x' }] })).rejects.toBeInstanceOf(
+        LlmUnavailableError,
+      );
+      expect(bad).toHaveBeenCalledTimes(1);
+
+      svc.setAnthropicClient(mockAnthropic(jest.fn().mockImplementation(() => new Promise(() => undefined))));
+      await expect(
+        svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'x' }], timeoutMs: 30 }),
+      ).rejects.toThrow('timeout');
+
+      process.env.ANTHROPIC_API_KEY = '';
+      process.env.AGENT_PROVIDER = 'anthropic';
+      await expect(svc.chat({ model: 'agent', messages: [{ role: 'user', content: 'x' }] })).rejects.toBeInstanceOf(
+        LlmUnavailableError,
+      );
+    });
+
+    it('describeRouting names provider and model for agent, fast and embeddings', () => {
+      expect(describeRouting(config()).summary).toBe(
+        'LLM routing: agent → anthropic claude-haiku-5-5 | fast → featherless Qwen/Qwen3.8-27B | ' +
+          'embeddings → featherless Qwen/Qwen3-Embedding-4B (1024 dims)',
+      );
+      process.env.ANTHROPIC_API_KEY = '';
+      const fallback = describeRouting(config());
+      expect(fallback.summary).toContain('agent → featherless Qwen/Qwen3-32B');
+      expect(fallback.warnings).toEqual([]);
+    });
   });
 });
