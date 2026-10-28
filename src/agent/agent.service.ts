@@ -20,6 +20,7 @@ import { PiiVault } from '../security/guardrails/pii-vault';
 import { buildSystemPrompt } from './system-prompt';
 import { parseToolArguments } from './tool-arguments';
 import { AGENT_TOOLS, AgentDeps, AgentTool, hasToolScope, toolsForPrincipal, toToolDefs, ToolError } from './tools';
+import { isNonOpenableSavings } from './tools/catalog.tools';
 import { recommendProduct } from './tools/offers.tools';
 import { Citation, newTurnState, Recommendation, TurnState } from './turn-state';
 
@@ -291,7 +292,9 @@ export class AgentService {
           occupation: user.occupation,
           riskProfile: user.riskProfile,
           today: now.toISOString().slice(0, 10),
-          catalogIndex: catalog.map((c) => `${c.slug} — ${c.name} (${c.category})`).join('\n'),
+          catalogIndex: catalog
+            .map((c) => `${c.slug} — ${c.name} (${c.category})${isNonOpenableSavings(c) ? ' [not openable]' : ''}`)
+            .join('\n'),
           channel,
           goal: goal ? { id: goal.id, name: vault.redact(goal.name) } : null,
           proposals: [...proposalStatus.values()].slice(0, 10),
@@ -358,9 +361,10 @@ export class AgentService {
             res = await this.llm.chat({ model: 'agent', messages });
           }
 
-          // 6b. Fallback: the model named catalog products without calling recommend_product.
+          // 6b. Fallback: the model named catalog products without calling recommend_product
+          // (never ones the customer cannot be moved into via a proposal).
           if (turn.recommendations.length === 0 && res.content) {
-            for (const product of productsMentioned(res.content, catalog)) {
+            for (const product of productsMentioned(res.content, catalog.filter((c) => !isNonOpenableSavings(c)))) {
               try {
                 await recommendProduct.handler(ctx, { productSlug: product.slug, why: 'Produs din catalog sugerat de asistent în acest răspuns.' });
               } catch (err) {
@@ -374,6 +378,7 @@ export class AgentService {
             allowedRates: [...turn.allowedRates, ...catalogRates(catalog)],
             catalogNames: catalog.map((c) => c.name),
             recommendationCategories: turn.recommendations.map((r) => r.category),
+            accountSuffixes: await this.knownAccountSuffixes(p.userId, vault),
           });
           strippedSentences = guarded.strippedSentences.length;
           warnings.push(...guarded.warnings);
@@ -555,6 +560,18 @@ export class AgentService {
     });
     const first = opening.find((m) => !isBlockedMessage(m))?.content ?? currentMessage;
     return byId(inferGoalId(first, goals));
+  }
+
+  /** Last 4 characters of the user's own IBANs and of every IBAN seen in this conversation (masked refs allowed in replies). */
+  private async knownAccountSuffixes(userId: string, vault: PiiVault): Promise<string[]> {
+    const accounts = await this.deps.accounts.listForUser(userId);
+    const ibans = [
+      ...accounts.map((a) => a.iban),
+      ...Object.entries(vault.toJSON())
+        .filter(([token]) => token.startsWith('[IBAN_'))
+        .map(([, value]) => value),
+    ];
+    return [...new Set(ibans.map((x) => x.replace(/\s+/g, '').slice(-4)))];
   }
 
   private async loadOrCreateConversation(p: Principal, id: string | undefined, channel: 'web' | 'mcp'): Promise<Conversation> {

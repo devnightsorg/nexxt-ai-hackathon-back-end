@@ -32,4 +32,11 @@ describe('output guard', () => {
     expect(r.warnings[0]).toContain('Cont Super Economii X');
     expect(r.text).toContain('**Cont Super Economii X**');
   });
+
+  it('replaces masked account refs that match none of the user IBAN suffixes; keeps known ones and bold amounts', () => {
+    const r = guardOutput('Mut **1000** lei din ••9149 în contul …5233 (RO49…5233).', { ...ctx, accountSuffixes: ['9149'] });
+    expect(r.text).toBe('Mut **1000** lei din ••9149 în contul •••• (••••).');
+    expect(r.warnings).toHaveLength(2);
+    expect(guardOutput('Contul …5233.', ctx).text).toBe('Contul …5233.');
+  });
 });

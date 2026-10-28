@@ -1,7 +1,8 @@
 import { z } from 'zod';
+import { isOpenableProduct } from '../../actions/policy';
 import { config } from '../../config/config';
 import { simulate } from '../../finance/projection';
-import { CatalogProduct } from '../../products/catalog.types';
+import { CatalogProduct, OPENABLE_CATEGORIES } from '../../products/catalog.types';
 import { addCitation } from '../turn-state';
 import { AgentDeps, defineTool, ToolError } from './types';
 import { amountSchema } from './schemas';
@@ -14,9 +15,24 @@ export async function findProduct(deps: AgentDeps, slug: string): Promise<Catalo
   }
 }
 
+export const NOT_OPENABLE_NOTE =
+  'openable: false — the customer cannot be moved into this product through a proposal (no propose_open_product, no transfer into it). Do not recommend it, simulate it or build a savings plan on it.';
+
+/** Savings-type product the customer cannot be moved into (e.g. card round-ups only, non-RON). */
+export function isNonOpenableSavings(p: CatalogProduct): boolean {
+  return OPENABLE_CATEGORIES.includes(p.category) && !isOpenableProduct(p);
+}
+
+/** `openable` (can be opened/funded via propose_open_product) plus a warning note for non-openable savings products. */
+export function openability(p: CatalogProduct): { openable: boolean; note?: string } {
+  const openable = isOpenableProduct(p);
+  return isNonOpenableSavings(p) ? { openable, note: NOT_OPENABLE_NOTE } : { openable };
+}
+
 export const listProducts = defineTool({
   name: 'list_products',
-  description: 'Lists Raiffeisen catalog products (optionally by category or goodFor tag) with summary, rate/return and minimum amount.',
+  description:
+    'Lists Raiffeisen catalog products (optionally by category or goodFor tag) with summary, rate/return, minimum amount and openable (true when the customer can be moved into it via propose_open_product).',
   scope: null,
   schema: z.object({ category: z.string().max(60).optional(), goodFor: z.string().max(60).optional() }),
   handler: async (ctx, args) => {
@@ -30,16 +46,20 @@ export const listProducts = defineTool({
       minAmount: p.min_amount,
       riskLevel: p.risk_level,
       goodFor: p.good_for,
+      ...openability(p),
     }));
   },
 });
 
 export const getProduct = defineTool({
   name: 'get_product',
-  description: 'Full catalog details of one product by slug (features, rates, fees, eligibility, terms).',
+  description: 'Full catalog details of one product by slug (features, rates, fees, eligibility, terms, openable).',
   scope: null,
   schema: z.object({ slug: z.string().min(1).max(120) }),
-  handler: (ctx, args) => findProduct(ctx.deps, args.slug),
+  handler: async (ctx, args) => {
+    const product = await findProduct(ctx.deps, args.slug);
+    return { ...product, ...openability(product) };
+  },
 });
 
 export const searchKnowledgeBase = defineTool({
@@ -72,7 +92,7 @@ export const searchKnowledgeBase = defineTool({
 export const simulateProduct = defineTool({
   name: 'simulate_product',
   description:
-    'Deterministic projection for a savings/deposit/investment/pension product: interest, tax, final amount and months to reach a goal target.',
+    'Deterministic projection for an openable savings/deposit/investment/pension product: interest, tax, final amount and months to reach a goal target. Run it for the exact product, amount and monthly contribution you propose.',
   scope: null,
   schema: z.object({
     productSlug: z.string().min(1).max(120),
@@ -83,6 +103,11 @@ export const simulateProduct = defineTool({
   }),
   handler: async (ctx, args) => {
     const product = await findProduct(ctx.deps, args.productSlug);
+    if (isNonOpenableSavings(product)) {
+      throw new ToolError(
+        `Produsul "${product.slug}" nu poate fi deschis sau alimentat printr-o propunere (openable: false), deci nu facem proiecții pentru el. Alege un produs cu openable: true.`,
+      );
+    }
     return simulate({
       product,
       amount: args.amount,

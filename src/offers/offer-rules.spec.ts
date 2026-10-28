@@ -209,6 +209,20 @@ describe('offer rules', () => {
     expect(out.find((c) => c.ruleId === 'idle_cash_savings')?.goalId).toBeNull();
   });
 
+  it('home_goal savings fallback names the savings account the customer already holds', () => {
+    const base = {
+      products: PRODUCTS.filter((p) => p.category !== 'term_deposit'),
+      snapshot: snapshot({ idleCash: 800, avgMonthlyIncome: 4800, avgMonthlySpending: 4200 }),
+      goals: [goal({ type: 'home', targetAmount: 60_000, monthsLeft: 36, requiredMonthlySaving: 1600 })],
+    };
+    const owned = generateOfferCandidates(input({ ...base, ownedProductSlugs: ['economii'] })).find((c) => c.ruleId === 'home_goal')!;
+    expect(owned.productSlug).toBe('economii');
+    expect(owned.goalId).toBe('g-home');
+    expect(owned.reasoning).toContain('contul tău existent economii');
+    const fresh = generateOfferCandidates(input(base)).find((c) => c.ruleId === 'home_goal')!;
+    expect(fresh.reasoning).not.toContain('existent');
+  });
+
   it('youth_package is not offered to someone already holding a youth package', () => {
     const young = { user: { age: 22, riskProfile: 'conservative' as const } };
     expect(ids(generateOfferCandidates(input(young)))).toContain('youth_package');

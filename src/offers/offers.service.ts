@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { AccountType, Offer, Prisma } from '@prisma/client';
 import { ActionsService, ProposalDto } from '../actions/actions.service';
+import type { ProposeInput } from '../actions/policy';
 import { actorFromPrincipal, Principal } from '../auth/principal';
 import { AccountsService } from '../banking/accounts.service';
 import { StatsService } from '../banking/stats.service';
@@ -58,6 +59,37 @@ function lockUserOffers(tx: Prisma.TransactionClient, userId: string): Promise<n
 
 function numbersIn(text: string): string[] {
   return text.match(/\d[\d.,]*\d|\d/g) ?? [];
+}
+
+/** Products the customer keeps adding money to: when they already hold one, an offer tops it up instead of opening another. */
+const REUSABLE_CATEGORIES = ['savings_account', 'housing_savings'];
+
+/**
+ * What accepting an actionable offer proposes: a transfer into the customer's existing account of that product
+ * (savings accounts, housing savings), else opening the product. Funded from `source`; keeps the goal link.
+ */
+export function offerProposalInput(
+  product: CatalogProduct,
+  terms: Terms,
+  accounts: { id: string; type: string; status: string; productSlug: string | null }[],
+  source: { id: string },
+  amount: number,
+  reason: string,
+): ProposeInput {
+  const goal = terms.goalId ? { goalId: terms.goalId } : {};
+  const owned = REUSABLE_CATEGORIES.includes(product.category)
+    ? accounts.find((a) => a.status === 'active' && a.productSlug === product.slug && a.id !== source.id)
+    : undefined;
+  if (owned) return { type: 'transfer', fromAccountId: source.id, toAccountId: owned.id, amount, reason, ...goal };
+  return {
+    type: 'open_product',
+    productSlug: product.slug,
+    fromAccountId: source.id,
+    amount,
+    ...(terms.termMonths ? { termMonths: terms.termMonths } : {}),
+    reason,
+    ...goal,
+  };
 }
 
 @Injectable()
@@ -146,15 +178,7 @@ export class OffersService {
         if (amount === undefined || amount === null) throw new BadRequestException('Suma nu poate fi determinată');
         proposal = await this.actions.propose(
           p,
-          {
-            type: 'open_product',
-            productSlug: product.slug,
-            fromAccountId: source.id,
-            amount,
-            ...(terms.termMonths ? { termMonths: terms.termMonths } : {}),
-            reason: row.title.slice(0, 300),
-            ...(terms.goalId ? { goalId: terms.goalId } : {}),
-          },
+          offerProposalInput(product, terms, accounts, source, amount, row.title.slice(0, 300)),
           { proposedVia: 'offer', offerId: row.id },
         );
       } else if (product && CREDIT_CATEGORIES.includes(product.category)) {

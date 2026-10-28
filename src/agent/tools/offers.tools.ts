@@ -4,9 +4,9 @@ import { Projection, simulate } from '../../finance/projection';
 import { creditPrecheck } from '../../offers/credit-precheck';
 import { OPENABLE_CATEGORIES } from '../../products/catalog.types';
 import { Recommendation } from '../turn-state';
-import { defineTool } from './types';
+import { defineTool, ToolError } from './types';
 import { amountSchema } from './schemas';
-import { findProduct } from './catalog.tools';
+import { findProduct, isNonOpenableSavings } from './catalog.tools';
 
 const DEFAULT_PROJECTION_AMOUNT = 1000;
 
@@ -21,7 +21,7 @@ export const getPersonalisedOffers = defineTool({
 export const recommendProduct = defineTool({
   name: 'recommend_product',
   description:
-    'The ONLY way to recommend a product: records a structured recommendation of a catalog product (by slug) with a short reason; the bank computes the projection.',
+    'The ONLY way to recommend a product: records a structured recommendation of a catalog product (by slug) with a short reason; the bank computes the projection. Savings/deposit/fund/pension products must be openable (openable: true).',
   scope: 'offers:read',
   schema: z.object({
     productSlug: z.string().min(1).max(120),
@@ -32,6 +32,11 @@ export const recommendProduct = defineTool({
   }),
   handler: async (ctx, args) => {
     const product = await findProduct(ctx.deps, args.productSlug);
+    if (isNonOpenableSavings(product)) {
+      throw new ToolError(
+        `Produsul "${product.slug}" nu poate fi deschis sau alimentat printr-o propunere (openable: false); recomandă un produs cu openable: true.`,
+      );
+    }
     let projection: Projection | null = null;
     if (OPENABLE_CATEGORIES.includes(product.category)) {
       projection = simulate({

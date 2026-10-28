@@ -17,7 +17,8 @@ export const getFinancialSnapshot = defineTool({
 
 export const getAccounts = defineTool({
   name: 'get_accounts',
-  description: 'Lists the user accounts (id, type, name, product, IBAN, balance in RON, status). Use the account id in propose_* tools.',
+  description:
+    'Lists the user accounts (id, type, name, product, IBAN, ibanLast4, balance in RON, status). Use the account id in propose_* tools; when citing an account to the user use its name or exactly its ibanLast4.',
   scope: 'accounts:read',
   schema: z.object({}),
   handler: async (ctx) => {
@@ -29,6 +30,7 @@ export const getAccounts = defineTool({
       productSlug: a.productSlug,
       productName: a.productName,
       iban: a.iban,
+      ibanLast4: a.iban.replace(/\s+/g, '').slice(-4),
       currency: a.currency,
       balance: a.balance,
       status: a.status,

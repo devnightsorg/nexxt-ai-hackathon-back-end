@@ -2,6 +2,8 @@ export interface OutputGuardContext {
   allowedRates: number[];
   catalogNames: string[];
   recommendationCategories: string[];
+  /** Last 4 IBAN characters the reply may cite as masked refs (…1234, ••1234); others are removed. Omitted → no check. */
+  accountSuffixes?: string[];
 }
 
 export interface OutputGuardResult {
@@ -20,6 +22,8 @@ const PRODUCT_WORD = /\b(?:cont|depozit|card|credit|fond|pensie|asigurare|accoun
 const RATE_RE = /(?<![\d.,])(\d+(?:[.,]\d+)?)\s*%/g;
 const SPAN_RES = [/\*\*([^*\n]+?)\*\*/g, /__([^_\n]+?)__/g, /"([^"\n]+?)"/g, /„([^”"\n]+?)[”"]/g, /“([^”\n]+?)”/g];
 const RATE_TOLERANCE = 0.005;
+/** Masked account reference: optional "RO49" prefix, an ellipsis or bullets, then exactly 4 digits ("…9149", "••9149"). */
+const MASKED_ACCOUNT_RE = /(?:\b[A-Z]{2}\d{2})?(?:…|\.{3}|•{2,}\s?)(\d{4})(?!\d)/g;
 
 /** Numbers followed by `%` (accepts `4,5%`, `4.50 %`, `4,50% p.a.`). */
 export function extractRates(text: string): number[] {
@@ -77,6 +81,15 @@ export function guardOutput(reply: string, ctx: OutputGuardContext): OutputGuard
     }
   }
   text = text.replace(/\n{3,}/g, '\n\n').trim();
+
+  if (ctx.accountSuffixes) {
+    const known = new Set(ctx.accountSuffixes);
+    text = text.replace(MASKED_ACCOUNT_RE, (m: string, digits: string) => {
+      if (known.has(digits)) return m;
+      warnings.push(`Referință de cont necunoscută: "${m}"`);
+      return '••••';
+    });
+  }
 
   const names = ctx.catalogNames.map((n) => n.toLowerCase().trim()).filter(Boolean);
   const seen = new Set<string>();

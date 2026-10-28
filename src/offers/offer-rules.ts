@@ -305,12 +305,14 @@ const homeGoal: Rule = (i) => {
   }
   const savings = pickBest(i.products, { categories: ['savings_account'] });
   if (!savings || monthly <= 0) return null;
+  // Already holds it → accepting tops up the existing account (OffersService.accept) instead of opening a duplicate.
+  const where = (i.ownedProductSlugs ?? []).includes(savings.slug) ? `contul tău existent ${savings.name}` : savings.name;
   return productCandidate(i, 'home_goal', 90, savings, {
     title: `Economisește lunar pentru avansul locuinței`,
     monthlyContribution: monthly,
     goalTarget: remaining,
     goalId: goal.id,
-    reasoning: `Pentru „${goal.name}” mai ai de strâns ${ron(remaining)}. Îți propunem ${ron(monthly)} pe lună în ${savings.name}.${tail}`,
+    reasoning: `Pentru „${goal.name}” mai ai de strâns ${ron(remaining)}. Îți propunem ${ron(monthly)} pe lună în ${where}.${tail}`,
   });
 };
 
