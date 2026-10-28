@@ -19,6 +19,7 @@ import { extractRates, guardOutput } from '../security/guardrails/output-guard';
 import { PiiVault } from '../security/guardrails/pii-vault';
 import { buildSystemPrompt } from './system-prompt';
 import { AGENT_TOOLS, AgentDeps, AgentTool, hasToolScope, toolsForPrincipal, toToolDefs, ToolError } from './tools';
+import { recommendProduct } from './tools/offers.tools';
 import { Citation, newTurnState, Recommendation, TurnState } from './turn-state';
 
 export const DEGRADED_TEXT =
@@ -79,6 +80,29 @@ function errorMessage(e: unknown): string {
   }
   if (e instanceof Error) return e.message;
   return 'Eroare necunoscută';
+}
+
+function normalizeName(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+/** Catalog products the reply names explicitly (by name or slug), longest names first, at most `max`. */
+export function productsMentioned(reply: string, catalog: CatalogProduct[], max = 3): CatalogProduct[] {
+  const text = ` ${normalizeName(reply)} `;
+  const raw = reply.toLowerCase();
+  const sorted = [...catalog].sort((a, b) => b.name.length - a.name.length);
+  const found: CatalogProduct[] = [];
+  for (const c of sorted) {
+    const name = normalizeName(c.name);
+    if ((name.length >= 8 && text.includes(` ${name} `)) || raw.includes(c.slug)) found.push(c);
+    if (found.length >= max) break;
+  }
+  return found;
 }
 
 function truncate(s: string, max: number): string {
@@ -246,6 +270,17 @@ export class AgentService {
           }
           if (res.toolCalls.length > 0) {
             res = await this.llm.chat({ model: 'agent', messages });
+          }
+
+          // 6b. Fallback: the model named catalog products without calling recommend_product.
+          if (turn.recommendations.length === 0 && res.content) {
+            for (const product of productsMentioned(res.content, catalog)) {
+              try {
+                await recommendProduct.handler(ctx, { productSlug: product.slug, why: 'Produs din catalog sugerat de asistent în acest răspuns.' });
+              } catch (err) {
+                this.logger.warn(`Fallback recommendation failed for ${product.slug}: ${(err as Error).message}`);
+              }
+            }
           }
 
           // 7a. Output guard.

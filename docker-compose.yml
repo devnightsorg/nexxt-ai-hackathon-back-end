@@ -6,7 +6,7 @@ services:
       POSTGRES_PASSWORD: raiffeisen
       POSTGRES_DB: raiffeisen
     ports:
-      - "5433:5432"
+      - "${DB_PORT:-5433}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./docker/initdb:/docker-entrypoint-initdb.d:ro
@@ -26,7 +26,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "3000:3000"
+      - "${API_PORT:-3000}:3000"
     command: sh -c "npx prisma migrate deploy && node dist/seed/seed.js && node dist/main.js"
 
 volumes:
