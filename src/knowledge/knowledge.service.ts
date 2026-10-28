@@ -192,7 +192,11 @@ export class KnowledgeService {
     return { id, chunks: rows.length };
   }
 
-  /** Cosine search over embedded chunks; full-text fallback when the query can't be embedded or nothing is embedded. */
+  /**
+   * Cosine search over chunks embedded with the current EMBEDDING_MODEL (vectors from another model live in a
+   * different space, so their distances are meaningless); full-text fallback when the query can't be embedded
+   * or no chunk carries a current-model vector.
+   */
   async search(query: string, o: SearchOptions = {}): Promise<KbHit[]> {
     const k = Math.min(Math.max(Math.trunc(o.k ?? 5) || 5, 1), 50);
     const q = (query ?? '').trim();
@@ -201,6 +205,7 @@ export class KnowledgeService {
       AND (${o.category ?? null}::text IS NULL OR d.category = ${o.category ?? null})
       AND (${o.productSlug ?? null}::text IS NULL OR d."productSlug" = ${o.productSlug ?? null})`;
 
+    const embeddingModel = config().EMBEDDING_MODEL;
     let vector: number[] | null = null;
     try {
       [vector] = await this.llm.embed([q]);
@@ -214,7 +219,7 @@ export class KnowledgeService {
         SELECT c.id AS "chunkId", c."documentId", d.title, d.category, d."productSlug", d."sourceUrls", c.content,
                1 - (c.embedding <=> ${lit}::vector) AS score
         FROM "KbChunk" c JOIN "KbDocument" d ON d.id = c."documentId"
-        WHERE c.embedding IS NOT NULL ${filters}
+        WHERE c.embedding IS NOT NULL AND d."embeddingModel" = ${embeddingModel} ${filters}
         ORDER BY c.embedding <=> ${lit}::vector
         LIMIT ${k}`;
       if (rows.length > 0) return rows.map(toHit);

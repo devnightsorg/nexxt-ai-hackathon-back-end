@@ -126,15 +126,20 @@ export function historyToolStubs(messages: Anthropic.MessageParam[]): Anthropic.
   return [...names].map((name) => ({ name, input_schema: { type: 'object', properties: {} } }));
 }
 
-/** Maps a Messages API response back to the provider-neutral ChatResult. */
+/**
+ * Maps a Messages API response back to the provider-neutral ChatResult. A `max_tokens` stop may have cut a
+ * tool_use block short (its input incomplete), so tool calls are dropped and only the text is returned:
+ * a truncated tool call must never execute.
+ */
 export function fromAnthropicMessage(msg: Anthropic.Message): ChatResult {
   if (msg.stop_reason === 'refusal') return { content: ANTHROPIC_REFUSAL_TEXT, toolCalls: [] };
+  const truncated = msg.stop_reason === 'max_tokens';
   const texts: string[] = [];
   const toolCalls: ChatToolCall[] = [];
   for (const block of msg.content ?? []) {
     if (block.type === 'text') {
       if (block.text.trim()) texts.push(block.text.trim());
-    } else if (block.type === 'tool_use') {
+    } else if (block.type === 'tool_use' && !truncated) {
       toolCalls.push({ id: block.id, name: block.name, arguments: JSON.stringify(block.input ?? {}) });
     }
   }

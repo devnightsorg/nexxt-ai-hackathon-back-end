@@ -61,7 +61,11 @@ export function describeRouting(cfg: AppConfig = config()): { summary: string; w
     `embeddings → featherless ${cfg.EMBEDDING_MODEL} (${EMBEDDING_DIM} dims)`;
   const warnings: string[] = [];
   if (cfg.AGENT_PROVIDER === 'anthropic' && !cfg.ANTHROPIC_API_KEY) {
-    warnings.push('AGENT_PROVIDER=anthropic but ANTHROPIC_API_KEY is empty: the agent will run in degraded mode');
+    warnings.push(
+      cfg.FEATHERLESS_API_KEY
+        ? `AGENT_PROVIDER=anthropic but ANTHROPIC_API_KEY is empty: every agent call will fail over to featherless ${cfg.AGENT_MODEL}`
+        : 'AGENT_PROVIDER=anthropic but ANTHROPIC_API_KEY is empty: the agent will run in degraded mode',
+    );
   }
   if (!cfg.FEATHERLESS_API_KEY) {
     warnings.push('FEATHERLESS_API_KEY is empty: fast model and embeddings are disabled (heuristics + full-text search only)');
@@ -103,7 +107,8 @@ function isRetryable(err: unknown): boolean {
 
 /**
  * LLM gateway: Featherless (OpenAI-compatible) serves the fast model and embeddings, and the agent unless
- * AGENT_PROVIDER is 'anthropic', in which case the agent goes to the Anthropic Messages API.
+ * AGENT_PROVIDER is 'anthropic', in which case the agent goes to the Anthropic Messages API (failing over to
+ * the Featherless agent model when Anthropic is unavailable).
  */
 @Injectable()
 export class LlmService implements OnModuleInit {
@@ -162,10 +167,21 @@ export class LlmService implements OnModuleInit {
     return this.anthropic;
   }
 
+  /**
+   * Agent calls on Anthropic fail over to the Featherless agent model: when the Anthropic call ends in
+   * LlmUnavailableError (after its own one retry on 429/5xx) and FEATHERLESS_API_KEY is set, the same request
+   * is sent once to AGENT_MODEL. Only if that also fails does the error reach the caller (agent → degraded).
+   */
   async chat(o: ChatOptions): Promise<ChatResult> {
     const cfg = config();
-    if (o.model === 'agent' && cfg.AGENT_PROVIDER === 'anthropic') return this.chatAnthropic(o, cfg);
-    return this.chatFeatherless(o, cfg);
+    if (o.model !== 'agent' || cfg.AGENT_PROVIDER !== 'anthropic') return this.chatFeatherless(o, cfg);
+    try {
+      return await this.chatAnthropic(o, cfg);
+    } catch (err) {
+      if (!(err instanceof LlmUnavailableError) || !cfg.FEATHERLESS_API_KEY) throw err;
+      this.logger.warn(`Anthropic agent call failed (${err.message}); failing over to featherless ${cfg.AGENT_MODEL}`);
+      return this.chatFeatherless(o, cfg);
+    }
   }
 
   private async chatAnthropic(o: ChatOptions, cfg: AppConfig): Promise<ChatResult> {
@@ -204,7 +220,9 @@ export class LlmService implements OnModuleInit {
   private async chatFeatherless(o: ChatOptions, cfg: AppConfig): Promise<ChatResult> {
     if (!cfg.FEATHERLESS_API_KEY) throw new LlmUnavailableError('LLM dezactivat: FEATHERLESS_API_KEY lipsește');
     const client = this.getClient();
-    const messages = cfg.AGENT_THINKING ? o.messages : withNoThink(o.messages);
+    // AGENT_THINKING is for the agent only: the fast model (short JSON classifications) never thinks.
+    const thinking = o.model === 'agent' && cfg.AGENT_THINKING;
+    const messages = thinking ? o.messages : withNoThink(o.messages);
     const body: Record<string, unknown> = {
       model: o.model === 'agent' ? cfg.AGENT_MODEL : cfg.FAST_MODEL,
       messages,
@@ -212,7 +230,7 @@ export class LlmService implements OnModuleInit {
       temperature: o.temperature ?? 0.3,
     };
     // Qwen3.5+ ignore /no_think and, with thinking on, often return empty content: switch it off in the template.
-    if (!cfg.AGENT_THINKING) body.chat_template_kwargs = { enable_thinking: false };
+    if (!thinking) body.chat_template_kwargs = { enable_thinking: false };
     if (o.tools?.length) body.tools = o.tools;
     const timeoutMs = o.timeoutMs ?? (o.model === 'agent' ? cfg.AGENT_TIMEOUT_MS : cfg.FAST_TIMEOUT_MS);
 

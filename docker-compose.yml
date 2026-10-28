@@ -28,6 +28,16 @@ services:
     ports:
       - "${API_PORT:-3000}:3000"
     command: sh -c "npx prisma migrate deploy && node dist/seed/seed.js && node dist/main.js"
+    networks:
+      default:
+      # Shared reverse-proxy network (Caddy reaches the API as raiffeisen-api:3000).
+      proxy:
+        aliases:
+          - raiffeisen-api
+
+networks:
+  proxy:
+    external: true
 
 volumes:
   pgdata:

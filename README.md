@@ -48,13 +48,18 @@ Featherless nu răspunde, ingestia doar scrie un warning în log și aplicația 
   refuză, deci nu le pune în `ANTHROPIC_AGENT_MODEL` fără a schimba codul.
 - Pe Featherless, cu `AGENT_THINKING=false` (implicit), cererile trimit
   `chat_template_kwargs.enable_thinking=false` (Qwen3.5 și mai noi) plus `/no_think` (Qwen3 mai
-  vechi).
+  vechi). `AGENT_THINKING` se aplică doar agentului: modelul rapid rulează mereu fără thinking.
 - Vectorii sunt `vector(1024)`: modelul de embeddings trebuie să accepte `dimensions: 1024`
   (Qwen3-Embedding-4B are nativ 2560 și îi trunchiază). Fiecare document din baza de cunoștințe
   reține modelul cu care a fost vectorizat, așa că la schimbarea `EMBEDDING_MODEL` următoarea
   pornire re-vectorizează automat tot (inclusiv documentele adăugate prin API).
-- Dacă un furnizor nu răspunde (cheie lipsă, timeout, eroare), agentul intră în modul degradat
-  (`degraded: true`), iar căutarea în baza de cunoștințe trece pe full-text.
+- Dacă Anthropic nu răspunde (cheie lipsă, timeout, eroare), aceeași cerere se reîncearcă o
+  singură dată pe modelul agent de pe Featherless (`AGENT_MODEL`, doar dacă `FEATHERLESS_API_KEY`
+  e completat), iar logul arată un warning `failing over to featherless ...`. Agentul intră în
+  modul degradat (`degraded: true`) doar dacă pică și rezerva (sau dacă nu există rezervă).
+- Căutarea vectorială ia în calcul doar documentele vectorizate cu `EMBEDDING_MODEL` curent
+  (vectorii altui model nu sunt comparabili). Dacă embeddings nu merg sau nu există niciun vector
+  al modelului curent, căutarea în baza de cunoștințe trece pe full-text.
 
 ## Credențiale demo
 

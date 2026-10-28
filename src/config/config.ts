@@ -11,7 +11,7 @@ export interface AppConfig {
   ANTHROPIC_AGENT_MODEL: string;
   /** Who serves the main agent; the fast model and embeddings always use Featherless. */
   AGENT_PROVIDER: AgentProvider;
-  /** Featherless agent model (used when AGENT_PROVIDER is 'featherless'). */
+  /** Featherless agent model (AGENT_PROVIDER 'featherless', and the failover when Anthropic is unavailable). */
   AGENT_MODEL: string;
   FAST_MODEL: string;
   EMBEDDING_MODEL: string;

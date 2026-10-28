@@ -1,4 +1,13 @@
-import { AnthropicClient, describeRouting, EMBEDDING_DIM, LlmClient, LlmService, LlmUnavailableError } from './llm.service';
+import { Logger } from '@nestjs/common';
+import {
+  AnthropicClient,
+  ChatMessage,
+  describeRouting,
+  EMBEDDING_DIM,
+  LlmClient,
+  LlmService,
+  LlmUnavailableError,
+} from './llm.service';
 import { config } from '../config/config';
 
 function completion(content: string) {
@@ -61,6 +70,18 @@ describe('LlmService', () => {
     expect(thinking.model).toBe('Qwen/Qwen3-32B');
     expect(thinking.chat_template_kwargs).toBeUndefined();
     expect(thinking.messages).toEqual([{ role: 'user', content: 'hi' }]);
+  });
+
+  it('AGENT_THINKING=true applies to the agent only: the fast model still gets /no_think + enable_thinking=false', async () => {
+    process.env.AGENT_THINKING = 'true';
+    const create = jest.fn().mockResolvedValue(completion('{}'));
+    const svc = new LlmService();
+    svc.setClient(mockClient(create));
+    await svc.chat({ model: 'fast', messages: [{ role: 'system', content: 'Clasifică.' }, { role: 'user', content: 'hi' }] });
+    const body = create.mock.calls[0][0];
+    expect(body.model).toBe('Qwen/Qwen3.8-27B');
+    expect(body.chat_template_kwargs).toEqual({ enable_thinking: false });
+    expect(body.messages[0]).toEqual({ role: 'system', content: 'Clasifică.\n/no_think' });
   });
 
   it('embeddings request dimensions=1024 from EMBEDDING_MODEL', async () => {
@@ -218,6 +239,7 @@ describe('LlmService', () => {
     });
 
     it('retries once on 429, times out, and maps failures and a missing key to LlmUnavailableError', async () => {
+      process.env.FEATHERLESS_API_KEY = ''; // no failover target: Anthropic errors reach the caller
       const flaky = jest
         .fn()
         .mockRejectedValueOnce(Object.assign(new Error('rate_limit_error'), { status: 429 }))
@@ -246,6 +268,84 @@ describe('LlmService', () => {
       );
     });
 
+    describe('failover to the Featherless agent model', () => {
+      let warn: jest.SpyInstance;
+      beforeEach(() => {
+        warn = jest.spyOn(Logger.prototype, 'warn').mockImplementation(() => undefined);
+      });
+      afterEach(() => warn.mockRestore());
+
+      const messages: ChatMessage[] = [
+        { role: 'system', content: 'Ești asistentul băncii.' },
+        { role: 'user', content: 'Ce obiective am?' },
+      ];
+
+      it('Anthropic LlmUnavailableError → the same request is retried once on Featherless AGENT_MODEL, with a warning', async () => {
+        const anthropicCreate = jest.fn().mockRejectedValue(Object.assign(new Error('overloaded'), { status: 400 }));
+        const openaiCreate = jest.fn().mockResolvedValue({
+          choices: [
+            {
+              message: {
+                role: 'assistant',
+                content: null,
+                tool_calls: [{ id: 'c1', type: 'function', function: { name: 'list_goals', arguments: '{}' } }],
+              },
+            },
+          ],
+        });
+        const svc = new LlmService();
+        svc.setAnthropicClient(mockAnthropic(anthropicCreate));
+        svc.setClient(mockClient(openaiCreate));
+
+        const r = await svc.chat({ model: 'agent', messages, tools });
+        expect(r).toEqual({ content: '', toolCalls: [{ id: 'c1', name: 'list_goals', arguments: '{}' }] });
+        expect(anthropicCreate).toHaveBeenCalledTimes(1);
+        expect(openaiCreate).toHaveBeenCalledTimes(1);
+        const body = openaiCreate.mock.calls[0][0];
+        expect(body.model).toBe('Qwen/Qwen3-32B');
+        expect(body.tools).toEqual(tools);
+        expect(body.messages[1]).toEqual({ role: 'user', content: 'Ce obiective am?' });
+        expect(body.max_tokens).toBe(1024);
+        expect(warn).toHaveBeenCalledWith(expect.stringContaining('failing over to featherless Qwen/Qwen3-32B'));
+      });
+
+      it('also covers timeouts and a missing ANTHROPIC_API_KEY', async () => {
+        const openaiCreate = jest.fn().mockResolvedValue(completion('din rezervă'));
+        const svc = new LlmService();
+        svc.setClient(mockClient(openaiCreate));
+        svc.setAnthropicClient(mockAnthropic(jest.fn().mockImplementation(() => new Promise(() => undefined))));
+        expect((await svc.chat({ model: 'agent', messages, timeoutMs: 30 })).content).toBe('din rezervă');
+
+        process.env.ANTHROPIC_API_KEY = '';
+        process.env.AGENT_PROVIDER = 'anthropic';
+        expect((await svc.chat({ model: 'agent', messages })).content).toBe('din rezervă');
+        expect(openaiCreate).toHaveBeenCalledTimes(2);
+      });
+
+      it('both providers failing → LlmUnavailableError (agent goes degraded)', async () => {
+        const anthropicCreate = jest.fn().mockRejectedValue(Object.assign(new Error('api_error'), { status: 400 }));
+        const openaiCreate = jest.fn().mockRejectedValue(Object.assign(new Error('Unauthorized'), { status: 401 }));
+        const svc = new LlmService();
+        svc.setAnthropicClient(mockAnthropic(anthropicCreate));
+        svc.setClient(mockClient(openaiCreate));
+        await expect(svc.chat({ model: 'agent', messages })).rejects.toThrow(/LLM chat indisponibil \(status 401\)/);
+        expect(anthropicCreate).toHaveBeenCalledTimes(1);
+        expect(openaiCreate).toHaveBeenCalledTimes(1);
+      });
+
+      it('no FEATHERLESS_API_KEY → no failover: the Anthropic error reaches the caller', async () => {
+        process.env.FEATHERLESS_API_KEY = '';
+        const anthropicCreate = jest.fn().mockRejectedValue(Object.assign(new Error('api_error'), { status: 400 }));
+        const openaiCreate = jest.fn();
+        const svc = new LlmService();
+        svc.setAnthropicClient(mockAnthropic(anthropicCreate));
+        svc.setClient(mockClient(openaiCreate));
+        await expect(svc.chat({ model: 'agent', messages })).rejects.toThrow(/LLM anthropic chat indisponibil \(status 400\)/);
+        expect(openaiCreate).not.toHaveBeenCalled();
+        expect(warn).not.toHaveBeenCalledWith(expect.stringContaining('failing over'));
+      });
+    });
+
     it('describeRouting names provider and model for agent, fast and embeddings', () => {
       expect(describeRouting(config()).summary).toBe(
         'LLM routing: agent → anthropic claude-haiku-5-5 | fast → featherless Qwen/Qwen3.8-27B | ' +
@@ -255,6 +355,11 @@ describe('LlmService', () => {
       const fallback = describeRouting(config());
       expect(fallback.summary).toContain('agent → featherless Qwen/Qwen3-32B');
       expect(fallback.warnings).toEqual([]);
+
+      process.env.AGENT_PROVIDER = 'anthropic';
+      expect(describeRouting(config()).warnings).toEqual([
+        'AGENT_PROVIDER=anthropic but ANTHROPIC_API_KEY is empty: every agent call will fail over to featherless Qwen/Qwen3-32B',
+      ]);
     });
   });
 });

@@ -188,4 +188,22 @@ describe('fromAnthropicMessage', () => {
     );
     expect(r).toEqual({ content: ANTHROPIC_REFUSAL_TEXT, toolCalls: [] });
   });
+
+  it('drops tool calls on a max_tokens stop (a truncated tool_use must never execute) and keeps the text', () => {
+    const r = fromAnthropicMessage(
+      message(
+        [
+          { type: 'text', text: 'Pregătesc transferul.' },
+          { type: 'tool_use', id: 'toolu_1', name: 'propose_transfer', input: { amount: 100 } },
+        ],
+        'max_tokens',
+      ),
+    );
+    expect(r).toEqual({ content: 'Pregătesc transferul.', toolCalls: [] });
+
+    expect(fromAnthropicMessage(message([{ type: 'tool_use', id: 't', name: 'list_goals', input: {} }], 'max_tokens'))).toEqual({
+      content: '',
+      toolCalls: [],
+    });
+  });
 });
