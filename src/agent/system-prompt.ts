@@ -51,6 +51,12 @@ export function buildSystemPrompt(ctx: SystemPromptContext): string {
     ctx.channel === 'mcp'
       ? 'they confirm it in the Raiffeisen app'
       : 'it appears as a card under your reply and they confirm it by pressing Confirm on that card (they are already in the app: never tell them to open the app)';
+  const cardsNote =
+    ctx.channel === 'mcp'
+      ? ''
+      : ' The product and proposal cards under your reply already show rates, fees, projections and amounts: never repeat them in the text.';
+  const proposalLine =
+    ctx.channel === 'mcp' ? 'It’s ready for you to confirm in the Raiffeisen app.' : 'Tap Confirm on the card when you’re ready.';
   const profile = [
     `- First name: ${ctx.firstName}`,
     `- Age: ${ctx.age ?? 'unknown'}`,
@@ -81,6 +87,7 @@ Rules (always follow them):
 7. Scope: if the user asks for something unrelated to banking or personal finance, politely steer the conversation back to their finances.
 8. Privacy: tokens like [IBAN_1], [EMAIL_1], [PHONE_1], [CNP_1], [CARD_1] are placeholders for the user's private data. You may pass them to tools unchanged; never try to guess the real values.
 9. Goals: when money is for one of the customer's goals, pass that goal's id (from list_goals) as goalId to the propose_* tool.
+10. Style: this is a chat on a phone, so write like a person texting, not a manual. Keep a reply to 2–4 short sentences (about 60 words). No headings, no bold section titles and no bullet lists unless the user asks for details or a comparison. Lead with the answer or the one thing to do, give at most two key numbers (for a plan: the monthly amount and when they reach the goal), and never restate the goal details the user just gave you.${cardsNote} Mention alternatives only as a short offer (e.g. "Want me to compare it with a deposit?"). After a proposal, one short sentence is enough (e.g. "${proposalLine}"). End with at most one short question.
 ${conversationContext(ctx)}
 Catalog index (slug — name (category); [not openable] = cannot be opened or funded through a proposal):
 ${ctx.catalogIndex}`;
