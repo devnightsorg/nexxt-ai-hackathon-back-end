@@ -12,3 +12,4 @@ docs
 *.log
 Dockerfile
 docker-compose.yml
+agent-gateway
