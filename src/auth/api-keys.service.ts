@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { createHash, randomBytes } from 'node:crypto';
 import { toMoney } from '../common/money';
 import { PrismaService } from '../prisma/prisma.service';
-import { Principal, Scope, SCOPES } from './principal';
+import { MandateTerms, Principal, Scope, SCOPES, scopesForMandate } from './principal';
 
 export const API_KEY_PREFIX = 'rk_live_';
 export const API_KEY_PREFIX_LENGTH = 12;
@@ -101,19 +101,43 @@ export class ApiKeysService {
     return { id: updated.id, revokedAt: updated.revokedAt as Date };
   }
 
-  /** Resolves a raw key to a Principal; null if unknown or revoked. Updates `lastUsedAt`. */
+  /** Issues the API key an agent uses under a freshly signed mandate (OAuth token exchange). */
+  async createMandateKey(userId: string, terms: MandateTerms, expiresAt: Date): Promise<CreatedApiKey> {
+    const key = generateApiKey();
+    const row = await this.prisma.apiKey.create({
+      data: {
+        userId,
+        name: `Mandat ${terms.clientName}`,
+        prefix: key.slice(0, API_KEY_PREFIX_LENGTH),
+        hash: hashApiKey(key),
+        scopes: scopesForMandate(terms.permissions),
+        mandate: terms as unknown as Prisma.InputJsonValue,
+        expiresAt,
+      },
+    });
+    return { id: row.id, key, prefix: row.prefix, scopes: toScopes(row.scopes), maxAmountPerAction: null };
+  }
+
+  /**
+   * Resolves a raw key to a Principal; null if unknown or revoked. Updates `lastUsedAt`.
+   * A revoked or expired mandate key still resolves (with no scopes) so MCP tools can tell the agent why it is refused.
+   */
   async authenticate(rawKey: string): Promise<Principal | null> {
     if (!rawKey.startsWith(API_KEY_PREFIX)) return null;
     const row = await this.prisma.apiKey.findUnique({ where: { hash: hashApiKey(rawKey) }, include: { user: true } });
-    if (!row || row.revokedAt) return null;
+    if (!row) return null;
+    const terms = row.mandate as unknown as MandateTerms | null;
+    if (row.revokedAt && !terms) return null;
     await this.prisma.apiKey.update({ where: { id: row.id }, data: { lastUsedAt: new Date() } });
+    const status = row.revokedAt ? 'revoked' : row.expiresAt && row.expiresAt <= new Date() ? 'expired' : 'active';
     return {
       userId: row.userId,
       role: row.user.role,
       kind: 'api_key',
       apiKeyId: row.id,
-      scopes: toScopes(row.scopes),
+      scopes: status === 'active' ? toScopes(row.scopes) : [],
       maxAmountPerAction: row.maxAmountPerAction != null ? toMoney(row.maxAmountPerAction) : null,
+      ...(terms ? { mandate: { ...terms, status, expiresAt: row.expiresAt } } : {}),
     };
   }
 }

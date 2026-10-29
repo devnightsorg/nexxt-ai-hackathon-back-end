@@ -7,6 +7,7 @@ import { GoalsModule } from './goals/goals.module';
 import { HealthController } from './health/health.controller';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 import { LlmModule } from './llm/llm.module';
+import { MandatesModule } from './mandates/mandates.module';
 import { McpModule } from './mcp/mcp.module';
 import { MoneyMapModule } from './money-map/money-map.module';
 import { OffersModule } from './offers/offers.module';
@@ -33,6 +34,7 @@ import { UsersModule } from './users/users.module';
     OffersModule,
     MoneyMapModule,
     AgentModule,
+    MandatesModule,
     McpModule,
   ],
   controllers: [HealthController, SecurityController],

@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
+import type { Response } from 'express';
 import { config } from '../config/config';
 import { ApiKeysService } from './api-keys.service';
 import { ADMIN_ONLY_KEY, AuthedRequest, IS_PUBLIC_KEY, REQUIRED_SCOPES_KEY, USER_ONLY_KEY } from './decorators';
@@ -28,7 +29,22 @@ export class AuthGuard implements CanActivate {
     if (this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, targets)) return true;
 
     const req = ctx.switchToHttp().getRequest<AuthedRequest>();
-    const principal = await this.authenticate(req);
+    const isMcp = req.path === '/mcp' || req.path.startsWith('/mcp/');
+    let principal: Principal;
+    try {
+      principal = await this.authenticate(req);
+      // A mandate key is for the agent's MCP connection only, never the REST API.
+      if (principal.mandate && !isMcp) throw new UnauthorizedException(AUTH_REQUIRED);
+    } catch (e) {
+      // OAuth discovery (RFC 9728): tells MCP clients such as claude.ai where to start the connect flow.
+      if (isMcp && e instanceof UnauthorizedException) {
+        ctx
+          .switchToHttp()
+          .getResponse<Response>()
+          .setHeader('WWW-Authenticate', `Bearer resource_metadata="${config().PUBLIC_URL}/.well-known/oauth-protected-resource"`);
+      }
+      throw e;
+    }
     req.principal = principal;
 
     if (this.reflector.getAllAndOverride<boolean>(USER_ONLY_KEY, targets) && principal.kind !== 'user') {

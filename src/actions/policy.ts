@@ -120,7 +120,10 @@ export function evaluatePolicy(ctx: PolicyContext): PolicyVerdict {
     } else {
       external = true;
       if (!target.ibanValid) add('IBAN_INVALID');
-      if (principal.kind === 'api_key') add('EXTERNAL_TRANSFER_NOT_ALLOWED_FOR_AGENT');
+      // A signed mandate may allow external payments; they still always wait for the customer's tap in the app.
+      if (principal.kind === 'api_key' && !principal.mandate?.permissions.externalPayments) {
+        add('EXTERNAL_TRANSFER_NOT_ALLOWED_FOR_AGENT');
+      }
       notes.push('Transfer către un cont extern');
     }
   } else if (!product) {

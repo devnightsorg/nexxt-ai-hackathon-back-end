@@ -25,6 +25,8 @@ export interface AppConfig {
   ACTION_TTL_MINUTES: number;
   INTEREST_TAX_RATE: number;
   CORS_ORIGIN: string;
+  /** Public origin of the PWA + API (Caddy), used for OAuth metadata, redirects and approval links. */
+  PUBLIC_URL: string;
   KNOWLEDGE_DIR: string;
   SEED_ON_START: boolean;
   THROTTLE_LIMIT: number;
@@ -97,6 +99,7 @@ export function config(env: Env = process.env): AppConfig {
     ACTION_TTL_MINUTES: num(env, 'ACTION_TTL_MINUTES', 15),
     INTEREST_TAX_RATE: num(env, 'INTEREST_TAX_RATE', 0.1),
     CORS_ORIGIN: str(env, 'CORS_ORIGIN', '*'),
+    PUBLIC_URL: str(env, 'PUBLIC_URL', 'https://raiffeisen.desepticon.qzz.io').replace(/\/+$/, ''),
     KNOWLEDGE_DIR: str(env, 'KNOWLEDGE_DIR', 'seed/knowledge'),
     SEED_ON_START: bool(env, 'SEED_ON_START', true),
     THROTTLE_LIMIT: num(env, 'THROTTLE_LIMIT', 120),

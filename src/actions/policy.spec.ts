@@ -173,6 +173,17 @@ describe('evaluatePolicy', () => {
     ).toEqual(['EXTERNAL_TRANSFER_NOT_ALLOWED_FOR_AGENT']);
   });
 
+  it('mandate allowing external payments + external IBAN → allowed (approval is enforced by the mandate)', () => {
+    const permissions = { read: true, deposits: true, ownTransfers: true, externalPayments: true };
+    const mandate = { clientName: 'Claude', permissions, autoApproveUpTo: 2000, totalLimit: 10000, status: 'active' as const, expiresAt: null };
+    const target = { kind: 'external_iban' as const, ibanValid: true };
+    expect(violations(transferCtx({ principal: { ...apiKey(null), mandate }, target }))).toEqual([]);
+    const denied = { ...mandate, permissions: { ...permissions, externalPayments: false } };
+    expect(violations(transferCtx({ principal: { ...apiKey(null), mandate: denied }, target }))).toEqual([
+      'EXTERNAL_TRANSFER_NOT_ALLOWED_FOR_AGENT',
+    ]);
+  });
+
   it('valid term deposit open → allowed', () => {
     expect(evaluatePolicy(openCtx())).toMatchObject({ allowed: true, riskLevel: 'low', violations: [] });
   });
