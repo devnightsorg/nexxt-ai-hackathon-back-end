@@ -107,7 +107,10 @@ marcate *public*. Detalii și scheme: `/docs`.
 | Agent AI | `POST /agent/chat`, `GET /agent/conversations`, `GET /agent/conversations/:id` |
 | Acțiuni (propuneri) | `GET /actions?status=pending`, `GET /actions/:id`, `POST /actions`, `POST /actions/:id/confirm`, `POST /actions/:id/reject` |
 | Securitate | `GET /security/events`, `GET /security/audit`, `GET /security/audit/verify` *(admin)* |
-| MCP | `POST /mcp` (Streamable HTTP, cheie API) |
+| MCP | `POST /mcp` (Streamable HTTP, cheie API sau token de mandat) |
+| Mandate agent | `POST /mandates/authorize`, `GET /mandates`, `POST /mandates/:id/revoke` |
+| OAuth (conectare Claude) | `/.well-known/oauth-protected-resource`, `/.well-known/oauth-authorization-server`, `POST /oauth/register`, `GET /oauth/authorize`, `POST /oauth/token` *(public)* |
+| Demo | `POST /demo/reset` (resetează persona autentificată) |
 | Sistem | `GET /health` *(public)*, `/docs` *(public)* |
 
 `GET /offers` recalculează ofertele active la fiecare apel, dar păstrează id-ul fiecărei oferte
@@ -171,6 +174,33 @@ curl -s -X POST http://localhost:3000/mcp -H "Authorization: Bearer $KEY" \
   -H 'content-type: application/json' -H 'accept: application/json, text/event-stream' \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
+
+## Mandate: Claude conectat la cont
+
+Clientul își conectează propriul Claude (claude.ai → Settings → Connectors → *Add custom connector*, URL
+`https://raiffeisen.desepticon.qzz.io/mcp`). Claude descoperă OAuth singur; pasul de consimțământ este ecranul
+**Semnează mandatul** din PWA (`/connect/authorize`), unde clientul alege permisiunile: citire, depozite și
+economii, transferuri între conturi proprii, plăți către alte persoane. Limitele sunt fixe pentru demo:
+
+- până la **2.000 RON** pe acțiune Claude execută imediat (`mandate.decision: executed_under_mandate`);
+- peste această sumă, și **orice plată către alt IBAN**, acțiunea rămâne `pending` și Claude primește
+  `mandate.approvalUrl` (`/approve/<id>` în PWA), unde clientul aprobă sau respinge;
+- totalul executat sub mandat nu poate depăși **10.000 RON**; mandatul expiră după **30 de zile**;
+- Claude nu are `actions:confirm`, deci nu își poate aproba singur cererile;
+- după **Revocă** în aplicație (`/agent`), orice unealtă MCP răspunde `MANDATE_REVOKED`.
+
+Tokenul de mandat este o cheie `rk_live_` cu termenii în `ApiKey.mandate` și merge doar pe `/mcp`, nu pe API-ul
+REST. OAuth-ul este **doar pentru demo**: înregistrare fără stocare de clienți, PKCE neverificat, codurile de
+autorizare stau în memorie (o repornire între semnare și token cere reconectare).
+
+```bash
+./scripts/mandate-smoke.sh http://localhost:3000 ion.georgescu@demo.ro   # tot fluxul, fără LLM; mută 6.500 RON
+./scripts/reset-demo.sh andrei                                             # persona revine la starea din seed
+```
+
+Designul mandatului (permisiuni, limite, prag de aprobare, revocare, coduri de eroare) vine din gateway-ul lui
+Leonid din `agent-gateway/` (pașapoarte Ed25519 pentru agenți, mandate semnate, canal de distribuție pentru
+agenți). Acolo e implementarea de referință pentru pasul următor, „Know Your Agent”; nu rulează în stack-ul demo.
 
 ## Demo securitate
 

@@ -11,6 +11,7 @@ import { StatsService } from '../banking/stats.service';
 import { config } from '../config/config';
 import { simulate } from '../finance/projection';
 import { GoalsService } from '../goals/goals.service';
+import { MandatesService } from '../mandates/mandates.service';
 import { KnowledgeService } from '../knowledge/knowledge.service';
 import { MoneyMapService } from '../money-map/money-map.service';
 import { OffersService } from '../offers/offers.service';
@@ -28,6 +29,7 @@ export interface McpDeps {
   products: ProductsService;
   agent: AgentService;
   actions: ActionsService;
+  mandates: MandatesService;
   audit: AuditService;
 }
 
@@ -48,6 +50,11 @@ export interface McpToolResult {
 export const MCP_INTERNAL_ERROR = 'A apărut o eroare internă. Încearcă din nou mai târziu.';
 
 export const missingScopeText = (scope: Scope): string => `Lipsește permisiunea ${scope}`;
+
+export const MANDATE_INACTIVE_TEXT: Record<'revoked' | 'expired', string> = {
+  revoked: 'MANDATE_REVOKED: clientul a revocat mandatul în aplicația Raiffeisen. Nu mai poți accesa contul și nu poți face nicio acțiune.',
+  expired: 'MANDATE_EXPIRED: mandatul a expirat. Clientul trebuie să reconecteze agentul și să semneze un mandat nou în aplicația Raiffeisen.',
+};
 
 /** Romanian, agent-readable error text for a failed tool call (message + policy violations, if any). */
 export function toolErrorText(e: unknown): string {
@@ -179,7 +186,9 @@ export const MCP_TOOLS: McpToolDef[] = [
   {
     name: 'propose_action',
     description:
-      'Propune un transfer (între conturi proprii) sau deschiderea unui produs. Creează o propunere în așteptare; nimic nu se execută fără confirmare.',
+      'Propune un transfer (între conturi proprii sau către un IBAN) sau deschiderea unui produs. Fără mandat creează o propunere în așteptare; nimic nu se execută fără confirmare. ' +
+      'Cu un mandat semnat de client: acțiunile în limita de aprobare automată se execută imediat; cele mai mari și orice plată către alte persoane ' +
+      'întorc `mandate.approvalUrl`, pe care îl arăți clientului ca să aprobe în aplicația Raiffeisen.',
     scope: 'actions:propose',
     inputSchema: {
       type: z.enum(['transfer', 'open_product']),
@@ -194,7 +203,9 @@ export const MCP_TOOLS: McpToolDef[] = [
       goalId: z.string().min(1).max(64).optional(),
     },
     handler: (d, p, a) =>
-      d.actions.propose(p, a as ProposeInput, { proposedVia: `mcp:${p.apiKeyId ?? p.userId}` }),
+      p.mandate
+        ? d.mandates.propose(p, a as ProposeInput)
+        : d.actions.propose(p, a as ProposeInput, { proposedVia: `mcp:${p.apiKeyId ?? p.userId}` }),
   },
   {
     name: 'confirm_action',
@@ -215,7 +226,9 @@ export const MCP_TOOLS: McpToolDef[] = [
 /** Runs one MCP tool for a principal: scope check, error mapping, audit. Never throws. */
 export async function runMcpTool(def: McpToolDef, deps: McpDeps, p: Principal, args: unknown): Promise<McpToolResult> {
   let result: McpToolResult;
-  if (def.scope && !p.scopes.includes(def.scope)) {
+  if (p.mandate && p.mandate.status !== 'active') {
+    result = errorResult(MANDATE_INACTIVE_TEXT[p.mandate.status]);
+  } else if (def.scope && !p.scopes.includes(def.scope)) {
     result = errorResult(missingScopeText(def.scope));
   } else {
     try {

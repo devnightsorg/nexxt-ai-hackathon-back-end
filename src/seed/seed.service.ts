@@ -53,6 +53,19 @@ export class SeedService {
     private readonly knowledge: KnowledgeService,
   ) {}
 
+  /**
+   * Puts demo personas back to their freshly seeded state: deletes them (cascading to accounts, goals, proposals,
+   * conversations and mandates), then recreates them. Returns how many were deleted.
+   */
+  async resetPersonas(keys: string[]): Promise<number> {
+    const unknown = keys.filter((k) => !PERSONAS.some((p) => p.key === k));
+    if (unknown.length) throw new Error(`unknown persona(s): ${unknown.join(', ')}`);
+    const emails = PERSONAS.filter((p) => keys.includes(p.key)).map((p) => p.email);
+    const { count } = await this.prisma.user.deleteMany({ where: { email: { in: emails } } });
+    await this.run({ ingestKnowledge: false });
+    return count;
+  }
+
   /** Idempotent: catalog always synced; users, accounts, history and demo keys created only when absent. */
   async run(opts: SeedRunOptions = {}): Promise<SeedSummary> {
     const anchor = opts.anchor ?? new Date();

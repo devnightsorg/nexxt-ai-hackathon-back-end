@@ -26,6 +26,7 @@ describe('config', () => {
       ACTION_TTL_MINUTES: 15,
       INTEREST_TAX_RATE: 0.1,
       CORS_ORIGIN: '*',
+      PUBLIC_URL: 'https://raiffeisen.desepticon.qzz.io',
       KNOWLEDGE_DIR: 'seed/knowledge',
       SEED_ON_START: true,
       THROTTLE_LIMIT: 120,

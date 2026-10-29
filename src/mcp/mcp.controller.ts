@@ -11,6 +11,7 @@ import { Principal } from '../auth/principal';
 import { StatsService } from '../banking/stats.service';
 import { GoalsService } from '../goals/goals.service';
 import { KnowledgeService } from '../knowledge/knowledge.service';
+import { MandatesService } from '../mandates/mandates.service';
 import { OffersService } from '../offers/offers.service';
 import { ProductsService } from '../products/products.service';
 import { AuditService } from '../security/audit/audit.service';
@@ -43,9 +44,10 @@ export class McpController {
     products: ProductsService,
     agent: AgentService,
     actions: ActionsService,
+    mandates: MandatesService,
     audit: AuditService,
   ) {
-    this.deps = { users, stats, goals, offers, knowledge, moneyMap, products, agent, actions, audit };
+    this.deps = { users, stats, goals, offers, knowledge, moneyMap, products, agent, actions, mandates, audit };
   }
 
   @Post()

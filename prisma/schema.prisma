@@ -318,6 +318,9 @@ model ApiKey {
   hash               String    @unique
   scopes             String[]
   maxAmountPerAction Decimal?  @db.Decimal(14, 2)
+  /// Terms of the signed agent mandate (OAuth connect flow); null for plain API keys.
+  mandate            Json?
+  expiresAt          DateTime?
   lastUsedAt         DateTime?
   revokedAt          DateTime?
   createdAt          DateTime  @default(now())
