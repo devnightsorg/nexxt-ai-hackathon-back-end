@@ -18,7 +18,14 @@ async function main(): Promise<void> {
   }
   const app = await NestFactory.createApplicationContext(SeedCliModule, { logger: ['log', 'warn', 'error'] });
   try {
-    await app.get(SeedService).run();
+    // SEED_RESET=andrei,maria: delete those demo personas (cascades to all their data) so the run recreates them fresh.
+    const reset = (process.env.SEED_RESET ?? '').split(',').map((k) => k.trim()).filter(Boolean);
+    if (reset.length) {
+      const count = await app.get(SeedService).resetPersonas(reset);
+      console.log(`seed: reset ${count} persona(s): ${reset.join(', ')}`);
+    } else {
+      await app.get(SeedService).run();
+    }
   } finally {
     await app.close();
   }
